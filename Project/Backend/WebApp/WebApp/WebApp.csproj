@@ -263,6 +263,11 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\DomainModels\Location.cs" />
+    <Compile Include="Models\DomainModels\Ticket.cs" />
+    <Compile Include="Models\DomainModels\TransportationLine.cs" />
+    <Compile Include="Models\DomainModels\Station.cs" />
+    <Compile Include="Models\Enums\TicketType.cs" />
     <Compile Include="Persistence\ApplicationDbContext.cs" />
     <Compile Include="Persistence\Repository\IRepository.cs" />
     <Compile Include="Persistence\Repository\Repository.cs" />
