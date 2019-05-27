@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using WebApp.Models;
+using WebApp.Models.DomainModels;
 
 namespace WebApp.Persistence
 {
@@ -20,5 +21,10 @@ namespace WebApp.Persistence
         {
             return new ApplicationDbContext();
         }
+
+        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<Station> Stations { get; set; }
+        public virtual DbSet<Ticket> Tickets { get; set; }
+        public virtual DbSet<TransportationLine> TransportationLines { get; set; }
     }
 }

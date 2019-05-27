@@ -7,5 +7,6 @@ namespace WebApp.Models.DomainModels
 {
     public class Station
     {
+        public int Id { get; set; }
     }
 }

@@ -69,7 +69,7 @@ namespace WebApp.App_Start
             // container.RegisterType<IProductRepository, ProductRepository>();
            
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
-            container.RegisterType<IUnitOfWork, DemoUnitOfWork>();
+            container.RegisterType<IUnitOfWork, UnitOfWork>();
         }
 
         public void Dispose()

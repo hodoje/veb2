@@ -7,5 +7,6 @@ namespace WebApp.Models.DomainModels
 {
     public class Ticket
     {
+        public int Id { get; set; }
     }
 }

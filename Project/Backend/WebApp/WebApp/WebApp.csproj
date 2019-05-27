@@ -269,9 +269,17 @@
     <Compile Include="Models\DomainModels\Station.cs" />
     <Compile Include="Models\Enums\TicketType.cs" />
     <Compile Include="Persistence\ApplicationDbContext.cs" />
+    <Compile Include="Persistence\ModelRepositories\LocationRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\StationRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TicketRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TransportationLineRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ILocationRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\IStationRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineRepository.cs" />
     <Compile Include="Persistence\Repository\IRepository.cs" />
     <Compile Include="Persistence\Repository\Repository.cs" />
-    <Compile Include="Persistence\UnitOfWork\DemoUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\UnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -340,6 +348,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Controllers\DomainControllers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

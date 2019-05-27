@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApp.Models.DomainModels
 {
-    public class TransportationLine
+    public class TicketType
     {
         public int Id { get; set; }
     }
