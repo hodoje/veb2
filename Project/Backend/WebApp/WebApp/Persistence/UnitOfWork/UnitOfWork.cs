@@ -18,16 +18,30 @@ namespace WebApp.Persistence.UnitOfWork
             _context = context;
         }
 
-        [Dependency]
-        public ILocationRepository LocationRepository { get; set; }
-        [Dependency]
-        public IStationRepository StationRepository { get; set; }
-        [Dependency]
-        public ITicketRepository TicketRepository { get; set; }
-        [Dependency]
-        public ITransportationLineRepository TransportationLineRepository { get; set; }
+		[Dependency]
+		public IBenefitRepository BenefitRepository { get; set; }
+		[Dependency]
+		public IDayOfTheWeekRepository DayOfTheWeekRepository { get; set; }
+		[Dependency]
+		public ILocationRepository LocationRepository { get; set; }
+		[Dependency]
+		public IPricelistRepository PricelistRepository { get; set; }
+		[Dependency]
+		public IScheduleRepository ScheduleRepository { get; set; }
+		[Dependency]
+		public IStationRepository StationRepository { get; set; }
+		[Dependency]
+		public ITicketRepository TicketRepository { get; set; }
+		[Dependency]
+		public ITicketTypePricelistRepository TicketTypePricelistRepository { get; set; }
+		[Dependency]
+		public ITicketTypeRepository TicketTypeRepository { get; set; }
+		[Dependency]
+		public ITransportationLineRepository TransportationLineRepository { get; set; }
+		[Dependency]
+		public IVehicleRepository VehicleRepository { get; set; }
 
-        public int Complete()
+		public int Complete()
         {
             return _context.SaveChanges();
         }

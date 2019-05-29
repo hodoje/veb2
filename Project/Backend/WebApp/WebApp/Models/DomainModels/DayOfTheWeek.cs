@@ -6,12 +6,10 @@ using System.Web;
 namespace WebApp.Models.DomainModels
 {
     // Checked
-    public class Station
+    public class DayOfTheWeek
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int LocationId { get; set; }
-        public Location Location { get; set; }
-        public ICollection<TransportationLine> TransportationLines { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
     }
 }

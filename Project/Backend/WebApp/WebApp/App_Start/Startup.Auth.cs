@@ -40,7 +40,11 @@ namespace WebApp
 
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
-                //For Dev enviroment only (on production should be AllowInsecureHttp = false)
+                // For Dev enviroment only (on production should be AllowInsecureHttp = false)
+				// In real applications there will be access and refresh tokens
+				// Initially client requests both tokens
+				// Access token is the one that lasts for a short period of time and is used for all the actions of the client
+				// Refresh token is the one that lasts longer and is used for getting the new access token after the previous one expires
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/oauth/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),

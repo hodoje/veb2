@@ -9,7 +9,8 @@ using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers
 {
-    [Authorize]
+    // Primer za proveru role
+    [Authorize(Roles = "pera")]
     public class ValuesController : ApiController
     {
         public ValuesController()

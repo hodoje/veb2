@@ -10,6 +10,8 @@ using Unity.Injection;
 using Unity.Lifetime;
 using WebApp.Models;
 using WebApp.Persistence;
+using WebApp.Persistence.ModelRepositories;
+using WebApp.Persistence.ModelRepositoryInterfaces;
 using WebApp.Persistence.Repository;
 using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
@@ -68,7 +70,21 @@ namespace WebApp.App_Start
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
            
+            // PerResolveLifetimeManager will create a new context each time a context is requested
+            // BUT if there is a hierarchy of objects (parent uses the same context as the child etc.)
+            // all of them will get the same context
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
+			container.RegisterType<IBenefitRepository, BenefitRepository>();
+			container.RegisterType<IDayOfTheWeekRepository, DayOfTheWeekRepository>();
+			container.RegisterType<ILocationRepository, LocationRepository>();
+			container.RegisterType<IPricelistRepository, PricelistRepository>();
+			container.RegisterType<IScheduleRepository, ScheduleRepository>();
+			container.RegisterType<IStationRepository, StationRepository>();
+			container.RegisterType<ITicketRepository, TicketRepository>();
+			container.RegisterType<ITicketTypePricelistRepository, TicketTypePricelistRepository>();
+			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
+			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
+			container.RegisterType<IVehicleRepository, VehicleRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
         }
 

@@ -6,12 +6,12 @@ using System.Web;
 namespace WebApp.Models.DomainModels
 {
     // Checked
-    public class Station
+    public class Vehicle
     {
         public int Id { get; set; }
-        public string Name { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }
-        public ICollection<TransportationLine> TransportationLines { get; set; }
+        public int TransportationLineId { get; set; }
+        public TransportationLine TransportationLine { get; set; }
     }
 }
