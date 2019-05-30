@@ -18,6 +18,8 @@ namespace WebApp.Persistence.UnitOfWork
             _context = context;
         }
 
+        [Dependency]
+        public IApplicationUserRepository ApplicationUserRepository { get; set; }
 		[Dependency]
 		public IBenefitRepository BenefitRepository { get; set; }
 		[Dependency]

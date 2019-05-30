@@ -74,6 +74,7 @@ namespace WebApp.App_Start
             // BUT if there is a hierarchy of objects (parent uses the same context as the child etc.)
             // all of them will get the same context
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
+            container.RegisterType<IApplicationUserRepository, ApplicationUserRepository>();
 			container.RegisterType<IBenefitRepository, BenefitRepository>();
 			container.RegisterType<IDayOfTheWeekRepository, DayOfTheWeekRepository>();
 			container.RegisterType<ILocationRepository, LocationRepository>();
