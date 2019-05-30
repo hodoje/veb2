@@ -31,16 +31,5 @@ namespace WebApp.Persistence
 		public virtual DbSet<TicketTypePricelist> TicketTypePricelists { get; set; }
 		public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<TransportationLine> TransportationLines { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            //modelBuilder.Entity<ApplicationUser>()
-            //    .HasOptional(au => au.Benefit);
-
-            //modelBuilder.Entity<Benefit>()
-            //    .HasMany(b => b.ApplicationUsers);
-        }
     }
 }
