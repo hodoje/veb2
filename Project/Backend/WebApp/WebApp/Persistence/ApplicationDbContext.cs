@@ -22,7 +22,6 @@ namespace WebApp.Persistence
             return new ApplicationDbContext();
         }
 
-        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
 		public virtual DbSet<Benefit> Benefits { get; set; }
 		public virtual DbSet<DayOfTheWeek> DayOfTheWeeks { get; set; }
         public virtual DbSet<Location> Locations { get; set; }

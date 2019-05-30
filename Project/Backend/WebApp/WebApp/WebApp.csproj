@@ -266,7 +266,6 @@
     <Compile Include="Models\DomainModels\Address.cs" />
     <Compile Include="Models\DomainModels\Benefit.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
-    <Compile Include="Persistence\ModelRepositories\ApplicationUserRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\DayOfTheWeekRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\PricelistRepository.cs" />
@@ -274,7 +273,6 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\VehicleRepository.cs" />
-    <Compile Include="Persistence\ModelRepositoryInterfaces\IApplicationUserRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IVehicleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
