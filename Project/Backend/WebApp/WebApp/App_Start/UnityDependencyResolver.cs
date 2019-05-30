@@ -76,7 +76,6 @@ namespace WebApp.App_Start
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
 			container.RegisterType<IBenefitRepository, BenefitRepository>();
 			container.RegisterType<IDayOfTheWeekRepository, DayOfTheWeekRepository>();
-			container.RegisterType<ILocationRepository, LocationRepository>();
 			container.RegisterType<IPricelistRepository, PricelistRepository>();
 			container.RegisterType<IScheduleRepository, ScheduleRepository>();
 			container.RegisterType<IStationRepository, StationRepository>();
@@ -84,7 +83,6 @@ namespace WebApp.App_Start
 			container.RegisterType<ITicketTypePricelistRepository, TicketTypePricelistRepository>();
 			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
-			container.RegisterType<IVehicleRepository, VehicleRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
         }
 

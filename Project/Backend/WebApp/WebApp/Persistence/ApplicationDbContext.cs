@@ -24,7 +24,6 @@ namespace WebApp.Persistence
 
 		public virtual DbSet<Benefit> Benefits { get; set; }
 		public virtual DbSet<DayOfTheWeek> DayOfTheWeeks { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
 		public virtual DbSet<Pricelist> Pricelists { get; set; }
 		public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
@@ -32,6 +31,16 @@ namespace WebApp.Persistence
 		public virtual DbSet<TicketTypePricelist> TicketTypePricelists { get; set; }
 		public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<TransportationLine> TransportationLines { get; set; }
-		public virtual DbSet<Vehicle> Vehicles { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<ApplicationUser>()
+            //    .HasOptional(au => au.Benefit);
+
+            //modelBuilder.Entity<Benefit>()
+            //    .HasMany(b => b.ApplicationUsers);
+        }
     }
 }

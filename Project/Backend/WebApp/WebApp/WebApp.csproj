@@ -259,6 +259,10 @@
     <Compile Include="Migrations\201905222056072_InitialMigration.Designer.cs">
       <DependentUpon>201905222056072_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905301117387_ModelUpdate1.cs" />
+    <Compile Include="Migrations\201905301117387_ModelUpdate1.Designer.cs">
+      <DependentUpon>201905301117387_ModelUpdate1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -272,9 +276,7 @@
     <Compile Include="Persistence\ModelRepositories\ScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
-    <Compile Include="Persistence\ModelRepositories\VehicleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
-    <Compile Include="Persistence\ModelRepositoryInterfaces\IVehicleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypeRepository.cs" />
@@ -288,12 +290,10 @@
     <Compile Include="Models\DomainModels\Station.cs" />
     <Compile Include="Models\DomainModels\Vehicle.cs" />
     <Compile Include="Persistence\ApplicationDbContext.cs" />
-    <Compile Include="Persistence\ModelRepositories\LocationRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\StationRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransportationLineRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IDayOfTheWeekRepository.cs" />
-    <Compile Include="Persistence\ModelRepositoryInterfaces\ILocationRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IPricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IStationRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketRepository.cs" />
@@ -403,6 +403,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201905222056072_InitialMigration.resx">
       <DependentUpon>201905222056072_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905301117387_ModelUpdate1.resx">
+      <DependentUpon>201905301117387_ModelUpdate1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

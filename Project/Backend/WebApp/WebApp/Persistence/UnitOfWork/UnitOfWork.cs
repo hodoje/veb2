@@ -23,8 +23,6 @@ namespace WebApp.Persistence.UnitOfWork
 		[Dependency]
 		public IDayOfTheWeekRepository DayOfTheWeekRepository { get; set; }
 		[Dependency]
-		public ILocationRepository LocationRepository { get; set; }
-		[Dependency]
 		public IPricelistRepository PricelistRepository { get; set; }
 		[Dependency]
 		public IScheduleRepository ScheduleRepository { get; set; }
@@ -38,8 +36,6 @@ namespace WebApp.Persistence.UnitOfWork
 		public ITicketTypeRepository TicketTypeRepository { get; set; }
 		[Dependency]
 		public ITransportationLineRepository TransportationLineRepository { get; set; }
-		[Dependency]
-		public IVehicleRepository VehicleRepository { get; set; }
 
 		public int Complete()
         {

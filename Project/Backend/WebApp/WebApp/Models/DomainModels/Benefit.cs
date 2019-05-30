@@ -9,5 +9,6 @@ namespace WebApp.Models.DomainModels
 	{
 		public int Id { get; set; }
 		public double DiscountCoefficient { get; set; }
+        public ICollection<ApplicationUser> ApplicationUsers { get; set; }
 	}
 }

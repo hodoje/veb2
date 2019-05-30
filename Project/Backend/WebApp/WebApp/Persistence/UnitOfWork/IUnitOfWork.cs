@@ -12,7 +12,6 @@ namespace WebApp.Persistence.UnitOfWork
     {
 		IBenefitRepository BenefitRepository { get; }
 		IDayOfTheWeekRepository DayOfTheWeekRepository { get; }
-        ILocationRepository LocationRepository { get; }
 		IPricelistRepository PricelistRepository { get; }
 		IScheduleRepository ScheduleRepository { get; }
         IStationRepository StationRepository { get; }
@@ -20,7 +19,6 @@ namespace WebApp.Persistence.UnitOfWork
 		ITicketTypePricelistRepository TicketTypePricelistRepository { get; }
 		ITicketTypeRepository TicketTypeRepository { get; }
         ITransportationLineRepository TransportationLineRepository { get; }
-		IVehicleRepository VehicleRepository { get; }
         int Complete();
     }
 }
