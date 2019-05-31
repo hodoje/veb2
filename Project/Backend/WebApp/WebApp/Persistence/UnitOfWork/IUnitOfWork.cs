@@ -10,7 +10,8 @@ namespace WebApp.Persistence.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-		IBenefitRepository BenefitRepository { get; }
+        IBenefitRepository BenefitRepository { get; }
+		IUserTypeRepository UserTypeRepository { get; }
 		IDayOfTheWeekRepository DayOfTheWeekRepository { get; }
 		IPricelistRepository PricelistRepository { get; }
 		IScheduleRepository ScheduleRepository { get; }

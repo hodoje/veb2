@@ -13,7 +13,7 @@ namespace WebApp.Models.DomainModels
         public int DayOfTheWeekId { get; set; }
         public DayOfTheWeek DayOfTheWeek { get; set; }
         public string Timetable { get; set; }
-        public int TransportationLineId { get; set; }
+        public int? TransportationLineId { get; set; }
         public TransportationLine TransportationLine { get; set; }
     }
 }

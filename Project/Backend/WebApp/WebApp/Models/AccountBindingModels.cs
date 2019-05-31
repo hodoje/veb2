@@ -34,6 +34,23 @@ namespace WebApp.Models
 
     public class RegisterBindingModel
     {
+        #region Additional properties
+        [Required]
+        [StringLength(60, MinimumLength = 2)]
+        public string Name { get; set; }
+
+        [Required]
+        [StringLength(60, MinimumLength = 2)]
+        public string LastName { get; set; }
+
+        [Required]
+        public DateTime Birthday { get; set; }
+
+        [Required]
+        [StringLength(60, MinimumLength = 2)]
+        public string Address { get; set; }
+        #endregion
+
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }

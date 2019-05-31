@@ -48,6 +48,12 @@
     <Reference Include="AutoMapper, Version=8.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.8.1.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -172,12 +178,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -262,6 +262,7 @@
     <Compile Include="Controllers\DomainControllers\TicketTypePricelistsController.cs" />
     <Compile Include="Controllers\DomainControllers\TicketTypesController.cs" />
     <Compile Include="Controllers\DomainControllers\TransportationLinesController.cs" />
+    <Compile Include="Controllers\DomainControllers\UserTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -275,21 +276,36 @@
     <Compile Include="Migrations\201905301117387_ModelUpdate1.Designer.cs">
       <DependentUpon>201905301117387_ModelUpdate1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905311039331_Benefit_UserType.cs" />
+    <Compile Include="Migrations\201905311039331_Benefit_UserType.Designer.cs">
+      <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\DomainModels\Benefit.cs" />
+    <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
+    <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
+    <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
-    <Compile Include="Models\Dtos\BenefitDto.cs" />
+    <Compile Include="Models\Dtos\PricelistDto.cs" />
+    <Compile Include="Models\Dtos\ScheduleDto.cs" />
+    <Compile Include="Models\Dtos\StationDto.cs" />
+    <Compile Include="Models\Dtos\TicketDto.cs" />
+    <Compile Include="Models\Dtos\TicketTypeDto.cs" />
+    <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
+    <Compile Include="Models\Dtos\TransportationLineDto.cs" />
+    <Compile Include="Models\Dtos\UserTypeDto.cs" />
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\UserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\DayOfTheWeekRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\PricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\ScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypeRepository.cs" />
@@ -416,6 +432,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905301117387_ModelUpdate1.resx">
       <DependentUpon>201905301117387_ModelUpdate1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905311039331_Benefit_UserType.resx">
+      <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,8 +17,8 @@ namespace WebApp.Models
     {
 		#region Properties
 		public ICollection<Ticket> Tickets { get; set; }
-		public int? BenefitId { get; set; }
-		public Benefit Benefit { get; set; }
+		public int? UserTypeId { get; set; }
+		public UserType UserType { get; set; }
 		#endregion
 
 		#region Methods

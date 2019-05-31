@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebApp.Models.DomainModels.Benefits;
 
 namespace WebApp.Models.DomainModels
 {
-	public class Benefit
+	public class UserType
 	{
 		public int Id { get; set; }
-		public double DiscountCoefficient { get; set; }
+        public string Name { get; set; }
         public ICollection<ApplicationUser> ApplicationUsers { get; set; }
-	}
+        public ICollection<Benefit> Benefits { get; set; }
+    }
 }

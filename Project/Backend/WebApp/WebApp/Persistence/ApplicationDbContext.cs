@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using WebApp.Models;
 using WebApp.Models.DomainModels;
+using WebApp.Models.DomainModels.Benefits;
 
 namespace WebApp.Persistence
 {
@@ -22,7 +23,8 @@ namespace WebApp.Persistence
             return new ApplicationDbContext();
         }
 
-		public virtual DbSet<Benefit> Benefits { get; set; }
+        public virtual DbSet<Benefit> Benefits { get; set; }
+		public virtual DbSet<UserType> UserTypes { get; set; }
 		public virtual DbSet<DayOfTheWeek> DayOfTheWeeks { get; set; }
 		public virtual DbSet<Pricelist> Pricelists { get; set; }
 		public virtual DbSet<Schedule> Schedules { get; set; }

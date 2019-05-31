@@ -18,24 +18,26 @@ namespace WebApp.Persistence.UnitOfWork
             _context = context;
         }
 
+        [Dependency]
+        public IBenefitRepository BenefitRepository { get; private set; }
 		[Dependency]
-		public IBenefitRepository BenefitRepository { get; set; }
+		public IUserTypeRepository UserTypeRepository { get; private set; }
 		[Dependency]
-		public IDayOfTheWeekRepository DayOfTheWeekRepository { get; set; }
+		public IDayOfTheWeekRepository DayOfTheWeekRepository { get; private set; }
 		[Dependency]
-		public IPricelistRepository PricelistRepository { get; set; }
+		public IPricelistRepository PricelistRepository { get; private set; }
 		[Dependency]
-		public IScheduleRepository ScheduleRepository { get; set; }
+		public IScheduleRepository ScheduleRepository { get; private set; }
 		[Dependency]
-		public IStationRepository StationRepository { get; set; }
+		public IStationRepository StationRepository { get; private set; }
 		[Dependency]
-		public ITicketRepository TicketRepository { get; set; }
+		public ITicketRepository TicketRepository { get; private set; }
 		[Dependency]
-		public ITicketTypePricelistRepository TicketTypePricelistRepository { get; set; }
+		public ITicketTypePricelistRepository TicketTypePricelistRepository { get; private set; }
 		[Dependency]
-		public ITicketTypeRepository TicketTypeRepository { get; set; }
+		public ITicketTypeRepository TicketTypeRepository { get; private set; }
 		[Dependency]
-		public ITransportationLineRepository TransportationLineRepository { get; set; }
+		public ITransportationLineRepository TransportationLineRepository { get; private set; }
 
 		public int Complete()
         {

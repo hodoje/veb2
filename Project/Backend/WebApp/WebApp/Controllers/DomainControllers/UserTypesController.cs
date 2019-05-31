@@ -8,62 +8,62 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using WebApp.Models.DomainModels.Benefits;
+using WebApp.Models.DomainModels;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers.DomainControllers
 {
-    public class BenefitsController : ApiController
+    public class UserTypesController : ApiController
     {
         private IUnitOfWork unitOfWork;
 
-        public BenefitsController(IUnitOfWork uow)
+        public UserTypesController(IUnitOfWork uow)
         {
-            this.unitOfWork = uow;
+            unitOfWork = uow;
         }
 
-        // GET: api/Benefits
-        public IEnumerable<Benefit> GetBenefits()
+        // GET: api/UserTypes
+        public IEnumerable<UserType> GetUserTypes()
         {
-            return unitOfWork.BenefitRepository.GetAll();
+            return unitOfWork.UserTypeRepository.GetAll();
         }
 
-        // GET: api/Benefits/5
-        [ResponseType(typeof(Benefit))]
-        public IHttpActionResult GetBenefit(int id)
+        // GET: api/UserTypes/5
+        [ResponseType(typeof(UserType))]
+        public IHttpActionResult GetUserType(int id)
         {
-            Benefit benefit = unitOfWork.BenefitRepository.Get(id);
-            if (benefit == null)
+            UserType userType = unitOfWork.UserTypeRepository.Get(id);
+            if (userType == null)
             {
                 return NotFound();
             }
 
-            return Ok(benefit);
+            return Ok(userType);
         }
 
-        // PUT: api/Benefits/5
+        // PUT: api/UserTypes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutBenefit(int id, Benefit benefit)
+        public IHttpActionResult PutUserType(int id, UserType userType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != benefit.Id)
+            if (id != userType.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                unitOfWork.BenefitRepository.Update(benefit);
+                unitOfWork.UserTypeRepository.Update(userType);
                 unitOfWork.Complete();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BenefitExists(id))
+                if (!UserTypeExists(id))
                 {
                     return NotFound();
                 }
@@ -76,35 +76,35 @@ namespace WebApp.Controllers.DomainControllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Benefits
-        [ResponseType(typeof(Benefit))]
-        public IHttpActionResult PostBenefit(Benefit benefit)
+        // POST: api/UserTypes
+        [ResponseType(typeof(UserType))]
+        public IHttpActionResult PostUserType(UserType userType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            unitOfWork.BenefitRepository.Add(benefit);
+            unitOfWork.UserTypeRepository.Add(userType);
             unitOfWork.Complete();
 
-            return CreatedAtRoute("DefaultApi", new { id = benefit.Id }, benefit);
+            return CreatedAtRoute("DefaultApi", new { id = userType.Id }, userType);
         }
 
-        // DELETE: api/Benefits/5
-        [ResponseType(typeof(Benefit))]
-        public IHttpActionResult DeleteBenefit(int id)
+        // DELETE: api/UserTypes/5
+        [ResponseType(typeof(UserType))]
+        public IHttpActionResult DeleteUserType(int id)
         {
-            Benefit benefit = unitOfWork.BenefitRepository.Get(id);
-            if (benefit == null)
+            UserType userType = unitOfWork.UserTypeRepository.Get(id);
+            if (userType == null)
             {
                 return NotFound();
             }
-
-            unitOfWork.BenefitRepository.Remove(benefit);
+            
+            unitOfWork.UserTypeRepository.Remove(userType);
             unitOfWork.Complete();
 
-            return Ok(benefit);
+            return Ok(userType);
         }
 
         protected override void Dispose(bool disposing)
@@ -116,9 +116,9 @@ namespace WebApp.Controllers.DomainControllers
             base.Dispose(disposing);
         }
 
-        private bool BenefitExists(int id)
+        private bool UserTypeExists(int id)
         {
-            return unitOfWork.BenefitRepository.Get(id) == null;
+            return unitOfWork.UserTypeRepository.Get(id) != null;
         }
     }
 }

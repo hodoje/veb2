@@ -71,10 +71,11 @@ namespace WebApp.App_Start
             // container.RegisterType<IProductRepository, ProductRepository>();
            
             // PerResolveLifetimeManager will create a new context each time a context is requested
-            // BUT if there is a hierarchy of objects (parent uses the same context as the child etc.)
+            // BUT if there is a hierarchy of objects (child uses the same context as the parent etc.)
             // all of them will get the same context
             container.RegisterType<DbContext, ApplicationDbContext>(new PerResolveLifetimeManager());
-			container.RegisterType<IBenefitRepository, BenefitRepository>();
+            container.RegisterType<IBenefitRepository, BenefitRepository>();
+			container.RegisterType<IUserTypeRepository, UserTypeRepository>();
 			container.RegisterType<IDayOfTheWeekRepository, DayOfTheWeekRepository>();
 			container.RegisterType<IPricelistRepository, PricelistRepository>();
 			container.RegisterType<IScheduleRepository, ScheduleRepository>();
