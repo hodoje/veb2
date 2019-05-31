@@ -20,6 +20,5 @@ namespace WebApp.Models.DomainModels
         public int LineNum { get; set; }
         public ICollection<Station> Stations { get; set; }
         public ICollection<Schedule> Schedules { get; set; }
-        public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

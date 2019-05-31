@@ -10,8 +10,10 @@ namespace WebApp.Models.DomainModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        //public int LocationId { get; set; }
-        //public Location Location { get; set; }
+        // x coord
+        public double Longitude { get; set; }
+        // y coord
+        public double Latitude { get; set; }
         public ICollection<TransportationLine> TransportationLines { get; set; }
     }
 }
