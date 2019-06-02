@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using WebApp.Models.DomainModels;
+using WebApp.Models.DomainModels.Benefits;
 
 namespace WebApp.Models
 {
@@ -22,6 +23,25 @@ namespace WebApp.Models
 		#endregion
 
 		#region Methods
+
+        /// <summary>
+        /// Finds the discount coefficient for the given user.
+        /// </summary>
+        /// <returns>Discoutn coefficient if the user has a user type ( role ) and defined discount for that role.</returns>
+        public double GetDiscountCoefficient()
+        {
+            double discountValue = 1;
+            try
+            {
+                if (UserTypeId.HasValue)
+                {
+                    discountValue = ((TransportDiscountBenefit)UserType.Benefits.FirstOrDefault(x => x.GetType() == typeof(TransportDiscountBenefit))).CoefficientDiscount;
+                }
+            }
+            finally { }
+            return discountValue;
+        }
+
 		public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

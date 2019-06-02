@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -15,6 +16,13 @@ namespace WebApp
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+        }
+
+        public override Task<ApplicationUser> FindByNameAsync(string userName)
+        {
+            return Users.Include(x => x.UserType.Benefits)
+                .FirstAsync(x => x.UserName.Equals(userName));
+
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)

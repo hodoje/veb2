@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,9 +7,15 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using WebApp.Models;
 using WebApp.Models.DomainModels;
+using WebApp.Models.DomainModels.Benefits;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
@@ -16,17 +23,70 @@ namespace WebApp.Controllers.DomainControllers
 {
     public class TicketTypePricelistsController : ApiController
     {
+        private readonly string authentificationType = "JWT";
 		private IUnitOfWork unitOfWork;
+        private ApplicationUserManager userManager;
 
 		public TicketTypePricelistsController(IUnitOfWork uow)
 		{
 			unitOfWork = uow;
 		}
 
-		// GET: api/TicketTypePricelists
-		public IEnumerable<TicketTypePricelist> GetTicketTypePricelists()
+        public ApplicationUserManager UserManager
         {
-			return unitOfWork.TicketTypePricelistRepository.GetAll();
+            get => userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            set => userManager = value;
+        }
+
+        // GET: api/TicketTypePricelists
+        public async Task<IHttpActionResult> GetTicketTypePricelists()
+        {
+            try
+            {
+                string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
+                ApplicationUser user = await UserManager.FindByNameAsync(userName);
+
+                Pricelist currentPriceList = unitOfWork.PricelistRepository.GetAll().FirstOrDefault(x =>
+                {
+                    if (x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+
+                List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
+
+                List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
+
+                double discoutnCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
+
+                pltts.ForEach(pltt =>
+                {
+                    TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                    {
+                        Price = pltt.BasePrice * discoutnCoefficient,
+                        Name = pltt.TicketType.Name,
+                        TicketId = pltt.TicketType.Id
+                    };
+
+                    tickets.Add(ticket);
+                });
+
+                return Ok(tickets);
+            }
+            catch(NullReferenceException nre)
+            {
+                // log exception 
+                return BadRequest("Service is in invalid state.");
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/TicketTypePricelists/5
