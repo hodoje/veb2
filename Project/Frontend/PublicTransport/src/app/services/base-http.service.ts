@@ -10,23 +10,23 @@ export class BaseHttpService<T> {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAll(): Observable<T[]>{
+  getAll(): Observable<T[]> {
     return this.httpClient.get<T[]>(this.baseUrl + this.specifiedUrl);
   }
 
-  getById(id: number): Observable<T>{
+  getById(id: number): Observable<T> {
     return this.httpClient.get<T>(this.baseUrl + this.specifiedUrl + `/${id}`);
   }
 
-  put(id: number, inputData: T){
+  put(id: number, inputData: T) {
     return this.httpClient.put(this.baseUrl + this.specifiedUrl + `/${id}`, inputData);
   }
 
-  post(inputData: any): Observable<T>{
+  post(inputData: any): Observable<T> {
     return this.httpClient.post<T>(this.baseUrl + this.specifiedUrl, inputData);
   }
 
-  delete(id: number): Observable<T>{
+  delete(id: number) {
     return this.httpClient.delete(this.baseUrl + this.specifiedUrl + `/${id}`);
   }
 }
