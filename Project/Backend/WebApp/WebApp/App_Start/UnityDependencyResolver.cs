@@ -4,6 +4,7 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Web.Http;
 using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
@@ -85,6 +86,8 @@ namespace WebApp.App_Start
 			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
+
+            GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
         }
 
         public void Dispose()
