@@ -16,7 +16,12 @@ namespace WebApp.Persistence.ModelRepositories
 			get { return context as ApplicationDbContext; }
 		}
 
-		public TicketTypeRepository(DbContext context) : base(context)
+        public override TicketType Get(int id)
+        {
+            return context.Set<TicketType>().Include(tt => tt.TicketTypePricelists).FirstOrDefault(t => t.Id == id);
+        }
+
+        public TicketTypeRepository(DbContext context) : base(context)
 		{
 		}
 	}
