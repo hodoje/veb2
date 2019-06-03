@@ -86,6 +86,7 @@
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
@@ -93,6 +94,7 @@
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.40306.1554, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.4.403061554\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -263,6 +265,7 @@
     <Compile Include="Controllers\DomainControllers\TicketsController.cs" />
     <Compile Include="Controllers\DomainControllers\TicketTypePricelistsController.cs" />
     <Compile Include="Controllers\DomainControllers\TicketTypesController.cs" />
+    <Compile Include="Controllers\DomainControllers\TransporationLineTypesController.cs" />
     <Compile Include="Controllers\DomainControllers\TransportationLinesController.cs" />
     <Compile Include="Controllers\DomainControllers\UserTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -282,12 +285,17 @@
     <Compile Include="Migrations\201905311039331_Benefit_UserType.Designer.cs">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906031956172_TransporationLineType_Added.cs" />
+    <Compile Include="Migrations\201906031956172_TransporationLineType_Added.Designer.cs">
+      <DependentUpon>201906031956172_TransporationLineType_Added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
+    <Compile Include="Models\DomainModels\TransporationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
@@ -301,6 +309,7 @@
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TransporationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\UserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\DayOfTheWeekRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\PricelistRepository.cs" />
@@ -308,6 +317,7 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransporationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypePricelistRepository.cs" />
@@ -439,6 +449,9 @@
     <EmbeddedResource Include="Migrations\201905311039331_Benefit_UserType.resx">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906031956172_TransporationLineType_Added.resx">
+      <DependentUpon>201906031956172_TransporationLineType_Added.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -454,7 +467,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52295</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

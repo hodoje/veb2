@@ -7,5 +7,6 @@ namespace WebApp.Models.Dtos
 {
     public class TicketDto
     {
-    }
+		public int TicketTypeId { get; set; }
+	}
 }
