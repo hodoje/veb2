@@ -1,17 +1,18 @@
 namespace WebApp.Migrations
 {
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
-    using Models.DomainModels;
-    using Models.DomainModels.Benefits;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-    using WebApp.Models;
+	using Microsoft.AspNet.Identity;
+	using Microsoft.AspNet.Identity.EntityFramework;
+	using Models.DomainModels;
+	using Models.DomainModels.Benefits;
+	using System;
+	using System.Collections.Generic;
+	using System.Data.Entity;
+	using System.Data.Entity.Migrations;
+	using System.Linq;
+	using WebApp.Models;
+	using WebApp.Persistence;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<WebApp.Persistence.ApplicationDbContext>
+	internal sealed class Configuration : DbMigrationsConfiguration<WebApp.Persistence.ApplicationDbContext>
     {
         public Configuration()
         {
@@ -19,50 +20,120 @@ namespace WebApp.Migrations
         }
 
         protected override void Seed(WebApp.Persistence.ApplicationDbContext context)
-        {
-            //  This method will be called after migrating to the latest version.
+		{
+			//  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
+			//  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+			//  to avoid creating duplicate seed data.
 
-            if (!context.Roles.Any(r => r.Name == "Admin"))
-            {
-                var store = new RoleStore<IdentityRole>(context);
-                var manager = new RoleManager<IdentityRole>(store);
-                var role = new IdentityRole { Name = "Admin" };
+			PopulateUserRoles(context);
 
-                manager.Create(role);
-            }
+			PopulateDaysOfTheWeek(context);
 
-            if (!context.Roles.Any(r => r.Name == "Controller"))
-            {
-                var store = new RoleStore<IdentityRole>(context);
-                var manager = new RoleManager<IdentityRole>(store);
-                var role = new IdentityRole { Name = "Controller" };
+			PopulateTransporationTypes(context);
 
-                manager.Create(role);
-            }
+			PopulateTransporationLines(context);
 
-            if (!context.Roles.Any(r => r.Name == "AppUser"))
-            {
-                var store = new RoleStore<IdentityRole>(context);
-                var manager = new RoleManager<IdentityRole>(store);
-                var role = new IdentityRole { Name = "AppUser" };
+			PopulateUserTypesWithBenefits(context);
 
-                manager.Create(role);
-            }
+			PopulateUsers(context);
 
-            PopulateUserTypesWithBenefits(context);
+			PopulateAllTicketTables(context);
 
-            PopulateUsers(context);
+			context.SaveChanges();
+		}
 
-            PopulateAllTicketTables(context);
+		private void PopulateTransporationLines(ApplicationDbContext context)
+		{
+			TransporationLineType tlType = context.TransporationLineTypes.First();
+			Station station = context.Stations.First();
 
+			if (!context.TransportationLines.Any(x => x.LineNum == 4))
+			{
+				context.TransportationLines.Add(new TransportationLine()
+				{
+					LineNum = 4,
+					TransporationLineType = tlType,
+					Stations = new List<Station>(1) { station },
+					Schedules = new List<Schedule>(3)
+					{
+						new Schedule() { }
+					}
+				});
+			}
+		}
 
-            context.SaveChanges();
-        }
+		private void PopulateTransporationTypes(ApplicationDbContext context)
+		{
+			List<string> transporationLineTypes = new List<string>(2) { "Town", "Suburban" };
 
-        private void PopulateUsers(WebApp.Persistence.ApplicationDbContext context)
+			foreach (string type in transporationLineTypes)
+			{
+				if (!context.TransporationLineTypes.Any(x => x.Id.Equals(type)))
+				{
+					context.TransporationLineTypes.Add(new TransporationLineType() { Id = type });
+				}
+			}
+
+			context.SaveChanges();
+		}
+
+		private void PopulateDaysOfTheWeek(ApplicationDbContext context)
+		{
+			List<string> daysOfTheWeek = new List<string>(3) { "Weekday", "Saturday", "Sunday" };
+
+			foreach (string day in daysOfTheWeek)
+			{
+				if (!context.DayOfTheWeeks.Any(x => x.Name.Equals(day)))
+				{
+					context.DayOfTheWeeks.Add(new DayOfTheWeek() { Name = day });
+				}
+			}
+
+			context.SaveChanges();
+		}
+
+		private void PopulateStations(ApplicationDbContext context)
+		{
+			if (!context.Stations.Any(x => x.Name.Equals("Station1")))
+			{
+				context.Stations.Add(new Station() { Name = "Station1", Longitude = 45.259302, Latitude = 19.832563 });
+			}
+
+			context.SaveChanges();
+		}
+
+		private void PopulateUserRoles(ApplicationDbContext context)
+		{
+			if (!context.Roles.Any(r => r.Name == "Admin"))
+			{
+				var store = new RoleStore<IdentityRole>(context);
+				var manager = new RoleManager<IdentityRole>(store);
+				var role = new IdentityRole { Name = "Admin" };
+
+				manager.Create(role);
+			}
+
+			if (!context.Roles.Any(r => r.Name == "Controller"))
+			{
+				var store = new RoleStore<IdentityRole>(context);
+				var manager = new RoleManager<IdentityRole>(store);
+				var role = new IdentityRole { Name = "Controller" };
+
+				manager.Create(role);
+			}
+
+			if (!context.Roles.Any(r => r.Name == "AppUser"))
+			{
+				var store = new RoleStore<IdentityRole>(context);
+				var manager = new RoleManager<IdentityRole>(store);
+				var role = new IdentityRole { Name = "AppUser" };
+
+				manager.Create(role);
+			}
+		}
+
+		private void PopulateUsers(ApplicationDbContext context)
         {
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
@@ -76,7 +147,7 @@ namespace WebApp.Migrations
             }
         }
 
-        private void PopulateAllTicketTables(WebApp.Persistence.ApplicationDbContext context)
+        private void PopulateAllTicketTables(ApplicationDbContext context)
         {
             if (!context.Pricelists.Any(pl => pl.Id == 1))
             {
@@ -108,7 +179,7 @@ namespace WebApp.Migrations
             }
         }
 
-        private void PopulateUserTypesWithBenefits(WebApp.Persistence.ApplicationDbContext context)
+        private void PopulateUserTypesWithBenefits(ApplicationDbContext context)
         {
             Dictionary<string, double> roleBenefits = new Dictionary<string, double>(3)
             {
