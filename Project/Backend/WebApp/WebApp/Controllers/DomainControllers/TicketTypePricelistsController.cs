@@ -34,8 +34,8 @@ namespace WebApp.Controllers.DomainControllers
 
         public ApplicationUserManager UserManager
         {
-            get => userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            set => userManager = value;
+            get { return userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            set { userManager = value; }
         }
 
         // GET: api/TicketTypePricelists
@@ -46,17 +46,7 @@ namespace WebApp.Controllers.DomainControllers
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
 
-                Pricelist currentPriceList = unitOfWork.PricelistRepository.GetAll().FirstOrDefault(x =>
-                {
-                    if (x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                });
+                Pricelist currentPriceList = unitOfWork.PricelistRepository.Find(x => x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now).FirstOrDefault();
 
                 List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
 

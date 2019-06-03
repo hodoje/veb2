@@ -280,6 +280,10 @@
     <Compile Include="Migrations\201905311039331_Benefit_UserType.Designer.cs">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906030724503_TicketType.cs" />
+    <Compile Include="Migrations\201906030724503_TicketType.Designer.cs">
+      <DependentUpon>201906030724503_TicketType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -435,6 +439,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905311039331_Benefit_UserType.resx">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906030724503_TicketType.resx">
+      <DependentUpon>201906030724503_TicketType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
