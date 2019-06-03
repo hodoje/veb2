@@ -9,6 +9,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
+using WebApp.BusinessComponents;
 using WebApp.Models;
 using WebApp.Persistence;
 using WebApp.Persistence.ModelRepositories;
@@ -86,6 +87,7 @@ namespace WebApp.App_Start
 			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
+            container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
         }

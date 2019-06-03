@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using WebApp.BusinessComponents;
 using WebApp.Models;
 using WebApp.Models.DomainModels;
 using WebApp.Models.DomainModels.Benefits;
@@ -25,11 +26,13 @@ namespace WebApp.Controllers.DomainControllers
     {
         private readonly string authentificationType = "JWT";
 		private IUnitOfWork unitOfWork;
+        private ITicketBusinessComponent ticketBusiness;
         private ApplicationUserManager userManager;
 
-		public TicketTypePricelistsController(IUnitOfWork uow)
+		public TicketTypePricelistsController(IUnitOfWork uow, ITicketBusinessComponent ticketBusiness)
 		{
 			unitOfWork = uow;
+            this.ticketBusiness = ticketBusiness;
 		}
 
         public ApplicationUserManager UserManager
@@ -41,30 +44,19 @@ namespace WebApp.Controllers.DomainControllers
         // GET: api/TicketTypePricelists
         public async Task<IHttpActionResult> GetTicketTypePricelists()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
 
-                Pricelist currentPriceList = unitOfWork.PricelistRepository.Find(x => x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now).FirstOrDefault();
+                double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
 
-                List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
-
-                List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
-
-                double discoutnCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
-
-                pltts.ForEach(pltt =>
-                {
-                    TicketTypePricelistDto ticket = new TicketTypePricelistDto()
-                    {
-                        Price = pltt.BasePrice * discoutnCoefficient,
-                        Name = pltt.TicketType.Name,
-                        TicketId = pltt.TicketType.Id
-                    };
-
-                    tickets.Add(ticket);
-                });
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAvailableTicketsWithPrices(unitOfWork, discountCoefficient);
 
                 return Ok(tickets);
             }
