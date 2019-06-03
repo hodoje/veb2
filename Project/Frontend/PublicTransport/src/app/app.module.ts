@@ -9,6 +9,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
 import { LoginComponent } from './components/login/login.component';
 import { AuthHttpService } from './services/auth-http.service';
+import { PLTTService } from './services/price-list-ticket-type-http.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AuthHttpService } from './services/auth-http.service';
   providers: 
   [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    AuthHttpService
+    AuthHttpService,
+    PLTTService
   ],
   bootstrap: [AppComponent]
 })
