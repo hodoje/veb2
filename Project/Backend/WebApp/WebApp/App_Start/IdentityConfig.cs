@@ -21,8 +21,7 @@ namespace WebApp
         public override Task<ApplicationUser> FindByNameAsync(string userName)
         {
             return Users.Include(x => x.UserType.Benefits)
-                .FirstAsync(x => x.UserName.Equals(userName));
-
+                .FirstOrDefaultAsync(x => x.UserName.Equals(userName));
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
