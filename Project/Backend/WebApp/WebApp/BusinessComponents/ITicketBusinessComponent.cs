@@ -9,6 +9,6 @@ namespace WebApp.BusinessComponents
     {
         IEnumerable<TicketTypePricelistDto> ListAvailableTicketsWithPrices(IUnitOfWork unitOfWork, double discountCoefficient);
 
-        bool BuyTicket(ApplicationUser user, int ticketTypeId);
+        bool BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false);
     }
 }

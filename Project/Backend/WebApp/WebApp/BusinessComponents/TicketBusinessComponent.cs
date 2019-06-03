@@ -12,9 +12,31 @@ namespace WebApp.BusinessComponents
 {
     public class TicketBusinessComponent : ITicketBusinessComponent
     {
-        public bool BuyTicket(ApplicationUser user, int ticketTypeId)
+        public bool BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TicketType ticketType = unitOfWork.TicketTypeRepository.Get(ticketTypeId);
+
+                if (ticketType == null)
+                {
+                    return false;
+                }
+
+                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => (pltt.Pricelist.FromDate <= DateTime.Now && pltt.Pricelist.ToDate >= DateTime.Now)).FirstOrDefault();
+                Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
+
+                if (completeTransaction == true)
+                {
+                    unitOfWork.Complete();
+                }
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public IEnumerable<TicketTypePricelistDto> ListAvailableTicketsWithPrices(IUnitOfWork unitOfWork, double discountCoefficient)
