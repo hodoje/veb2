@@ -1,6 +1,6 @@
 import { BaseHttpService } from './base-http.service';
-import { PriceListTicketType } from '../dtos/pricelisttickettype.model';
+import { PriceListTicketType } from '../models/pricelisttickettype.model';
 
 export class PLTTService extends BaseHttpService<PriceListTicketType>{
-    specifiedUrl = "api/TicketTypePricelists"
+    specifiedUrl = "ticketTypePricelists"
 }
