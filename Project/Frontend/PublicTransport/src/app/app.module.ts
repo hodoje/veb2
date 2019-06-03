@@ -18,6 +18,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { PassengerComponent } from './components/passenger/passenger.component';
 import { ControllerComponent } from './components/controller/controller.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { LoginToNavbarService } from './services/login-to-navbar.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AdminComponent } from './components/admin/admin.component';
   [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     AuthHttpService,
-    PLTTService
+    PLTTService,
+    LoginToNavbarService
   ],
   bootstrap: [AppComponent]
 })

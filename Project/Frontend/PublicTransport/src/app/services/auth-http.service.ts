@@ -32,13 +32,16 @@ export class AuthHttpService{
 
           console.log('jwtData: ' + jwtData)
           console.log('decodedJwtJsonData: ' + decodedJwtJsonData)
-          console.log('decodedJwtData: ' + decodedJwtData)
+          console.log('decodedJwtData: ' + JSON.stringify(decodedJwtData))
           console.log('Role ' + role)
 
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
-          callback();
+          callback(true);
           
-        } );
+        },
+        err => {
+            callback(false);
+        });
     }
 }

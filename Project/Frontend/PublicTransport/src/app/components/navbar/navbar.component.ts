@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { LoginToNavbarService } from 'src/app/services/login-to-navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  isLoggedIn = false;
+
+  constructor(private loginToNavbarService: LoginToNavbarService) { }
 
   ngOnInit() {
   }
