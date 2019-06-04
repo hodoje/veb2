@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RegistrationService } from 'src/app/services/registration.service';
+import { RegistrationService } from 'src/app/services/registration-http.service';
 import { Registration } from 'src/app/models/registration.model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  register(registration: Registration){
+  register(registration: Registration, f: NgForm){
     this.registrationService.register(registration, (successfulRegistration) => {
       if(successfulRegistration){
         this.registrationSuccessful = true;

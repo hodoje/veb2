@@ -8,7 +8,8 @@ import { NgForm } from '@angular/forms';
 @Injectable()
 export class AuthHttpService{
     base_url = "http://localhost:52295/";
-    specifiedUrl = "oauth/token"
+    loginUrl = "oauth/token"
+    logoutUrl = "api/account/logout"
 
     constructor(private http: HttpClient){
     }
@@ -21,7 +22,7 @@ export class AuthHttpService{
             }
         }
 
-        this.http.post<any>(this.base_url + this.specifiedUrl, data, httpOptions)
+        this.http.post<any>(this.base_url + this.loginUrl, data, httpOptions)
         .subscribe(data => {
               
           let jwt = data.access_token;
@@ -43,7 +44,17 @@ export class AuthHttpService{
           
         },
         err => {
-            callback(false);
+            callback(false, err.status);
         });
+    }
+
+    logOut(callback){
+        this.http.post(this.base_url + this.logoutUrl, null).subscribe(
+            confirm => {
+                localStorage.jwt = undefined;
+                localStorage.role = undefined;
+                callback(true);
+            }
+        );
     }
 }
