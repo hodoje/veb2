@@ -1,3 +1,4 @@
+import { ConfirmPasswordValidatorDirective } from './common/directives/confirm-password-validator.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +31,8 @@ import { LoginToNavbarService } from './services/login-to-navbar.service';
     RegisterComponent,
     PassengerComponent,
     ControllerComponent,
-    AdminComponent
+    AdminComponent,
+    ConfirmPasswordValidatorDirective
   ],
   imports: [
     BrowserModule,

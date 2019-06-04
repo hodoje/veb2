@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BaseHttpService } from './base-http.service';
 import { User } from '../models/user.model';
+import { Registration } from '../models/registration.model';
+import { NgForm } from '@angular/forms';
 
 @Injectable()
 export class AuthHttpService{

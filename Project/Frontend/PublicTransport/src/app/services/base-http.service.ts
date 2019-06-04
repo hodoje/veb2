@@ -8,7 +8,7 @@ export class BaseHttpService<T> {
   base_url = "http://localhost:52295/api/";
   specifiedUrl = "";
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(protected httpClient: HttpClient) { }
 
   getAll(): Observable<T[]> {
     return this.httpClient.get<T[]>(this.base_url + this.specifiedUrl);
