@@ -88,6 +88,7 @@ namespace WebApp.App_Start
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
+			container.RegisterType<ITransporationLineTypeRepository, TransporationLineTypeRepository>();
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
         }

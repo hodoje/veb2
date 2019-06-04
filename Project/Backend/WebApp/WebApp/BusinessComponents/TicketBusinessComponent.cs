@@ -26,6 +26,8 @@ namespace WebApp.BusinessComponents
                 TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => (pltt.Pricelist.FromDate <= DateTime.Now && pltt.Pricelist.ToDate >= DateTime.Now)).FirstOrDefault();
                 Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
 
+				unitOfWork.TicketRepository.Add(boughtTicket);
+
                 if (completeTransaction == true)
                 {
                     unitOfWork.Complete();

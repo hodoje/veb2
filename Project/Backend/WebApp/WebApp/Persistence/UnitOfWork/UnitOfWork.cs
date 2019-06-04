@@ -38,6 +38,9 @@ namespace WebApp.Persistence.UnitOfWork
 		public ITicketTypeRepository TicketTypeRepository { get; set; }
 		[Dependency]
 		public ITransportationLineRepository TransportationLineRepository { get; set; }
+		[Dependency]
+		public ITransporationLineTypeRepository TransporationLineTypeRepository { get; set; }
+
 
 		public int Complete()
         {
