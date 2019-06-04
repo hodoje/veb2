@@ -9,6 +9,7 @@ namespace WebApp.Models.Dtos
     {   
         public int TicketId { get; set; }
         public string Name { get; set; }
+        public string UserType { get; set; }
         /// <summary>
         /// Ticket price calculated by service - ticket base price * transport coefficient.
         /// </summary>

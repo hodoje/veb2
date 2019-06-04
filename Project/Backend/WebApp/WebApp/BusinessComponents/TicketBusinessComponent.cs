@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using WebApp.Models;
 using WebApp.Models.DomainModels;
+using WebApp.Models.DomainModels.Benefits;
 using WebApp.Models.Dtos;
 using WebApp.Persistence.UnitOfWork;
 
@@ -41,7 +42,44 @@ namespace WebApp.BusinessComponents
             }
         }
 
-        public IEnumerable<TicketTypePricelistDto> ListAvailableTicketsWithPrices(IUnitOfWork unitOfWork, double discountCoefficient)
+        public IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork)
+        {
+            try
+            {
+                Pricelist currentPriceList = unitOfWork.PricelistRepository.Find(x => x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now).FirstOrDefault();
+
+                List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
+
+                List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
+
+                List<UserType> userTypes = unitOfWork.UserTypeRepository.GetAll().ToList();
+
+                foreach (UserType userType in userTypes)
+                {
+                    TransportDiscountBenefit benefit = userType.Benefits.First(x => x.GetType() == typeof(TransportDiscountBenefit)) as TransportDiscountBenefit;
+                    pltts.ForEach(pltt =>
+                    {
+                        TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                        {
+                            Price = pltt.BasePrice * (benefit != null ? benefit.CoefficientDiscount : 1),
+                            Name = pltt.TicketType.Name,
+                            TicketId = pltt.TicketType.Id,
+                            UserType = userType.Name
+                        };
+
+                        tickets.Add(ticket);
+                    });
+                }
+
+                return tickets;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient)
         {
             try
             {

@@ -42,7 +42,7 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // GET: api/TicketTypePricelists
-        public async Task<IHttpActionResult> GetTicketTypePricelists()
+        public IHttpActionResult GetTicketTypePricelists()
         {
             if (!ModelState.IsValid)
             {
@@ -51,12 +51,7 @@ namespace WebApp.Controllers.DomainControllers
 
             try
             {
-                string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
-                ApplicationUser user = await UserManager.FindByNameAsync(userName);
-
-                double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
-
-                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAvailableTicketsWithPrices(unitOfWork, discountCoefficient);
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAllTicketPrices(unitOfWork);
 
                 return Ok(tickets);
             }
@@ -71,17 +66,36 @@ namespace WebApp.Controllers.DomainControllers
             }
         }
 
-        // GET: api/TicketTypePricelists/5
-        [ResponseType(typeof(TicketTypePricelist))]
-        public IHttpActionResult GetTicketTypePricelist(int id)
+        // GET: api/TicketTypePricelists/GetMyTicketPrices
+        [HttpGet]
+        [Route("api/TicketTypePricelists/GetMyTicketPrices")]
+        public async Task<IHttpActionResult> GetTicketPriceForUser()
         {
-			TicketTypePricelist ticketTypePricelist = unitOfWork.TicketTypePricelistRepository.Get(id);
-            if (ticketTypePricelist == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
 
-            return Ok(ticketTypePricelist);
+            try
+            {
+                string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
+                ApplicationUser user = await UserManager.FindByNameAsync(userName);
+
+                double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
+
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient);
+
+                return Ok(tickets);
+            }
+            catch (NullReferenceException nre)
+            {
+                // log exception 
+                return BadRequest("Service is in invalid state.");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/TicketTypePricelists/5

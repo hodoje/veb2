@@ -220,7 +220,7 @@ namespace WebApp.Migrations
             {
                 {"Student", 0.8 },
                 {"Retiree", 0.85 },
-                {"Worker", 1 }
+                {"Regular", 1 }
             };
 
             foreach (var roleBenefit in roleBenefits)
