@@ -20,6 +20,8 @@ import { PassengerComponent } from './components/passenger/passenger.component';
 import { ControllerComponent } from './components/controller/controller.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { LoginToNavbarService } from './services/login-to-navbar.service';
+import { PasswordPatternValidatorDirective } from './common/directives/password-pattern-validator.directive';
+import { RegistrationService } from './services/registration-http.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { LoginToNavbarService } from './services/login-to-navbar.service';
     PassengerComponent,
     ControllerComponent,
     AdminComponent,
-    ConfirmPasswordValidatorDirective
+    ConfirmPasswordValidatorDirective,
+    PasswordPatternValidatorDirective
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,8 @@ import { LoginToNavbarService } from './services/login-to-navbar.service';
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     AuthHttpService,
     PLTTService,
-    LoginToNavbarService
+    LoginToNavbarService,
+    RegistrationService
   ],
   bootstrap: [AppComponent]
 })

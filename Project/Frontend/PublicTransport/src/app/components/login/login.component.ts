@@ -13,6 +13,8 @@ import { LoginToNavbarService } from 'src/app/services/login-to-navbar.service';
 export class LoginComponent implements OnInit {
 
   isLoggedIn = false;
+  isBadLoginParams: boolean;
+  isOtherError: boolean;
 
   constructor(
     private http: AuthHttpService, 
@@ -23,9 +25,20 @@ export class LoginComponent implements OnInit {
   }
 
   login(user: User, form: NgForm){
-    this.http.logIn(user, (isLoggedIn) => {
-      this.isLoggedIn = isLoggedIn;
-      this.loginToNavbar.login();
+    this.http.logIn(user, (isLoggedIn, errorStatus) => {
+      if(isLoggedIn){
+        this.isLoggedIn = isLoggedIn;
+        this.loginToNavbar.login();
+        this.router.navigate(['/home']);
+      }
+      else{
+        if(errorStatus === 400){
+          this.isBadLoginParams = true;
+        }
+        else{
+          this.isOtherError = true;
+        }
+      }
     });
     form.reset();
   }
