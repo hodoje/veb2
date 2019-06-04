@@ -31,7 +31,7 @@ namespace WebApp.Controllers.DomainControllers
 
         // GET: api/TransporationLineTypes/5
         [ResponseType(typeof(TransporationLineType))]
-        public IHttpActionResult GetTransporationLineType(string id)
+        public IHttpActionResult GetTransporationLineType(int id)
         {
             TransporationLineType transporationLineType = unitOfWork.TransporationLineTypeRepository.Get(id);
             if (transporationLineType == null)
@@ -44,7 +44,7 @@ namespace WebApp.Controllers.DomainControllers
 
         // PUT: api/TransporationLineTypes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutTransporationLineType(string id, TransporationLineType transporationLineType)
+        public IHttpActionResult PutTransporationLineType(int id, TransporationLineType transporationLineType)
         {
             if (!ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace WebApp.Controllers.DomainControllers
 
         // DELETE: api/TransporationLineTypes/5
         [ResponseType(typeof(TransporationLineType))]
-        public IHttpActionResult DeleteTransporationLineType(string id)
+        public IHttpActionResult DeleteTransporationLineType(int id)
         {
             TransporationLineType transporationLineType = unitOfWork.TransporationLineTypeRepository.Get(id);
             if (transporationLineType == null)
@@ -132,7 +132,7 @@ namespace WebApp.Controllers.DomainControllers
             base.Dispose(disposing);
         }
 
-        private bool TransporationLineTypeExists(string id)
+        private bool TransporationLineTypeExists(int id)
         {
 			return unitOfWork.TransporationLineTypeRepository.Get(id) != null;
         }

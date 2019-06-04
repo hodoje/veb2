@@ -1,0 +1,6 @@
+Schedules : hh:mm,hh:mm.hh+1:mm,hh+1:mm
+
+Red Voznje: [Gradski/Prigradski] list
+		[Linija] list
+			[Dan] string
+			[TimeTable] string

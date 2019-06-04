@@ -285,9 +285,9 @@
     <Compile Include="Migrations\201905311039331_Benefit_UserType.Designer.cs">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201906040709564_TransportationLine_Added.cs" />
-    <Compile Include="Migrations\201906040709564_TransportationLine_Added.Designer.cs">
-      <DependentUpon>201906040709564_TransportationLine_Added.cs</DependentUpon>
+    <Compile Include="Migrations\201906040755476_TransporationLineType_AddModel.cs" />
+    <Compile Include="Migrations\201906040755476_TransporationLineType_AddModel.Designer.cs">
+      <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -449,8 +449,8 @@
     <EmbeddedResource Include="Migrations\201905311039331_Benefit_UserType.resx">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906040709564_TransportationLine_Added.resx">
-      <DependentUpon>201906040709564_TransportationLine_Added.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906040755476_TransporationLineType_AddModel.resx">
+      <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
