@@ -10,7 +10,8 @@ namespace WebApp.Models.DomainModels
 		/// <summary>
 		/// Represents type of zone.
 		/// </summary>
-		public string Id { get; set; }
-		public ICollection<TransportationLine> TransportationLines { get; set; }
+		public int Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<TransportationLine> TransportationLines { get; set; }
 	}
 }

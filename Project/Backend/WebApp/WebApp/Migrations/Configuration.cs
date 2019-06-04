@@ -32,7 +32,11 @@ namespace WebApp.Migrations
 
 			PopulateTransporationTypes(context);
 
+            PopulateStations(context);
+
 			PopulateTransporationLines(context);
+
+            PopulateSchedules(context);
 
 			PopulateUserTypesWithBenefits(context);
 
@@ -43,35 +47,60 @@ namespace WebApp.Migrations
 			context.SaveChanges();
 		}
 
-		private void PopulateTransporationLines(ApplicationDbContext context)
-		{
-			TransporationLineType tlType = context.TransporationLineTypes.First();
-			Station station = context.Stations.First();
+        private void PopulateSchedules(ApplicationDbContext context)
+        {
+            bool sendTransaction = false;
+            List<Schedule> schedules = new List<Schedule>(3)
+                    {
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:00,7:15.8:00,8:30", TransportationLineId = context.TransportationLines.First().Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:00,9:15.10:00,10:30", TransportationLineId = context.TransportationLines.First().Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:00,11:15.12:00,12:30", TransportationLineId = context.TransportationLines.First().Id }
+                    };
 
-			if (!context.TransportationLines.Any(x => x.LineNum == 4))
-			{
-				context.TransportationLines.Add(new TransportationLine()
-				{
-					LineNum = 4,
-					TransporationLineType = tlType,
-					Stations = new List<Station>(1) { station },
-					Schedules = new List<Schedule>(3)
-					{
-						new Schedule() { }
-					}
-				});
-			}
-		}
+            foreach (Schedule schedule in schedules)
+            {
+                if (!context.Schedules.Any(x => x.DayOfTheWeek.Name.Equals(schedule.DayOfTheWeek.Name)))
+                {
+                    sendTransaction = true;
+                    context.Schedules.Add(schedule);
+                }
+            }
 
-		private void PopulateTransporationTypes(ApplicationDbContext context)
+            if (sendTransaction == true)
+            {
+                context.SaveChanges();
+            }
+        }
+
+        private void PopulateTransporationLines(ApplicationDbContext context)
+        {
+            TransporationLineType tlType = context.TransporationLineTypes.First();
+            Station station = context.Stations.First();
+
+            if (!context.TransportationLines.Any(x => x.LineNum == 4))
+            {
+                TransportationLine transporationLine = new TransportationLine()
+                {
+                    LineNum = 4,
+                    TransporationLineType = tlType,
+                    Stations = new List<Station>(1) { station },
+                };
+
+                context.TransportationLines.Add(transporationLine);
+            }
+
+            context.SaveChanges();
+        }
+
+        private void PopulateTransporationTypes(ApplicationDbContext context)
 		{
 			List<string> transporationLineTypes = new List<string>(2) { "Town", "Suburban" };
 
 			foreach (string type in transporationLineTypes)
 			{
-				if (!context.TransporationLineTypes.Any(x => x.Id.Equals(type)))
+				if (!context.TransporationLineTypes.Any(x => x.Name.Equals(type)))
 				{
-					context.TransporationLineTypes.Add(new TransporationLineType() { Id = type });
+					context.TransporationLineTypes.Add(new TransporationLineType() { Name = type });
 				}
 			}
 
@@ -149,17 +178,22 @@ namespace WebApp.Migrations
 
         private void PopulateAllTicketTables(ApplicationDbContext context)
         {
+            bool sendTransaction = false;
             if (!context.Pricelists.Any(pl => pl.Id == 1))
             {
                 Pricelist newPriceList = new Pricelist() { Id = 1, FromDate = new DateTime(2019, 1, 1), ToDate = new DateTime(2019, 12, 31, 23, 59, 59) };
                 context.Pricelists.Add(newPriceList);
+                sendTransaction = true;
             }
 
-            context.SaveChanges();
+            if (sendTransaction == true)
+            {
+                context.SaveChanges();
+            }
 
             Dictionary<string, int> ticketTypes = new Dictionary<string, int>(4)
             {
-                {"Hourly",    100},
+                {"Hourly",     100},
                 {"Daily",      200},
                 {"Monthly",   1500},
                 {"Yearly",    5000}
@@ -181,6 +215,7 @@ namespace WebApp.Migrations
 
         private void PopulateUserTypesWithBenefits(ApplicationDbContext context)
         {
+            bool sendTransaction = false;
             Dictionary<string, double> roleBenefits = new Dictionary<string, double>(3)
             {
                 {"Student", 0.8 },
@@ -196,9 +231,16 @@ namespace WebApp.Migrations
                 { 
                     TransportDiscountBenefit benefit = new TransportDiscountBenefit() { Name = benefitName, CoefficientDiscount = roleBenefit.Value };
                     context.Benefits.Add(benefit);
+
+                    sendTransaction = true;
                 }
 
-                context.SaveChanges();
+                if (sendTransaction == true)
+                {
+                    context.SaveChanges();
+                }
+
+                sendTransaction = false;
 
                 if (!context.UserTypes.Any(x => x.Name.Equals(roleBenefit.Key)))
                 {
@@ -206,7 +248,11 @@ namespace WebApp.Migrations
 
                     UserType userType = new UserType() { Name = roleBenefit.Key, Benefits = new List<Benefit>(1) { benefit } };
                     context.UserTypes.Add(userType);
+
+                    sendTransaction = true;
                 }
+
+                
             }
         }
     }
