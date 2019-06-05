@@ -43,48 +43,69 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
-    //#region Get initial data
+    this.getData();
+  }
+
+  getData(){
+    this.getDaysData();
+  }
+
+  getDaysData(){
     this.daysService.getAll().subscribe(
       (data) => {
         this.days = data;
-        console.log(this.days);
         this.currentDay = this.days[0];
       },
       (err) => {
         console.log(err);
+      },
+      () => {
+        this.getTransportationLineTypesData();
       }
     );
+  }
+
+  getTransportationLineTypesData(){
     this.transportationLineTypesService.getAll().subscribe(
       (data: TransportationLineType[]) => {
         this.allLineTypes = data;
         this.currentLineType = this.allLineTypes[0];
-        console.log(this.allLineTypes);
       },
       (err) => {
         console.log(err);
+      },
+      () => {
+        this.getTransportationLinesData();
       }
     );
+  }
+
+  getTransportationLinesData(){
     this.transportationLinesService.getAll().subscribe(
       (data: TransportationLine[]) => {
         this.allLines = data;
-        console.log(this.allLines);
         this.currentLines = this.allLines.filter(l => l.transportationLineType.name === this.currentLineType.name);
         this.currentLine = this.currentLines[0];
       },
       (err) => {
         console.log(err);
+      },
+      () => {
+        this.getSchedulesData();
       }
     );
+  }
+
+  getSchedulesData(){
     this.scheduleService.getAll().subscribe(
       (data: Schedule[]) =>{
         this.allSchedules = data;
-        console.log(this.allSchedules);
+        //console.log(this.allSchedules);
       },
       (err) =>{
         console.log(err);
       }
     );
-    //#endregion
   }
 
   currentLineTypeChanged(){
