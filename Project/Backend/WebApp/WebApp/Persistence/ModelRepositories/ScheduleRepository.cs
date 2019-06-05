@@ -19,5 +19,10 @@ namespace WebApp.Persistence.ModelRepositories
 		public ScheduleRepository(DbContext context) : base(context)
 		{
 		}
+
+		public IEnumerable<Schedule> GetAllIncludeDayOfTheWeek()
+		{
+			return context.Set<Schedule>().Include(s => s.DayOfTheWeek);
+		}
 	}
 }

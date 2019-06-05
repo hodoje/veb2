@@ -8,7 +8,9 @@ namespace WebApp.Migrations
 	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Data.Entity.Migrations;
+	using System.Data.Entity.Validation;
 	using System.Linq;
+	using System.Text;
 	using WebApp.Models;
 	using WebApp.Persistence;
 
@@ -26,36 +28,61 @@ namespace WebApp.Migrations
 			//  You can use the DbSet<T>.AddOrUpdate() helper extension method 
 			//  to avoid creating duplicate seed data.
 
-			PopulateUserRoles(context);
+			try
+			{
+				PopulateUserRoles(context);
 
-			PopulateDaysOfTheWeek(context);
+				PopulateDaysOfTheWeek(context);
 
-			PopulateTransporationTypes(context);
+				PopulateTransporationTypes(context);
 
-            PopulateStations(context);
+				PopulateStations(context);
 
-			PopulateTransporationLines(context);
+				PopulateTransporationLines(context);
 
-            PopulateSchedules(context);
+				PopulateSchedules(context);
 
-			PopulateUserTypesWithBenefits(context);
+				PopulateUserTypesWithBenefits(context);
 
-			PopulateUsers(context);
+				PopulateUsers(context);
 
-			PopulateAllTicketTables(context);
+				PopulateAllTicketTables(context);
 
-			context.SaveChanges();
+				context.SaveChanges();
+			}
+			catch(DbEntityValidationException e)
+			{
+				StringBuilder sb = new StringBuilder();
+
+				foreach (var failure in e.EntityValidationErrors)
+				{
+					sb.AppendFormat("{0} failed validation\n", failure.Entry.Entity.GetType());
+					foreach (var error in failure.ValidationErrors)
+					{
+						sb.AppendFormat("- {0} : {1}", error.PropertyName, error.ErrorMessage);
+						sb.AppendLine();
+					}
+				}
+
+				throw new DbEntityValidationException(
+					"Entity Validation Failed - errors follow:\n" +
+					sb.ToString(), e
+				);
+			}
 		}
 
         private void PopulateSchedules(ApplicationDbContext context)
         {
             bool sendTransaction = false;
-            List<Schedule> schedules = new List<Schedule>(3)
+            List<Schedule> schedules = new List<Schedule>(6)
                     {
-                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:00,7:15.8:00,8:30", TransportationLineId = context.TransportationLines.First().Id },
-                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:00,9:15.10:00,10:30", TransportationLineId = context.TransportationLines.First().Id },
-                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:00,11:15.12:00,12:30", TransportationLineId = context.TransportationLines.First().Id }
-                    };
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:00,7:15.8:00,8:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:00,9:15.10:00,10:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:00,11:15.12:00,12:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
+						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:10,7:25.8:15,8:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
+						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:10,9:25.10:15,10:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
+						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:10,11:25.12:15,12:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id }
+					};
 
             foreach (Schedule schedule in schedules)
             {
@@ -74,7 +101,8 @@ namespace WebApp.Migrations
 
         private void PopulateTransporationLines(ApplicationDbContext context)
         {
-            TransporationLineType tlType = context.TransporationLineTypes.First();
+			TransportationLineType tlType = context.TransporationLineTypes.First(tlt => tlt.Name == "Urban");
+			TransportationLineType tlType2 = context.TransporationLineTypes.First(tlt => tlt.Name == "Suburban");
             Station station = context.Stations.First();
 
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
@@ -82,25 +110,37 @@ namespace WebApp.Migrations
                 TransportationLine transporationLine = new TransportationLine()
                 {
                     LineNum = 4,
-                    TransporationLineType = tlType,
+                    TransportationLineType = tlType,
                     Stations = new List<Station>(1) { station },
                 };
 
                 context.TransportationLines.Add(transporationLine);
             }
 
-            context.SaveChanges();
+			if (!context.TransportationLines.Any(x => x.LineNum == 70))
+			{
+				TransportationLine transporationLine = new TransportationLine()
+				{
+					LineNum = 70,
+					TransportationLineType = tlType2,
+					Stations = new List<Station>(1) { station },
+				};
+
+				context.TransportationLines.Add(transporationLine);
+			}
+
+			context.SaveChanges();
         }
 
         private void PopulateTransporationTypes(ApplicationDbContext context)
 		{
-			List<string> transporationLineTypes = new List<string>(2) { "Town", "Suburban" };
+			List<string> transporationLineTypes = new List<string>(2) { "Urban", "Suburban" };
 
 			foreach (string type in transporationLineTypes)
 			{
 				if (!context.TransporationLineTypes.Any(x => x.Name.Equals(type)))
 				{
-					context.TransporationLineTypes.Add(new TransporationLineType() { Name = type });
+					context.TransporationLineTypes.Add(new TransportationLineType() { Name = type });
 				}
 			}
 
@@ -170,7 +210,17 @@ namespace WebApp.Migrations
             if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
             {
                 UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Worker"));
-                var user = new ApplicationUser() { Id = "admin", UserName = "admin@yahoo.com", Email = "admin@yahoo.com", PasswordHash = ApplicationUser.HashPassword("Admin123!"), UserType = userType };
+                var user = new ApplicationUser()
+				{
+					Id = "admin",
+					UserName = "admin@yahoo.com",
+					Email = "admin@yahoo.com",
+					PasswordHash = ApplicationUser.HashPassword("Admin123!"),
+					UserType = userType,
+					Name = "joki",
+					LastName = "ziz",
+					Birthday = DateTime.Now,
+					Address = "zizova gajba" };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Admin");
             }

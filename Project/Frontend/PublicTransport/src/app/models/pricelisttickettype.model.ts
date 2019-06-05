@@ -1,7 +1,7 @@
 
 export class PriceListTicketType{
-    Id: number;
-    Name: string;
-    Price: number;
-    UserType: string;
+    id: number;
+    name: string;
+    price: number;
+    userType: string;
 }

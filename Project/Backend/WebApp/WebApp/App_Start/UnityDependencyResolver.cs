@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using System;
@@ -9,6 +10,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
+using WebApp.App_Start.MappingProfiles;
 using WebApp.BusinessComponents;
 using WebApp.Models;
 using WebApp.Persistence;
@@ -86,9 +88,19 @@ namespace WebApp.App_Start
 			container.RegisterType<ITicketTypePricelistRepository, TicketTypePricelistRepository>();
 			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
-            container.RegisterType<IUnitOfWork, UnitOfWork>();
+			container.RegisterType<ITransportationLineTypeRepository, TransporationLineTypeRepository>();
+			container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
-			container.RegisterType<ITransporationLineTypeRepository, TransporationLineTypeRepository>();
+
+			MapperConfiguration config = new MapperConfiguration(c =>
+			{
+				c.AddProfile<DayOfTheWeekMappingProfile>();
+				c.AddProfile<TransportationLineTypeMappingProfile>();
+				c.AddProfile<TransportationLineMappingProfile>();
+				c.AddProfile<ScheduleMappingProfile>();
+			});
+
+			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
         }

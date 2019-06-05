@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,25 +10,45 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers.DomainControllers
 {
-    public class SchedulesController : ApiController
+	[RoutePrefix("api/Schedules")]
+	public class SchedulesController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public SchedulesController(IUnitOfWork uow)
+		public SchedulesController()
+		{
+
+		}
+
+		public SchedulesController(IUnitOfWork uow, IMapper imapper)
 		{
 			unitOfWork = uow;
+			mapper = imapper;
 		}
 
 		// GET: api/Schedules
-		public IEnumerable<Schedule> GetSchedules()
+		public IEnumerable<ScheduleDto> GetSchedules()
         {
-			return unitOfWork.ScheduleRepository.GetAll();
-        }
+			List<Schedule> schedules = unitOfWork.ScheduleRepository.GetAll().ToList();
+			List<DayOfTheWeek> dayOfTheWeeks = unitOfWork.DayOfTheWeekRepository.GetAll().ToList();
+			List<TransportationLine> transportationLines = unitOfWork.TransportationLineRepository.GetAllIncludeTransportationLineType().ToList();
+			List<ScheduleDto> scheduleDtos = new List<ScheduleDto>();
+			foreach (Schedule s in schedules)
+			{
+				TransportationLine transportationLine = transportationLines.FirstOrDefault(tl => tl.Id == s.TransportationLineId);
+				s.TransportationLine = transportationLine;
+				ScheduleDto scheduleDto = mapper.Map<Schedule, ScheduleDto>(s);
+				scheduleDtos.Add(scheduleDto);
+			}
+			return scheduleDtos;
+		}
 
         // GET: api/Schedules/5
         [ResponseType(typeof(Schedule))]

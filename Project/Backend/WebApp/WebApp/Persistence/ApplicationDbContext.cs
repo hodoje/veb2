@@ -33,6 +33,6 @@ namespace WebApp.Persistence
 		public virtual DbSet<TicketTypePricelist> TicketTypePricelists { get; set; }
 		public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<TransportationLine> TransportationLines { get; set; }
-		public virtual DbSet<TransporationLineType> TransporationLineTypes { get; set; }
+		public virtual DbSet<TransportationLineType> TransporationLineTypes { get; set; }
 	}
 }

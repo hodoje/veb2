@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,31 +10,39 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers.DomainControllers
 {
-    public class TransporationLineTypesController : ApiController
+    public class TransportationLineTypesController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public TransporationLineTypesController(IUnitOfWork unitOfWork)
+		public TransportationLineTypesController()
+		{
+
+		}
+
+		public TransportationLineTypesController(IUnitOfWork unitOfWork, IMapper immaper)
 		{
 			this.unitOfWork = unitOfWork;
+			mapper = immaper;
 		}
 
         // GET: api/TransporationLineTypes
-        public IEnumerable<TransporationLineType> GetTransporationLineTypes()
+        public IEnumerable<TransportationLineTypeDto> GetTransporationLineTypes()
         {
-			return unitOfWork.TransporationLineTypeRepository.GetAll();
+			return mapper.Map<List<TransportationLineType>, List<TransportationLineTypeDto>>(unitOfWork.TransportationLineTypeRepository.GetAll().ToList());
         }
 
         // GET: api/TransporationLineTypes/5
-        [ResponseType(typeof(TransporationLineType))]
+        [ResponseType(typeof(TransportationLineType))]
         public IHttpActionResult GetTransporationLineType(int id)
         {
-            TransporationLineType transporationLineType = unitOfWork.TransporationLineTypeRepository.Get(id);
+            TransportationLineType transporationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
             if (transporationLineType == null)
             {
                 return NotFound();
@@ -44,7 +53,7 @@ namespace WebApp.Controllers.DomainControllers
 
         // PUT: api/TransporationLineTypes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutTransporationLineType(int id, TransporationLineType transporationLineType)
+        public IHttpActionResult PutTransporationLineType(int id, TransportationLineType transporationLineType)
         {
             if (!ModelState.IsValid)
             {
@@ -56,7 +65,7 @@ namespace WebApp.Controllers.DomainControllers
                 return BadRequest();
             }
 
-			unitOfWork.TransporationLineTypeRepository.Update(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Update(transporationLineType);
 
 			try
             {
@@ -78,15 +87,15 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // POST: api/TransporationLineTypes
-        [ResponseType(typeof(TransporationLineType))]
-        public IHttpActionResult PostTransporationLineType(TransporationLineType transporationLineType)
+        [ResponseType(typeof(TransportationLineType))]
+        public IHttpActionResult PostTransporationLineType(TransportationLineType transporationLineType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-			unitOfWork.TransporationLineTypeRepository.Add(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Add(transporationLineType);
 
             try
             {
@@ -108,16 +117,16 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // DELETE: api/TransporationLineTypes/5
-        [ResponseType(typeof(TransporationLineType))]
+        [ResponseType(typeof(TransportationLineType))]
         public IHttpActionResult DeleteTransporationLineType(int id)
         {
-            TransporationLineType transporationLineType = unitOfWork.TransporationLineTypeRepository.Get(id);
+            TransportationLineType transporationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
             if (transporationLineType == null)
             {
                 return NotFound();
             }
 
-			unitOfWork.TransporationLineTypeRepository.Remove(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Remove(transporationLineType);
 			unitOfWork.Complete();
 
             return Ok(transporationLineType);
@@ -134,7 +143,7 @@ namespace WebApp.Controllers.DomainControllers
 
         private bool TransporationLineTypeExists(int id)
         {
-			return unitOfWork.TransporationLineTypeRepository.Get(id) != null;
+			return unitOfWork.TransportationLineTypeRepository.Get(id) != null;
         }
     }
 }

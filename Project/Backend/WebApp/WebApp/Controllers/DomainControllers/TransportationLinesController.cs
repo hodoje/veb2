@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,25 +10,28 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers.DomainControllers
 {
-    public class TransportationLinesController : ApiController
+	public class TransportationLinesController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public TransportationLinesController(IUnitOfWork uow)
+		public TransportationLinesController(IUnitOfWork uow, IMapper imapper)
 		{
 			unitOfWork = uow;
+			mapper = imapper;
 		}
 
 		// GET: api/TransportationLines
-		public IEnumerable<TransportationLine> GetTransportationLines()
+		public IEnumerable<TransportationLineDto> GetTransportationLines()
         {
-			return unitOfWork.TransportationLineRepository.GetAll();
-        }
+			return mapper.Map<List<TransportationLine>, List<TransportationLineDto>>(unitOfWork.TransportationLineRepository.GetAll().ToList());
+		}
 
         // GET: api/TransportationLines/5
         [ResponseType(typeof(TransportationLine))]

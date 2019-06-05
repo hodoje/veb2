@@ -39,7 +39,7 @@ namespace WebApp.Persistence.UnitOfWork
 		[Dependency]
 		public ITransportationLineRepository TransportationLineRepository { get; set; }
 		[Dependency]
-		public ITransporationLineTypeRepository TransporationLineTypeRepository { get; set; }
+		public ITransportationLineTypeRepository TransportationLineTypeRepository { get; set; }
 
 
 		public int Complete()

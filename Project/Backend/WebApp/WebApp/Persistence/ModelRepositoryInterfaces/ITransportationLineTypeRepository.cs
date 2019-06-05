@@ -8,7 +8,7 @@ using WebApp.Persistence.Repository;
 
 namespace WebApp.Persistence.ModelRepositoryInterfaces
 {
-	public interface ITransporationLineTypeRepository : IRepository<TransporationLineType, int>
+	public interface ITransportationLineTypeRepository : IRepository<TransportationLineType, int>
 	{
 
 	}

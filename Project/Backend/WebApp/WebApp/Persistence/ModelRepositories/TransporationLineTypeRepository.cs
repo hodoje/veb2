@@ -9,7 +9,7 @@ using WebApp.Persistence.Repository;
 
 namespace WebApp.Persistence.ModelRepositories
 {
-	public class TransporationLineTypeRepository : Repository<TransporationLineType, int>, ITransporationLineTypeRepository
+	public class TransporationLineTypeRepository : Repository<TransportationLineType, int>, ITransportationLineTypeRepository
 	{
 		protected ApplicationDbContext ApplicationDbContext
 		{

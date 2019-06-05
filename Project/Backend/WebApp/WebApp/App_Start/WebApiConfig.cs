@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Unity;
 using Unity.Lifetime;
@@ -28,8 +29,12 @@ namespace WebApp
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-            // Web API routes
-            config.MapHttpAttributeRoutes();
+			// Using Camel Case notation instead of Pascal notation because JS uses Camel Case
+			config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+			config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
+
+			// Web API routes
+			config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

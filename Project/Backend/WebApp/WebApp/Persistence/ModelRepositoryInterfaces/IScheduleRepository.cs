@@ -10,5 +10,6 @@ namespace WebApp.Persistence.ModelRepositoryInterfaces
 {
 	public interface IScheduleRepository : IRepository<Schedule, int>
 	{
+		IEnumerable<Schedule> GetAllIncludeDayOfTheWeek();
 	}
 }

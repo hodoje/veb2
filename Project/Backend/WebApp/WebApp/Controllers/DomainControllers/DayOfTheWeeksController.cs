@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
@@ -17,16 +19,18 @@ namespace WebApp.Controllers.DomainControllers
     public class DayOfTheWeeksController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public DayOfTheWeeksController(IUnitOfWork uow)
+		public DayOfTheWeeksController(IUnitOfWork uow, IMapper imapper)
 		{
 			unitOfWork = uow;
+			mapper = imapper;
 		}
 
 		// GET: api/DayOfTheWeeks
-		public IEnumerable<DayOfTheWeek> GetDayOfTheWeeks()
+		public IEnumerable<DayOfTheWeekDto> GetDayOfTheWeeks()
         {
-			return unitOfWork.DayOfTheWeekRepository.GetAll();
+			return mapper.Map<List<DayOfTheWeek>, List<DayOfTheWeekDto>>(unitOfWork.DayOfTheWeekRepository.GetAll().ToList());
         }
 
         // GET: api/DayOfTheWeeks/5

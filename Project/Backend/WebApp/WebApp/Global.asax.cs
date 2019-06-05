@@ -18,6 +18,13 @@ namespace WebApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-        }
+
+			// Disable circular references for json formatter
+			GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings
+				.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			// Remove xml formatter
+			GlobalConfiguration.Configuration.Formatters
+				.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
+		}
     }
 }

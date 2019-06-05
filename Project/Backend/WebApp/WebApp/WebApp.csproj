@@ -221,6 +221,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\MappingProfiles\DayOfTheWeekMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\TransportationLineMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\TransportationLineTypeMappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SignalRUnityDependencyResolver.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -289,13 +293,25 @@
     <Compile Include="Migrations\201906040755476_TransporationLineType_AddModel.Designer.cs">
       <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906042331148_UpdatedApplicationUserModel.cs" />
+    <Compile Include="Migrations\201906042331148_UpdatedApplicationUserModel.Designer.cs">
+      <DependentUpon>201906042331148_UpdatedApplicationUserModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906042359392_TransportationLineTypeNameFix.cs" />
+    <Compile Include="Migrations\201906042359392_TransportationLineTypeNameFix.Designer.cs">
+      <DependentUpon>201906042359392_TransportationLineTypeNameFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906050234534_FixedTypeInTransportationLine.cs" />
+    <Compile Include="Migrations\201906050234534_FixedTypeInTransportationLine.Designer.cs">
+      <DependentUpon>201906050234534_FixedTypeInTransportationLine.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
-    <Compile Include="Models\DomainModels\TransporationLineType.cs" />
+    <Compile Include="Models\DomainModels\TransportationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
@@ -305,6 +321,7 @@
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineDto.cs" />
+    <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
     <Compile Include="Models\Dtos\UserTypeDto.cs" />
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
@@ -317,7 +334,7 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
-    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransporationLineTypeRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITicketTypePricelistRepository.cs" />
@@ -451,6 +468,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906040755476_TransporationLineType_AddModel.resx">
       <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906042331148_UpdatedApplicationUserModel.resx">
+      <DependentUpon>201906042331148_UpdatedApplicationUserModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906042359392_TransportationLineTypeNameFix.resx">
+      <DependentUpon>201906042359392_TransportationLineTypeNameFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906050234534_FixedTypeInTransportationLine.resx">
+      <DependentUpon>201906050234534_FixedTypeInTransportationLine.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

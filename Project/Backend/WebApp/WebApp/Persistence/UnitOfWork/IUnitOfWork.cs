@@ -20,7 +20,7 @@ namespace WebApp.Persistence.UnitOfWork
 		ITicketTypePricelistRepository TicketTypePricelistRepository { get; }
 		ITicketTypeRepository TicketTypeRepository { get; }
         ITransportationLineRepository TransportationLineRepository { get; }
-		ITransporationLineTypeRepository TransporationLineTypeRepository { get; }
+		ITransportationLineTypeRepository TransportationLineTypeRepository { get; }
 		int Complete();
     }
 }

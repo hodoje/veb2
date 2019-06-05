@@ -10,6 +10,6 @@ namespace WebApp.Persistence.ModelRepositoryInterfaces
 {
     public interface ITransportationLineRepository : IRepository<TransportationLine, int>
     {
-        
+		IEnumerable<TransportationLine> GetAllIncludeTransportationLineType();
     }
 }

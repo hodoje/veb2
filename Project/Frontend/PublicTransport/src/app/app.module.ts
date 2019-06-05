@@ -21,8 +21,13 @@ import { ControllerComponent } from './components/controller/controller.componen
 import { AdminComponent } from './components/admin/admin.component';
 import { LoginToNavbarService } from './services/login-to-navbar.service';
 import { TicketsComponent } from './components/tickets/tickets.component';
-import { PricelistComponent } from './components/tickets/pricelist/pricelist.component';
-import { PurchaseComponent } from './components/tickets/purchase/purchase.component';
+import { PricelistComponent } from './components/pricelist/pricelist.component';
+import { PurchaseComponent } from './components/purchase/purchase.component';
+import { SchedulesHttpService } from './services/schedules-http.service';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { TransportationLinesHttpService } from './services/transportation-lines-http.service';
+import { TransportationLineTypesHttpService } from './services/transportation-line-types-http.service';
+import { DayOfTheWeekService } from './services/day-of-the-week-http.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +43,8 @@ import { PurchaseComponent } from './components/tickets/purchase/purchase.compon
     ConfirmPasswordValidatorDirective,
     TicketsComponent,
     PricelistComponent,
-    PurchaseComponent
+    PurchaseComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +59,11 @@ import { PurchaseComponent } from './components/tickets/purchase/purchase.compon
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     AuthHttpService,
     PLTTService,
-    LoginToNavbarService
+    LoginToNavbarService,
+    SchedulesHttpService,
+    TransportationLinesHttpService,
+    TransportationLineTypesHttpService,
+    DayOfTheWeekService
   ],
   bootstrap: [AppComponent]
 })

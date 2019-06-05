@@ -5,8 +5,8 @@ using System.Web;
 
 namespace WebApp.Models.Dtos
 {
-    public class DayOfTheWeekDto
-    {
+	public class TransportationLineTypeDto
+	{
 		public string Name { get; set; }
-    }
+	}
 }

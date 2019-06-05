@@ -19,5 +19,10 @@ namespace WebApp.Persistence.ModelRepositories
         public TransportationLineRepository(DbContext context) : base(context)
         {
         }
-    }
+
+		public IEnumerable<TransportationLine> GetAllIncludeTransportationLineType()
+		{
+			return context.Set<TransportationLine>().Include(tl => tl.TransportationLineType);
+		}
+	}
 }
