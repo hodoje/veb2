@@ -28,6 +28,7 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
 import { TransportationLinesHttpService } from './services/transportation-lines-http.service';
 import { TransportationLineTypesHttpService } from './services/transportation-line-types-http.service';
 import { DayOfTheWeekService } from './services/day-of-the-week-http.service';
+import { RegistrationService } from './services/registration-http.service';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { DayOfTheWeekService } from './services/day-of-the-week-http.service';
     SchedulesHttpService,
     TransportationLinesHttpService,
     TransportationLineTypesHttpService,
-    DayOfTheWeekService
+    DayOfTheWeekService, 
+    RegistrationService
   ],
   bootstrap: [AppComponent]
 })
