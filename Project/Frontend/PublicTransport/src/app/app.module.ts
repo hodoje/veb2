@@ -29,6 +29,7 @@ import { TransportationLinesHttpService } from './services/transportation-lines-
 import { TransportationLineTypesHttpService } from './services/transportation-line-types-http.service';
 import { DayOfTheWeekService } from './services/day-of-the-week-http.service';
 import { RegistrationService } from './services/registration-http.service';
+import { TicketService } from './services/ticket-http.service';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { RegistrationService } from './services/registration-http.service';
     TransportationLinesHttpService,
     TransportationLineTypesHttpService,
     DayOfTheWeekService, 
-    RegistrationService
+    RegistrationService,
+    TicketService
   ],
   bootstrap: [AppComponent]
 })

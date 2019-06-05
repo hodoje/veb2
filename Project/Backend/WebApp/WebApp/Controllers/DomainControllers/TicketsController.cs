@@ -107,8 +107,8 @@ namespace WebApp.Controllers.DomainControllers
             return CreatedAtRoute("DefaultApi", new { id = ticket.Id }, ticket);
         }
 
-        [HttpPost]
         [Route("api/Tickets/BuyTicket")]
+        [HttpPost]
         public async Task<IHttpActionResult> BuyTicket(TicketDto id)
         {
             if (!ModelState.IsValid)

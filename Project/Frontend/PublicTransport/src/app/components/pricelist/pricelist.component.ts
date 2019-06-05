@@ -3,6 +3,7 @@ import { PriceListTicketType } from 'src/app/models/pricelisttickettype.model';
 import { Subscription, timer, pipe } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { PLTTService } from 'src/app/services/price-list-ticket-type-http.service';
+import { TicketsComponent } from '../tickets/tickets.component';
 
 @Component({
   selector: 'app-pricelist',
@@ -12,22 +13,25 @@ import { PLTTService } from 'src/app/services/price-list-ticket-type-http.servic
 export class PricelistComponent implements OnInit {
 
   subscritpion: Subscription;
-  ticketTypePriceLists: PriceListTicketType[] = [];
+  ticketTypePriceLists: {};
   error: string;
 
-  constructor(private plttService: PLTTService) { }
+  constructor(private plttService: PLTTService) {
+    this.ticketTypePriceLists = new Object();
+   }
 
   ngOnInit() {
-    // PERIODIC POLL
-    // this.subscritpion = timer(0, 5000).pipe(
-    //   switchMap(() => this.plttService.getAll()))
-    //   .subscribe((pltts) => this.plttService,
-    //              (error) => this.error = error);
-
     this.plttService.getAll().subscribe(
-      (pltts) => {
-        this.ticketTypePriceLists = pltts
-        console.log(pltts);
+      (pltts: PriceListTicketType[]) => {
+        
+        pltts.forEach(ticket =>{
+
+          if (this.ticketTypePriceLists[ticket.userType] === undefined){
+            this.ticketTypePriceLists[ticket.userType] = [];
+          }
+
+          this.ticketTypePriceLists[ticket.userType].push(ticket);
+        })
       },
       (error) => this.error = error);
   }

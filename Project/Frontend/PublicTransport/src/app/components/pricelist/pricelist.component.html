@@ -1,20 +1,38 @@
-<div [hidden]="ticketTypePriceLists.length == 0" id="dtBasicExample" 
-  class="table table-striped table-bordered" 
-  cellspacing="1" width="100%">
-  <table>
-      <thead>
-          <tr>
-            <th class="th-sm">Ticket type</th>
-            <th class="th-sm">User type</th>
-            <th class="th-sm">Ticket price</th>
-          </tr>
-        </thead>
-      <tbody>
-        <tr *ngFor="let ticket of ticketTypePriceLists; index as i">
-          <td>{{ticket.Name}}</td>
-          <td>{{ticket.UserType}}</td>
-          <td>{{ticket.Price}}</td>
-        </tr>
-      </tbody>
-  </table>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="page-header">
+              <h2>Prices</h2>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-md-12">
+        <div *ngFor="let ticketType of ticketTypePriceLists | keyvalue" [hidden]="ticketTypePriceLists.length == 0" >
+          <div class="table-caption">
+            <h4>{{ticketType.key}}</h4>
+          </div>
+          <table mdbTable class="blue white-text">
+              <thead class="white black-text">
+                <tr>
+                  <th class="th-sm">Ticket type</th>
+                  <th class="th-sm">Ticket price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr mdbTableCol *ngFor="let ticket of ticketType.value">
+                  <td>{{ticket.name}}</td>
+                  <td>{{ticket.price}} RSD</td>
+                </tr>
+              </tbody>
+          </table>
+          <hr/>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
