@@ -12,6 +12,7 @@ export class PurchaseComponent implements OnInit {
 
   ticketTypes: PriceListTicketType[];
   currentTicket: PriceListTicketType;
+  feedback: string;
 
   constructor(private plttService: PLTTService, private ticketService: TicketService) {
     this.ticketTypes = [];
@@ -24,9 +25,11 @@ export class PurchaseComponent implements OnInit {
   }
 
   buyTicket(){
-    console.log(JSON.stringify(this.currentTicket));
     this.ticketService.buyTicket(this.currentTicket.ticketId).subscribe(
-      data => console.log(data)
+      data =>{
+        // TODO
+      },
+      error => this.feedback = error
     );
   }
 }
