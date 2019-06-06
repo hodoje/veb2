@@ -225,6 +225,7 @@
     <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineTypeMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\UserTypeMappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SignalRUnityDependencyResolver.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -304,6 +305,10 @@
     <Compile Include="Migrations\201906050234534_FixedTypeInTransportationLine.cs" />
     <Compile Include="Migrations\201906050234534_FixedTypeInTransportationLine.Designer.cs">
       <DependentUpon>201906050234534_FixedTypeInTransportationLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906052339502_UpdatedApplicationUserModel1.cs" />
+    <Compile Include="Migrations\201906052339502_UpdatedApplicationUserModel1.Designer.cs">
+      <DependentUpon>201906052339502_UpdatedApplicationUserModel1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -426,6 +431,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -477,6 +483,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906050234534_FixedTypeInTransportationLine.resx">
       <DependentUpon>201906050234534_FixedTypeInTransportationLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906052339502_UpdatedApplicationUserModel1.resx">
+      <DependentUpon>201906052339502_UpdatedApplicationUserModel1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

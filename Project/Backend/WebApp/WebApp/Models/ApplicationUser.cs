@@ -31,6 +31,8 @@ namespace WebApp.Models
 		[Required]
 		[StringLength(60, MinimumLength = 2)]
 		public string Address { get; set; }
+        public bool IsSuccessfullyRegistered { get; set; }
+        public string DocumentImage { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
 		public int? UserTypeId { get; set; }
 		public UserType UserType { get; set; }
