@@ -6,4 +6,6 @@ export class Registration{
   password: string;
   confirmPassword: string;
   email: string;
+  userType: string;
+  documentImage: File;
 }

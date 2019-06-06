@@ -1,5 +1,5 @@
 import { DayOfTheWeek } from './../../models/day-of-the-week.model';
-import { DayOfTheWeekService } from './../../services/day-of-the-week-http.service';
+import { DayOfTheWeekHttpService } from './../../services/day-of-the-week-http.service';
 import { TransportationLinesHttpService } from './../../services/transportation-lines-http.service';
 import { Schedule } from './../../models/schedule.model';
 import { SchedulesHttpService } from '../../services/schedules-http.service';
@@ -30,7 +30,7 @@ export class ScheduleComponent implements OnInit {
   constructor(private scheduleService: SchedulesHttpService,
               private transportationLinesService: TransportationLinesHttpService,
               private transportationLineTypesService: TransportationLineTypesHttpService,
-              private daysService: DayOfTheWeekService) 
+              private daysService: DayOfTheWeekHttpService) 
   {
     this.days = [];
     this.allLineTypes = [];
