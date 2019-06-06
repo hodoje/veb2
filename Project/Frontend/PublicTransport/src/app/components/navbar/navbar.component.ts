@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   constructor(private loginToNavbarService: LoginToNavbarService, private authService: AuthHttpService, private router: Router) {
     if(localStorage.jwt !== undefined){
       this.isLoggedIn = true;
+      this.userRole = localStorage.role;
     }
   }
 
@@ -29,8 +30,12 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(){
-    this.isLoggedIn = false;
-    localStorage.jwt = undefined;
-    localStorage.role = undefined;
+    this.authService.logOut((isLoggedOut) => {
+      if(isLoggedOut){
+        this.isLoggedIn = false;
+        this.userRole = undefined;
+        this.router.navigate(['/home']);
+      }
+    });
   }
 }
