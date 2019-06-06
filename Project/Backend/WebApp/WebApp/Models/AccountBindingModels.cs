@@ -51,6 +51,8 @@ namespace WebApp.Models
         [Required]
         [StringLength(60, MinimumLength = 2)]
         public string Address { get; set; }
+        [Required]
+        public string RequestedUserType { get; set; }
         #endregion
 
         [Required]

@@ -7,5 +7,6 @@ namespace WebApp.Models.Dtos
 {
     public class UserTypeDto
     {
+        public string Name { get; set; }
     }
 }

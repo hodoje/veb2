@@ -14,8 +14,11 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebApp.Models;
+using WebApp.Models.DomainModels;
+using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
 using WebApp.Results;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -25,16 +28,15 @@ namespace WebApp.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-
-        public AccountController()
-        {
-        }
+		private IUnitOfWork unitOfWork;
 
         public AccountController(ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
+			IUnitOfWork uow)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
+			unitOfWork = uow;
         }
 
         public ApplicationUserManager UserManager
@@ -321,23 +323,72 @@ namespace WebApp.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register()
         {
-            if (!ModelState.IsValid)
+			var httpRequest = HttpContext.Current.Request;
+
+			RegisterBindingModel model = new RegisterBindingModel()
+			{
+				Email = httpRequest.Form["email"],
+				Password = httpRequest.Form["password"],
+				ConfirmPassword = httpRequest.Form["confirmPassword"],
+				Name = httpRequest.Form["name"],
+				LastName = httpRequest.Form["lastname"],
+				Birthday = DateTime.Parse(httpRequest.Form["birthday"]),
+				Address = httpRequest.Form["address"],
+				RequestedUserType = httpRequest.Form["requestedUserType"]
+			};
+
+			this.Validate<RegisterBindingModel>(model);
+
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			string documentImageFileName = null;
+			if (httpRequest.Files.Count > 0)
+			{
+				foreach (string file in httpRequest.Files)
+				{
+					var postedFile = httpRequest.Files[file];
+					var filePath = HttpContext.Current.Server.MapPath("~/Resources/" + postedFile.FileName);
+					postedFile.SaveAs(filePath);
+					documentImageFileName = postedFile.FileName;
+					break;
+				}
+			}
+
+            UserType requestedUserType = unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType).FirstOrDefault();
+
+            try
             {
-                return BadRequest(ModelState);
+                var user = new ApplicationUser()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    Address = model.Address,
+                    UserTypeId = requestedUserType.Id,
+                    IsSuccessfullyRegistered = false,
+                    DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
+                };
+
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+                if (!result.Succeeded)
+                {
+                    return GetErrorResult(result);
+                }
+
+                return Ok();
             }
-
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Name = model.Name, LastName = model.LastName, Birthday = model.Birthday, Address = model.Address};
-
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
+            catch(Exception ex)
             {
-                return GetErrorResult(result);
+                return BadRequest();
             }
-
-            return Ok();
         }
 
         // POST api/Account/RegisterExternal

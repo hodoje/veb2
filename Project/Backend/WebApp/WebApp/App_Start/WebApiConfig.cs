@@ -24,9 +24,9 @@ namespace WebApp
 
             GlobalHost.DependencyResolver = new SignalRUnityDependencyResolver(container);
 
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
+			// Web API configuration and services
+			// Configure Web API to use only bearer token authentication.
+			config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
 			// Using Camel Case notation instead of Pascal notation because JS uses Camel Case

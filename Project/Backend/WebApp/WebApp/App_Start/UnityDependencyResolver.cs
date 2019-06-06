@@ -91,6 +91,10 @@ namespace WebApp.App_Start
 			container.RegisterType<ITransportationLineTypeRepository, TransporationLineTypeRepository>();
 			container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
+            // This allows usage of UnitOfWork in AccountController
+            container.RegisterType<ApplicationUserManager>();
+            container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:52296"));
+            container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new InjectionConstructor(typeof(ApplicationDbContext)));
 
 			MapperConfiguration config = new MapperConfiguration(c =>
 			{
@@ -98,12 +102,13 @@ namespace WebApp.App_Start
 				c.AddProfile<TransportationLineTypeMappingProfile>();
 				c.AddProfile<TransportationLineMappingProfile>();
 				c.AddProfile<ScheduleMappingProfile>();
+                c.AddProfile<UserTypeMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
 
-            GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
-        }
+			//GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
+		}
 
         public void Dispose()
         {

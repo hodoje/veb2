@@ -27,12 +27,13 @@ import { SchedulesHttpService } from './services/schedules-http.service';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { TransportationLinesHttpService } from './services/transportation-lines-http.service';
 import { TransportationLineTypesHttpService } from './services/transportation-line-types-http.service';
-import { DayOfTheWeekService } from './services/day-of-the-week-http.service';
-import { RegistrationService } from './services/registration-http.service';
-import { TicketService } from './services/ticket-http.service';
+import { RegistrationHttpService } from './services/registration-http.service';
+import { TicketHttpService } from './services/ticket-http.service';
+import { UserTypeHttpService } from './services/user-type-http.service';
+import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service';
 
 @NgModule({
-  declarations: [
+  declarations:[
     AppComponent,
     LoginComponent,
     HomeComponent,
@@ -65,9 +66,10 @@ import { TicketService } from './services/ticket-http.service';
     SchedulesHttpService,
     TransportationLinesHttpService,
     TransportationLineTypesHttpService,
-    DayOfTheWeekService, 
-    RegistrationService,
-    TicketService
+    TicketHttpService,
+    DayOfTheWeekHttpService, 
+    RegistrationHttpService,
+    UserTypeHttpService
   ],
   bootstrap: [AppComponent]
 })
