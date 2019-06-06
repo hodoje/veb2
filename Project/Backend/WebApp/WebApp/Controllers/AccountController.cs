@@ -30,8 +30,6 @@ namespace WebApp.Controllers
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
 
-        
-
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
 			IUnitOfWork uow)

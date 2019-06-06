@@ -20,7 +20,7 @@ namespace WebApp
 {
     public partial class Startup
     {
-        const string ISSUER = "http://localhost:52295"; //TODO: Kad promenis port, menjaj i ovde.
+        const string ISSUER = "http://localhost:52296"; //TODO: Kad promenis port, menjaj i ovde.
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
 
         public static string PublicClientId { get; private set; }

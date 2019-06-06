@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class RegistrationHttpService{
-  base_url = "http://localhost:52295/api/";
+  base_url = "http://localhost:52296/api/";
   specifiedUrl = "account/register";
 
   constructor(private httpClient: HttpClient){

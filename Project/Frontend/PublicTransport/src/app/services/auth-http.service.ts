@@ -7,7 +7,7 @@ import { NgForm } from '@angular/forms';
 
 @Injectable()
 export class AuthHttpService{
-    base_url = "http://localhost:52295/";
+    base_url = "http://localhost:52296/";
     loginUrl = "oauth/token"
     logoutUrl = "api/account/logout"
 
