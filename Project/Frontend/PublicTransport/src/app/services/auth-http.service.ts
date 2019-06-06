@@ -51,8 +51,8 @@ export class AuthHttpService{
     logOut(callback){
         this.http.post(this.base_url + this.logoutUrl, null).subscribe(
             confirm => {
-                localStorage.jwt = undefined;
-                localStorage.role = undefined;
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("role");
                 callback(true);
             }
         );
