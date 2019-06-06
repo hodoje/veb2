@@ -6,9 +6,9 @@ export class TicketHttpService extends BaseHttpService<TicketDto>{
     specifiedUrl = "Tickets";
 
     buyTicket(id: number): Observable<TicketDto> {
-        console.log(id);
-        console.log(this.base_url + this.specifiedUrl + '/BuyTicket');
+        let ticketTdo = new TicketDto();
+        ticketTdo.ticketTypeId = id;
         return this.httpClient.post<TicketDto>(this.base_url + this.specifiedUrl + '/BuyTicket',
-        {ticketTypeId: id});
+        ticketTdo);
     }
 }
