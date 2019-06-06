@@ -148,7 +148,7 @@ namespace WebApp.Controllers.DomainControllers
 		[Route("api/Tickets/ValidateTicket")]
 		[Authorize(Roles = "Controller")]
 		[HttpPost]
-		public async Task<IHttpActionResult> ValidateTicket(TicketDto ticketDto)
+		public IHttpActionResult ValidateTicket(TicketDto ticketDto)
 		{
 			if (!ModelState.IsValid)
 			{
