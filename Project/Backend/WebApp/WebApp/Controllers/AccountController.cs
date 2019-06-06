@@ -18,6 +18,7 @@ using WebApp.Models.DomainModels;
 using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
 using WebApp.Results;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -29,9 +30,7 @@ namespace WebApp.Controllers
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
 
-        public AccountController()
-        {
-        }
+        
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
@@ -362,28 +361,36 @@ namespace WebApp.Controllers
 				}
 			}
 
-			UserType requestedUserType = (unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType) as List<UserType>).Find(ut => ut.Name == model.RequestedUserType);
-			var user = new ApplicationUser()
-			{
-				UserName = model.Email,
-				Email = model.Email,
-				Name = model.Name,
-				LastName = model.LastName,
-				Birthday = model.Birthday,
-				Address = model.Address,
-				UserTypeId = requestedUserType.Id,
-				IsSuccessfullyRegistered = (String.IsNullOrWhiteSpace(documentImageFileName)) ? false : true,
-				DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
-			};
+            UserType requestedUserType = unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType).FirstOrDefault();
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
+            try
             {
-                return GetErrorResult(result);
-            }
+                var user = new ApplicationUser()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    Address = model.Address,
+                    UserTypeId = requestedUserType.Id,
+                    IsSuccessfullyRegistered = false,
+                    DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
+                };
 
-            return Ok();
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+                if (!result.Succeeded)
+                {
+                    return GetErrorResult(result);
+                }
+
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
         }
 
         // POST api/Account/RegisterExternal
