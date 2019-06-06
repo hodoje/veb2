@@ -1,4 +1,10 @@
 
 export class TicketDto{
-    ticketTypeId: number
+    constructor(ticketTypeid: number, email: string){
+        this.ticketTypeId = ticketTypeid;
+        this.email = email;
+    }
+
+    ticketTypeId: number;
+    email: string;
 }

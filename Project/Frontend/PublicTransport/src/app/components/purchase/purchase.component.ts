@@ -20,16 +20,25 @@ export class PurchaseComponent implements OnInit {
 
   ngOnInit() {
     this.plttService.getUserPrices().subscribe(
-      tickets => this.ticketTypes = tickets
+      tickets =>{
+        this.ticketTypes = tickets
+        this.currentTicket = this.ticketTypes.length > 0 ? this.ticketTypes[0] : undefined;
+      }
     );
   }
 
-  buyTicket(){
-    this.ticketService.buyTicket(this.currentTicket.ticketId).subscribe(
+  buyTicket(email: string){
+    console.log(email);
+    this.ticketService.buyTicket(this.currentTicket.ticketId, email).subscribe(
       data =>{
         // TODO
       },
       error => this.feedback = error
     );
+  }
+
+  showEmailInput(): Boolean{
+    let role = localStorage.getItem("role");
+    return role !== "Admin" && role !== "AppUser" && role != "Controller";
   }
 }

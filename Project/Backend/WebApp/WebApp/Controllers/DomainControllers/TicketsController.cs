@@ -7,7 +7,9 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Claims;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -109,7 +111,7 @@ namespace WebApp.Controllers.DomainControllers
 
         [Route("api/Tickets/BuyTicket")]
         [HttpPost]
-        public async Task<IHttpActionResult> BuyTicket(TicketDto id)
+        public async Task<IHttpActionResult> BuyTicket(TicketDto ticketDto)
         {
             if (!ModelState.IsValid)
             {
@@ -120,16 +122,22 @@ namespace WebApp.Controllers.DomainControllers
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
 
-                if (ticketBusinessComponent.BuyTicket(unitOfWork, user, id.TicketTypeId, true))
+                if (ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId, true))
                 {
-                    return Ok();
+					if (!String.IsNullOrEmpty(ticketDto.Email))
+					{
+						// TODO SEND E-MAIL
+					
+					}
+
+					return Ok();
                 }
                 else
                 {
                     return BadRequest();
                 }
             }
-            catch
+            catch(Exception e)
             {
                 return InternalServerError();
             }
