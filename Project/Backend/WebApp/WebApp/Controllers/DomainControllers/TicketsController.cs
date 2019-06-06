@@ -122,13 +122,15 @@ namespace WebApp.Controllers.DomainControllers
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
 
-                if (ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId, true))
+                if (ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId))
                 {
 					if (!String.IsNullOrEmpty(ticketDto.Email))
 					{
 						// TODO SEND E-MAIL
 					
 					}
+
+					unitOfWork.Complete();
 
 					return Ok();
                 }
@@ -143,8 +145,34 @@ namespace WebApp.Controllers.DomainControllers
             }
         }
 
-        // DELETE: api/Tickets/5
-        [ResponseType(typeof(Ticket))]
+		[Route("api/Tickets/ValidateTicket")]
+		[Authorize(Roles = "Controller")]
+		[HttpPost]
+		public async Task<IHttpActionResult> ValidateTicket(TicketDto ticketDto)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			try
+			{
+				if (ticketBusinessComponent.ValidateTicket(unitOfWork, ticketDto.TicketTypeId))
+				{
+					return Ok();
+				}
+				else
+				{
+					return Ok($"Ticket (with id: {ticketDto.TicketTypeId}) is not valid.");
+				}
+			}
+			catch (Exception e)
+			{
+				return InternalServerError();
+			}
+		}
+
+		// DELETE: api/Tickets/5
+		[ResponseType(typeof(Ticket))]
         public IHttpActionResult DeleteTicket(int id)
         {
             Ticket ticket = unitOfWork.TicketRepository.Get(id);

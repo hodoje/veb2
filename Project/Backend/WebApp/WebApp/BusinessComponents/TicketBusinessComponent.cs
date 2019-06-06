@@ -108,5 +108,19 @@ namespace WebApp.BusinessComponents
                 throw;
             }
         }
-    }
+
+		public bool ValidateTicket(IUnitOfWork unitOfWork, int ticketId)
+		{
+			try
+			{
+				Ticket ticket = unitOfWork.TicketRepository.Get(ticketId);
+
+				return (ticket == null || ticket.ExpirationDate > DateTime.Now);
+			}
+			catch
+			{
+				throw;
+			}
+		}
+	}
 }
