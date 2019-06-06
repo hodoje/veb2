@@ -98,12 +98,13 @@ namespace WebApp.App_Start
 				c.AddProfile<TransportationLineTypeMappingProfile>();
 				c.AddProfile<TransportationLineMappingProfile>();
 				c.AddProfile<ScheduleMappingProfile>();
+                c.AddProfile<UserTypeMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
 
-            GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
-        }
+			//GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
+		}
 
         public void Dispose()
         {
