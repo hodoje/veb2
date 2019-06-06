@@ -4,3 +4,8 @@ Red Voznje DTO: [Gradski/Prigradski] list
 			[Linija] list
 				[Dan] string
 				[TimeTable] string
+
+Kod uredjivanja reda voznje:
+	- Dodavanje: neki time tag gde ce se izabrati vreme
+	- Izmena: dropdown sa svim vremenima i kad se izabere neki, da se popuni to polje koje se koristilo za dodavanje
+	- Brisanje: iz dropdowna se selektovano vreme obrise

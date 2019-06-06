@@ -6,6 +6,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TicketsComponent } from './components/tickets/tickets.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { PassengerComponent } from './components/passenger/passenger.component';
+import { ControllerComponent } from './components/controller/controller.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -31,6 +34,18 @@ const routes: Routes = [
   {
     path: "schedules",
     component: ScheduleComponent
+  },
+  {
+    path: "passenger",
+    component: PassengerComponent
+  },
+  {
+    path: "controller",
+    component: ControllerComponent
+  },
+  {
+    path: "admin",
+    component: AdminComponent
   },
   {
     path: "**",
