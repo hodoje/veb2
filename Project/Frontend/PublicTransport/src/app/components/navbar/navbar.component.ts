@@ -11,23 +11,26 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
 
   isLoggedIn = false;
+  userRole: string;
 
-  constructor(private loginToNavbarService: LoginToNavbarService, private authService: AuthHttpService, private router: Router) { }
+  constructor(private loginToNavbarService: LoginToNavbarService, private authService: AuthHttpService, private router: Router) {
+    if(localStorage.jwt !== undefined){
+      this.isLoggedIn = true;
+    }
+  }
 
   ngOnInit() {
     this.loginToNavbarService.change.subscribe(
       isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
+        this.userRole = localStorage.role;
       }
     );
   }
 
   logout(){
-    this.authService.logOut((isLoggedOut) => {
-      if(isLoggedOut){
-        this.isLoggedIn = false;
-        this.router.navigate(['/home']);
-      }
-    });
+    this.isLoggedIn = false;
+    localStorage.jwt = undefined;
+    localStorage.role = undefined;
   }
 }

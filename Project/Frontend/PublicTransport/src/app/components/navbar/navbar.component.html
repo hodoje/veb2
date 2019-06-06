@@ -20,6 +20,13 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <a *ngIf="userRole === 'AppUser'" class="nav-link" [routerLink]="['/passenger']">My panel</a>
+          <a *ngIf="userRole === 'Admin'" class="nav-link" [routerLink]="['/admin']">My panel</a>
+          <a *ngIf="userRole === 'Controller'" class="nav-link" [routerLink]="['/controller']">My panel</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
         <li>
           <button *ngIf="!isLoggedIn" class="btn btn-primary btn-lg" [routerLink]="['/login']">Login</button>
         </li>
