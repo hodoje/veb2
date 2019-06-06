@@ -14,7 +14,7 @@ namespace WebApp
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+			GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -22,9 +22,9 @@ namespace WebApp
 			// Disable circular references for json formatter
 			GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings
 				.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-			// Remove xml formatter
-			GlobalConfiguration.Configuration.Formatters
-				.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
+			//// Remove xml formatter
+			//GlobalConfiguration.Configuration.Formatters
+			//	.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
 		}
     }
 }
