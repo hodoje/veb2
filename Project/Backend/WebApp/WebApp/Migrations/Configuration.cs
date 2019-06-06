@@ -209,7 +209,7 @@ namespace WebApp.Migrations
 
             if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
             {
-                UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Worker"));
+                UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Regular"));
                 var user = new ApplicationUser()
 				{
 					Id = "admin",
@@ -302,7 +302,10 @@ namespace WebApp.Migrations
                     sendTransaction = true;
                 }
 
-                
+                if (sendTransaction == true)
+                {
+                    context.SaveChanges();
+                }
             }
         }
     }

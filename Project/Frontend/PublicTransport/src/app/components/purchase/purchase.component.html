@@ -1,3 +1,21 @@
-<p>
-  purchase works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="page-header">
+          <h2>Buy a ticket</h2>
+        </div>
+      </div>
+      <hr/>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">  
+        <select [(ngModel)]="currentTicket" class="form-control form-control-sm">
+            <option *ngFor="let ticketType of ticketTypes" [ngValue]="ticketType">{{ ticketType.name }} - {{ ticketType.price}} RSD</option>
+        </select>
+        <p>
+          <button id="buyTicketBtn" class="btn btn-primary btn-sm" (click)="buyTicket()">Buy</button>
+        </p>
+      </div>
+      <div class="col-md-4"></div>
+  </div>
+</div>
