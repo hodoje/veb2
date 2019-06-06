@@ -2,7 +2,7 @@ import { BaseHttpService } from './base-http.service';
 import { TicketDto } from '../models/ticket.model';
 import { Observable } from 'rxjs';
 
-export class TicketService extends BaseHttpService<TicketDto>{
+export class TicketHttpService extends BaseHttpService<TicketDto>{
     specifiedUrl = "Tickets";
 
     buyTicket(id: number): Observable<TicketDto> {

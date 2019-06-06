@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PLTTService } from 'src/app/services/price-list-ticket-type-http.service';
 import { PriceListTicketType } from 'src/app/models/pricelisttickettype.model';
-import { TicketService } from 'src/app/services/ticket-http.service';
+import { TicketHttpService } from 'src/app/services/ticket-http.service';
 
 @Component({
   selector: 'app-purchase',
@@ -14,7 +14,7 @@ export class PurchaseComponent implements OnInit {
   currentTicket: PriceListTicketType;
   feedback: string;
 
-  constructor(private plttService: PLTTService, private ticketService: TicketService) {
+  constructor(private plttService: PLTTService, private ticketService: TicketHttpService) {
     this.ticketTypes = [];
    }
 
