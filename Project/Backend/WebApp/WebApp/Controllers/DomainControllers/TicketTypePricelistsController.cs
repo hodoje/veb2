@@ -44,11 +44,6 @@ namespace WebApp.Controllers.DomainControllers
         // GET: api/TicketTypePricelists
         public IHttpActionResult GetTicketTypePricelists()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAllTicketPrices(unitOfWork);
@@ -71,11 +66,6 @@ namespace WebApp.Controllers.DomainControllers
         [Route("api/TicketTypePricelists/GetMyTicketPrices")]
         public async Task<IHttpActionResult> GetTicketPriceForUser()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
