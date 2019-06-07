@@ -4,6 +4,7 @@ import { Registration } from 'src/app/models/registration.model';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { UserTypeHttpService } from 'src/app/services/user-type-http.service';
 import { UserType } from 'src/app/models/user-type.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,10 @@ export class RegisterComponent implements OnInit {
   currentUserType: UserType;
   userTypes: UserType[];
 
-  constructor(private registrationService: RegistrationHttpService, private userTypeService: UserTypeHttpService) {
+  constructor(
+    private registrationService: RegistrationHttpService, 
+    private userTypeService: UserTypeHttpService,
+    private spinner: NgxSpinnerService) {
     this.uploadedFile = null;
     this.registrationSuccessful = false;
     this.currentUserType = null;
@@ -52,13 +56,15 @@ export class RegisterComponent implements OnInit {
     formData.append("birthday", birthdaystr);
     formData.append("requestedUserType", this.currentUserType.name);
     formData.append("documentImage", this.uploadedFile);
-    new Response(formData).text().then(console.log);
+    this.spinner.show();
     this.registrationService.register(formData, (successfulRegistration) => {
       if(successfulRegistration){
         this.registrationSuccessful = true;
+        this.spinner.hide();
       }
       else{
         this.registrationSuccessful = false;
+        this.spinner.hide();
       }
     });
   }
