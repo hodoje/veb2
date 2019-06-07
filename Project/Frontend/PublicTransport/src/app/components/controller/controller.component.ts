@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TicketHttpService } from 'src/app/services/ticket-http.service';
 
 @Component({
   selector: 'app-controller',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ControllerComponent implements OnInit {
 
-  constructor() { }
+  isTicketValid: Boolean;
+  constructor(private ticketService: TicketHttpService) { }
 
   ngOnInit() {
+  }
+
+  validateTicket(id: string){
+    this.ticketService.validateTicket(id).subscribe(
+      isValid => this.isTicketValid = isValid,
+      error => this.isTicketValid = false
+    );
   }
 
 }
