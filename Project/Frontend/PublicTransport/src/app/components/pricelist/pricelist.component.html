@@ -11,7 +11,7 @@
     </div>
     <hr/>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12" style="margin-left: 2%">
         <div *ngFor="let ticketType of ticketTypePriceLists | keyvalue" [hidden]="ticketTypePriceLists.length == 0" >
           <div class="table-caption">
             <h4>{{ticketType.key}}</h4>
