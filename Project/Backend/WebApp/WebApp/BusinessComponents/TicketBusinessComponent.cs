@@ -24,7 +24,8 @@ namespace WebApp.BusinessComponents
                     return -1;
                 }
 
-                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == unitOfWork.PricelistRepository.GetAll().Max(p => p.Id)).FirstOrDefault();
+                int plIndex = unitOfWork.PricelistRepository.GetAll().Max(p => p.Id);
+                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
                 Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
 
 				unitOfWork.TicketRepository.Add(boughtTicket);
@@ -115,7 +116,7 @@ namespace WebApp.BusinessComponents
 			{
 				Ticket ticket = unitOfWork.TicketRepository.Get(ticketId);
 
-				return (ticket == null || ticket.ExpirationDate > DateTime.Now);
+				return (ticket != null && ticket.ExpirationDate > DateTime.Now);
 			}
 			catch
 			{
