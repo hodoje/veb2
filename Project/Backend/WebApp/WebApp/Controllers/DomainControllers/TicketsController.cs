@@ -138,6 +138,9 @@ namespace WebApp.Controllers.DomainControllers
                         }
                         else
                         {
+                            unitOfWork.TicketRepository.Remove(unitOfWork.TicketRepository.Get(boughtTicketId));
+                            unitOfWork.Complete();
+
                             return InternalServerError();
                         }
                     }
@@ -152,8 +155,11 @@ namespace WebApp.Controllers.DomainControllers
         }
 
 		[Route("api/Tickets/ValidateTicket")]
-		[Authorize(Roles = "Controller")]
-		[HttpPost]
+        //USE
+		//[Authorize(Roles = "Controller")]
+        //TEST
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
 		public async Task<IHttpActionResult> ValidateTicket(TicketDto ticketDto)
 		{
 			if (!ModelState.IsValid)
@@ -168,7 +174,7 @@ namespace WebApp.Controllers.DomainControllers
 				}
 				else
 				{
-					return Ok($"Ticket (with id: {ticketDto.TicketTypeId}) is not valid.");
+					return Ok(true);
 				}
 			}
 			catch (Exception e)
