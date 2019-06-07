@@ -24,7 +24,7 @@ namespace WebApp.BusinessComponents
                     return false;
                 }
 
-                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => (pltt.Pricelist.FromDate <= DateTime.Now && pltt.Pricelist.ToDate >= DateTime.Now)).FirstOrDefault();
+                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == unitOfWork.PricelistRepository.GetAll().Max(p => p.Id)).FirstOrDefault();
                 Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
 
 				unitOfWork.TicketRepository.Add(boughtTicket);
@@ -46,7 +46,7 @@ namespace WebApp.BusinessComponents
         {
             try
             {
-                Pricelist currentPriceList = unitOfWork.PricelistRepository.Find(x => x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now).FirstOrDefault();
+                Pricelist currentPriceList = unitOfWork.PricelistRepository.GetAll().LastOrDefault();
 
                 List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
 
@@ -83,7 +83,7 @@ namespace WebApp.BusinessComponents
         {
             try
             {
-                Pricelist currentPriceList = unitOfWork.PricelistRepository.Find(x => x.FromDate <= DateTime.Now && x.ToDate >= DateTime.Now).FirstOrDefault();
+                Pricelist currentPriceList = unitOfWork.PricelistRepository.GetAll().LastOrDefault();
 
                 List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
 
