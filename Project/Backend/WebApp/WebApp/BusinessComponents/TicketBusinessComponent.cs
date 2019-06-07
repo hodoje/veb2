@@ -13,7 +13,7 @@ namespace WebApp.BusinessComponents
 {
     public class TicketBusinessComponent : ITicketBusinessComponent
     {
-        public bool BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false)
+        public int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false)
         {
             try
             {
@@ -21,7 +21,7 @@ namespace WebApp.BusinessComponents
 
                 if (ticketType == null)
                 {
-                    return false;
+                    return -1;
                 }
 
                 TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => (pltt.Pricelist.FromDate <= DateTime.Now && pltt.Pricelist.ToDate >= DateTime.Now)).FirstOrDefault();
@@ -34,7 +34,7 @@ namespace WebApp.BusinessComponents
                     unitOfWork.Complete();
                 }
 
-                return true;
+                return boughtTicket.Id;
             }
             catch
             {

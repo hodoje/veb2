@@ -28,11 +28,13 @@ namespace WebApp.Controllers.DomainControllers
         private ApplicationUserManager userManager;
 		private IUnitOfWork unitOfWork;
         private ITicketBusinessComponent ticketBusinessComponent;
+        private IEmailSender emailSender;
 
-		public TicketsController(IUnitOfWork uow, ITicketBusinessComponent ticketBusinessComponent)
+		public TicketsController(IUnitOfWork uow, ITicketBusinessComponent ticketBusinessComponent, IEmailSender emailSender)
 		{
 			unitOfWork = uow;
             this.ticketBusinessComponent = ticketBusinessComponent;
+            this.emailSender = emailSender;
 		}
 
         public ApplicationUserManager UserManager
@@ -121,25 +123,29 @@ namespace WebApp.Controllers.DomainControllers
             {
                 string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
+                int boughtTicketId;
 
-                if (ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId))
+                if ((boughtTicketId = ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId, true)) > 0)
                 {
-					if (!String.IsNullOrEmpty(ticketDto.Email))
-					{
-						// TODO SEND E-MAIL
-					
-					}
-
-					unitOfWork.Complete();
-
-					return Ok();
+                    if (!String.IsNullOrEmpty(ticketDto.Email))
+                    {
+                        TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
+                        string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
+                        string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
+                        if (emailSender.SendMail(subject, body, ticketDto.Email))
+                        {
+                            return Ok();
+                        }
+                        else
+                        {
+                            return InternalServerError();
+                        }
+                    }
                 }
-                else
-                {
-                    return BadRequest();
-                }
+
+                return BadRequest();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return InternalServerError();
             }
