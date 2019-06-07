@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = isLoggedIn;
         this.loginToNavbar.login();
         this.router.navigate(['/home']);
-        this.spinner.hide();
       }
       else{
         if(errorStatus === 400){
@@ -42,8 +41,8 @@ export class LoginComponent implements OnInit {
         else{
           this.isOtherError = true;
         }
-        this.spinner.hide();
       }
+      this.spinner.hide();
     });
     form.reset();
   }
