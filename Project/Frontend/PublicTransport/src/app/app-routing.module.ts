@@ -10,6 +10,11 @@ import { ControllerComponent } from './components/controller/controller.componen
 import { AdminComponent } from './components/admin/admin.component';
 import { LinesGridComponent } from './components/lines-grid/lines-grid.component';
 import { VehiclesMapComponent } from './components/vehicles-map/vehicles-map.component';
+import { LinesModificationComponent } from './components/lines-modification/lines-modification.component';
+import { StationsModificationComponent } from './components/stations-modification/stations-modification.component';
+import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
+import { PricelistModificationComponent } from './components/pricelist-modification/pricelist-modification.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -50,7 +55,33 @@ const routes: Routes = [
   },
   {
     path: "admin",
-    component: AdminComponent
+    component: AdminComponent,
+    children: [
+      {
+        path: "lines",
+        component: LinesModificationComponent
+      },
+      {
+        path: "stations",
+        component: StationsModificationComponent
+      },
+      {
+        path: "schedules",
+        component: SchedulesModificationComponent
+      },
+      {
+        path: "pricelist",
+        component: PricelistModificationComponent
+      },
+      {
+        path: "profile",
+        component: ProfileComponent
+      },
+      {
+        path: "**",
+        component: LinesModificationComponent
+      }
+    ]
   },
   {
     path: "**",
