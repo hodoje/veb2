@@ -231,7 +231,14 @@ namespace WebApp.Migrations
             bool sendTransaction = false;
             if (!context.Pricelists.Any(pl => pl.Id == 1))
             {
-                Pricelist newPriceList = new Pricelist() { Id = 1, FromDate = new DateTime(2019, 1, 1), ToDate = new DateTime(2019, 12, 31, 23, 59, 59) };
+                Pricelist newPriceList = new Pricelist() { Id = 1, FromDate = new DateTime(2018, 1, 1) };
+                context.Pricelists.Add(newPriceList);
+                sendTransaction = true;
+            }
+
+            if (!context.Pricelists.Any(pl => pl.Id == 2))
+            {
+                Pricelist newPriceList = new Pricelist() { Id = 2, FromDate = new DateTime(2019, 1, 1) };
                 context.Pricelists.Add(newPriceList);
                 sendTransaction = true;
             }
@@ -249,7 +256,8 @@ namespace WebApp.Migrations
                 {"Yearly",    5000}
             };
 
-            Pricelist priceList = context.Pricelists.First();
+            int? lastPriceListId = context.Pricelists.Max(p => p.Id);
+            Pricelist priceList = context.Pricelists.FirstOrDefault(p => p.Id == lastPriceListId);
 
             foreach (var ticketType in ticketTypes)
             {
