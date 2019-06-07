@@ -14,7 +14,6 @@ import { AuthHttpService } from './services/auth-http.service';
 import { PLTTService } from './services/price-list-ticket-type-http.service';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ContentComponent } from './components/content/content.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PassengerComponent } from './components/passenger/passenger.component';
 import { ControllerComponent } from './components/controller/controller.component';
@@ -31,6 +30,8 @@ import { RegistrationHttpService } from './services/registration-http.service';
 import { TicketHttpService } from './services/ticket-http.service';
 import { UserTypeHttpService } from './services/user-type-http.service';
 import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service';
+import { LinesGridComponent } from './components/lines-grid/lines-grid.component';
+import { VehiclesMapComponent } from './components/vehicles-map/vehicles-map.component';
 
 @NgModule({
   declarations:[
@@ -38,7 +39,6 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     LoginComponent,
     HomeComponent,
     NavbarComponent,
-    ContentComponent,
     RegisterComponent,
     PassengerComponent,
     ControllerComponent,
@@ -47,7 +47,9 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     TicketsComponent,
     PricelistComponent,
     PurchaseComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    LinesGridComponent,
+    VehiclesMapComponent
   ],
   imports: [
     BrowserModule,
