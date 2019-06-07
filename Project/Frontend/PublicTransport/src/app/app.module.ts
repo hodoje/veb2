@@ -32,6 +32,11 @@ import { UserTypeHttpService } from './services/user-type-http.service';
 import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service';
 import { LinesGridComponent } from './components/lines-grid/lines-grid.component';
 import { VehiclesMapComponent } from './components/vehicles-map/vehicles-map.component';
+import { PricelistModificationComponent } from './components/pricelist-modification/pricelist-modification.component';
+import { LinesModificationComponent } from './components/lines-modification/lines-modification.component';
+import { StationsModificationComponent } from './components/stations-modification/stations-modification.component';
+import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations:[
@@ -49,7 +54,12 @@ import { VehiclesMapComponent } from './components/vehicles-map/vehicles-map.com
     PurchaseComponent,
     ScheduleComponent,
     LinesGridComponent,
-    VehiclesMapComponent
+    VehiclesMapComponent,
+    PricelistModificationComponent,
+    LinesModificationComponent,
+    StationsModificationComponent,
+    SchedulesModificationComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
