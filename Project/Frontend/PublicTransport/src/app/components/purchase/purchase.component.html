@@ -28,7 +28,7 @@
               <div *ngIf="ticketTypeCBox.errors.required">Ticket is required.</div>
           </div>
           <p>
-            <button id="buyTicketBtn" class="btn btn-primary btn-sm" (click)="buyTicket(email.value)" [disabled]="!email.valid">Buy</button>
+            <button id="buyTicketBtn" class="btn btn-primary btn-sm" (click)="buyTicket(email.value)" [disabled]="!email.valid && buttonEnabled()">Buy</button>
           </p>
         </div>
       </div>
