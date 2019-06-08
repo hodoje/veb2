@@ -51,11 +51,31 @@ namespace WebApp.Controllers.DomainControllers
 		public IHttpActionResult GetLatestPricelist()
 		{
 			Pricelist pricelist = unitOfWork.PricelistRepository.GetActivePricelist();
+			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
+			List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+			foreach(TicketTypePricelist pltt in pltts)
+			{
+				if (pltt.TicketType.Name == "Hourly")
+				{
+					pricelistDto.Hourly = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Daily")
+				{
+					pricelistDto.Daily = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Monthly")
+				{
+					pricelistDto.Monthly = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Yearly")
+				{
+					pricelistDto.Yearly = pltt.BasePrice;
+				}
+			}
 			if (pricelist == null)
 			{
 				return NotFound();
 			}
-			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
 			return Ok(pricelistDto);
 		}
 
