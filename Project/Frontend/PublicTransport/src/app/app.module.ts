@@ -1,3 +1,4 @@
+import { PricelistHttpService } from './services/pricelist-http.service';
 import { ConfirmPasswordValidatorDirective } from './common/directives/confirm-password-validator.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -83,7 +84,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     TicketHttpService,
     DayOfTheWeekHttpService, 
     RegistrationHttpService,
-    UserTypeHttpService
+    UserTypeHttpService,
+    PricelistHttpService
   ],
   bootstrap: [AppComponent]
 })
