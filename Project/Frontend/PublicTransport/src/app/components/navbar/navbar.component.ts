@@ -17,8 +17,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private loginToNavbarService: LoginToNavbarService, 
     private authService: AuthHttpService, 
-    private router: Router,
-    private spinner: NgxSpinnerService) {
+    private router: Router) {
     if(localStorage.jwt !== undefined){
       this.isLoggedIn = true;
       this.userRole = localStorage.role;
@@ -35,12 +34,10 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(){
-    this.spinner.show();
     this.authService.logOut((isLoggedOut) => {
       if(isLoggedOut){
         this.isLoggedIn = false;
         this.userRole = undefined;
-        this.spinner.hide();
         this.router.navigate(['/home']);
       }
     });
