@@ -1,3 +1,56 @@
-<p>
-  pricelist-modification works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col col-md-4"></div>
+      <div class="col col-md-4">
+        <div class="page-header">
+          <h2>Pricelist</h2>
+        </div>
+        <form #f="ngForm" (ngSubmit)="updatePricelist(f.value, f)">
+          <div class="form-group required">
+            <h4>Base Prices</h4>
+            <label>Hourly</label>
+            <input required min="0" pattern="[0-9]*" type="text" id="hourly" name="hourly" [(ngModel)]="activePricelist.hourly" #hourly="ngModel" class="form-control form-control-sm"/>
+            <div class="alert alert-danger" *ngIf="hourly?.touched && !hourly.valid">
+              <div *ngIf="hourly.errors.required">Hourly Base Price is required.</div>
+              <div *ngIf="hourly.errors.min">Hourly Base Price cannot be less than 0.</div>
+              <div *ngIf="hourly.errors.pattern">Hourly Base Price field must contain only digits.</div>
+            </div>
+            <label>Daily</label>
+            <input required min="0" pattern="[0-9]*" type="text" id="daily" name="daily" [(ngModel)]="activePricelist.daily" #daily="ngModel" class="form-control form-control-sm"/>
+            <div class="alert alert-danger" *ngIf="daily?.touched && !daily.valid">
+              <div *ngIf="daily.errors.required">Daily Base Price is required.</div>
+              <div *ngIf="daily.errors.min">Daily Base Price cannot be less than 0.</div>
+              <div *ngIf="daily.errors.pattern">Daily Base Price field must contain only digits.</div>
+            </div>
+            <label>Monthly</label>
+            <input required min="0" pattern="[0-9]*" type="text" id="monthly" name="monthly" [(ngModel)]="activePricelist.monthly" #monthly="ngModel" class="form-control form-control-sm"/>
+            <div class="alert alert-danger" *ngIf="monthly?.touched && !monthly.valid">
+              <div *ngIf="monthly.errors.required">Monthly Base Price is required.</div>
+              <div *ngIf="monthly.errors.min">Monthly Base Price cannot be less than 0.</div>
+              <div *ngIf="monthly.errors.pattern">Monthly Base Price field must contain only digits.</div>
+            </div>
+            <label>Yearly</label>
+            <input required min="0" pattern="[0-9]*" type="text" id="yearly" name="yearly" [(ngModel)]="activePricelist.yearly" #yearly="ngModel" class="form-control form-control-sm"/>
+            <div class="alert alert-danger" *ngIf="yearly?.touched && !yearly.valid">
+              <div *ngIf="yearly.errors.required">Yearly Base Price is required.</div>
+              <div *ngIf="yearly.errors.min">Yearly Base Price cannot be less than 0.</div>
+              <div *ngIf="yearly.errors.pattern">Yearly Base Price field must contain only digits.</div>
+            </div>
+            <label for="currentDate">Validation Date</label>
+            <input 
+              required 
+              type="date" name="currentDate" [min]="minDate" #fromDate [value]="currentDate | date:'yyyy-MM-dd'" (input)="currentDate=parseDate($event.target.value)" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="currentDate?.touched && !currentDate.valid">
+              <div *ngIf="currentDate.errors.required">Validation Date is required.</div>
+            </div>
+            <p>
+              <input type="submit" id="changeDateBtn" class="btn btn-primary btn-sm" value="Update" [disabled]="!f.valid">
+            </p>
+          </div>
+        </form>
+      </div>
+      <div class="col col-md-4"></div>
+    </div>
+  </div>
+</div>
