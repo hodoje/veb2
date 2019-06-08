@@ -10,5 +10,6 @@ namespace WebApp.Persistence.ModelRepositoryInterfaces
 {
 	public interface IPricelistRepository : IRepository<Pricelist, int>
 	{
+		Pricelist GetActivePricelist();
 	}
 }
