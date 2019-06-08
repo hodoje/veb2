@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
@@ -17,10 +19,12 @@ namespace WebApp.Controllers.DomainControllers
     public class PricelistsController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public PricelistsController(IUnitOfWork uow)
+		public PricelistsController(IUnitOfWork uow, IMapper imapper)
 		{
 			unitOfWork = uow;
+			mapper = imapper;
 		}
 
 		// GET: api/Pricelists
@@ -41,6 +45,39 @@ namespace WebApp.Controllers.DomainControllers
 
             return Ok(pricelist);
         }
+
+		[HttpGet]
+		[Route("api/pricelists/getActivePricelist")]
+		public IHttpActionResult GetLatestPricelist()
+		{
+			Pricelist pricelist = unitOfWork.PricelistRepository.GetActivePricelist();
+			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
+			List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+			foreach(TicketTypePricelist pltt in pltts)
+			{
+				if (pltt.TicketType.Name == "Hourly")
+				{
+					pricelistDto.Hourly = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Daily")
+				{
+					pricelistDto.Daily = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Monthly")
+				{
+					pricelistDto.Monthly = pltt.BasePrice;
+				}
+				else if (pltt.TicketType.Name == "Yearly")
+				{
+					pricelistDto.Yearly = pltt.BasePrice;
+				}
+			}
+			if (pricelist == null)
+			{
+				return NotFound();
+			}
+			return Ok(pricelistDto);
+		}
 
         // PUT: api/Pricelists/5
         [ResponseType(typeof(void))]
@@ -77,15 +114,39 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // POST: api/Pricelists
-        [ResponseType(typeof(Pricelist))]
-        public IHttpActionResult PostPricelist(Pricelist pricelist)
+        [ResponseType(typeof(PricelistDto))]
+        public IHttpActionResult PostPricelist(PricelistDto pricelistDto)
         {
+			Pricelist pricelist = mapper.Map<PricelistDto, Pricelist>(pricelistDto);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
 			unitOfWork.PricelistRepository.Add(pricelist);
+			unitOfWork.Complete();
+
+			foreach(TicketType tt in unitOfWork.TicketTypeRepository.GetAll())
+			{
+				TicketTypePricelist pltt = new TicketTypePricelist(tt.Id, pricelist.Id);
+				if(tt.Name == "Hourly")
+				{
+					pltt.BasePrice = pricelistDto.Hourly;
+				}
+				else if(tt.Name == "Daily")
+				{
+					pltt.BasePrice = pricelistDto.Daily;
+				}
+				else if(tt.Name == "Monthly")
+				{
+					pltt.BasePrice = pricelistDto.Monthly;
+				}
+				else if(tt.Name == "Yearly")
+				{
+					pltt.BasePrice = pricelistDto.Yearly;
+				}
+				unitOfWork.TicketTypePricelistRepository.Add(pltt);
+			}
 			unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = pricelist.Id }, pricelist);

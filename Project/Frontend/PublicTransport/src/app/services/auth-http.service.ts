@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 export class AuthHttpService{
     base_url = "http://localhost:52296/";
     loginUrl = "oauth/token"
+    logoutUrl = "api/account/logout"
 
     constructor(private http: HttpClient){
     }
@@ -45,5 +46,20 @@ export class AuthHttpService{
         err => {
             callback(false, err.status);
         });
+    }
+
+    logOut(callback){
+        this.http.post(this.base_url + this.logoutUrl, null).subscribe(
+            (confirm) => {
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("role");
+                callback(true);
+            },
+            (err) =>{
+                localStorage.removeItem("jwt");
+                localStorage.removeItem("role");
+                callback(true);
+            }
+        );
     }
 }

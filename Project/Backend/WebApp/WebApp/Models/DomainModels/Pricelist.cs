@@ -10,7 +10,6 @@ namespace WebApp.Models.DomainModels
     {
         public int Id { get; set; }
         public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
         public ICollection<TicketTypePricelist> TicketTypePricelists { get; set; }
     }
 }

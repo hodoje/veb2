@@ -39,6 +39,10 @@ export class PurchaseComponent implements OnInit {
 
   showEmailInput(): Boolean{
     let role = localStorage.getItem("role");
-    return role !== "Admin" && role !== "AppUser" && role != "Controller";
+    return role !== "Admin" && role !== "AppUser" && role !== "Controller";
+  }
+
+  buttonEnabled(): Boolean{
+    return this.showEmailInput();
   }
 }

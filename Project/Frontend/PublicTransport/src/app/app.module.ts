@@ -1,3 +1,4 @@
+import { PricelistHttpService } from './services/pricelist-http.service';
 import { ConfirmPasswordValidatorDirective } from './common/directives/confirm-password-validator.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -5,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -14,7 +16,6 @@ import { AuthHttpService } from './services/auth-http.service';
 import { PLTTService } from './services/price-list-ticket-type-http.service';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ContentComponent } from './components/content/content.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PassengerComponent } from './components/passenger/passenger.component';
 import { ControllerComponent } from './components/controller/controller.component';
@@ -31,6 +32,13 @@ import { RegistrationHttpService } from './services/registration-http.service';
 import { TicketHttpService } from './services/ticket-http.service';
 import { UserTypeHttpService } from './services/user-type-http.service';
 import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service';
+import { LinesGridComponent } from './components/lines-grid/lines-grid.component';
+import { VehiclesMapComponent } from './components/vehicles-map/vehicles-map.component';
+import { PricelistModificationComponent } from './components/pricelist-modification/pricelist-modification.component';
+import { LinesModificationComponent } from './components/lines-modification/lines-modification.component';
+import { StationsModificationComponent } from './components/stations-modification/stations-modification.component';
+import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations:[
@@ -38,7 +46,6 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     LoginComponent,
     HomeComponent,
     NavbarComponent,
-    ContentComponent,
     RegisterComponent,
     PassengerComponent,
     ControllerComponent,
@@ -47,7 +54,14 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     TicketsComponent,
     PricelistComponent,
     PurchaseComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    LinesGridComponent,
+    VehiclesMapComponent,
+    PricelistModificationComponent,
+    LinesModificationComponent,
+    StationsModificationComponent,
+    SchedulesModificationComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +69,8 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    NgxSpinnerModule
   ],
   providers: 
   [
@@ -69,7 +84,8 @@ import { DayOfTheWeekHttpService } from './services/day-of-the-week-http.service
     TicketHttpService,
     DayOfTheWeekHttpService, 
     RegistrationHttpService,
-    UserTypeHttpService
+    UserTypeHttpService,
+    PricelistHttpService
   ],
   bootstrap: [AppComponent]
 })

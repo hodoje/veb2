@@ -1,25 +1,35 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <a class="navbar-brand" [routerLink]="['/admin']">My panel</a>
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/admin/lines']">Lines</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/admin/stations']">Stations</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/admin/schedules']">Schedules</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/admin/pricelist']">Pricelist</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/admin/profile']">Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <div class="wrapper">
   <div class="container-fluid">
     <div class="row">
-      <div class="col col-md-3">
-        <div class="page-header">
-          <h2>Lines</h2>
-        </div>
-      </div>
-      <div class="col col-md-3">
-        <div class="page-header">
-          <h2>Stations</h2>
-        </div>
-      </div>
-      <div class="col col-md-3">
-        <div class="page-header">
-          <h2>Schedules</h2>
-        </div>
-      </div>
-      <div class="col col-md-3">
-        <div class="page-header">
-          <h2>Pricelist</h2>
-        </div>
+      <div class="col col-md-12">
+          <router-outlet></router-outlet>
       </div>
     </div>
   </div>

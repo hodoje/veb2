@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using WebApp.Models.DomainModels;
 using WebApp.Persistence.ModelRepositoryInterfaces;
@@ -18,6 +19,16 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public TicketTypePricelistRepository(DbContext context) : base(context)
 		{
+		}
+
+		public IEnumerable<TicketTypePricelist> GetAllIncludeTicketType()
+		{
+			return context.Set<TicketTypePricelist>().Include(pltt => pltt.TicketType);
+		}
+
+		public IEnumerable<TicketTypePricelist> FindIncludeTicketType(Expression<Func<TicketTypePricelist, bool>> predicate)
+		{
+			return context.Set<TicketTypePricelist>().Include(pltt => pltt.TicketType).Where(predicate);
 		}
 	}
 }

@@ -1,3 +1,33 @@
-<p>
-  controller works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="page-header">
+            <h2>Validate ticket</h2>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+          <div class="form-group required">
+            <label for="ticketId">Ticket ID: </label>
+            <input required ticketId type="text" name="ticketId" #ticketId="ngModel" ngModel ngModel class="form-control form-control-sm"
+                  pattern="#[0-9]+" placeholder="(example: #1234567890)">
+            <div class="alert alert-danger" *ngIf="ticketId?.touched && !ticketId?.valid">
+              <div *ngIf="ticketId.errors.required">Ticket ID is required.</div>
+              <div *ngIf="ticketId.errors.pattern">Ticket ID pattern is invalid.</div>
+            </div>
+            <p>
+              <button id="validateBtn"
+                class="btn btn-primary btn-sm float-right"
+                (click)="validateTicket(ticketId?.value)">Validate</button>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+  </div>
+</div>

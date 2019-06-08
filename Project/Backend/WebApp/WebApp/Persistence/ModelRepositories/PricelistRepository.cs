@@ -19,5 +19,10 @@ namespace WebApp.Persistence.ModelRepositories
 		public PricelistRepository(DbContext context) : base(context)
 		{
 		}
+
+		public Pricelist GetActivePricelist()
+		{
+			return context.Set<Pricelist>().OrderByDescending(pl => pl.Id).FirstOrDefault();
+		}
 	}
 }

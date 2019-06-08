@@ -1,3 +1,11 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+  [fullScreen] = "true">
+<p style="font-size: 20px; color: white">Logging in...</p>
+</ngx-spinner>
 <div class="wrapper">
   <div class="container">
     <div class="row">
@@ -13,9 +21,11 @@
               required
               minlength="3"
               maxlength="30"
+              email
               type="text" name="username" ngModel #username="ngModel" class="form-control form-control-sm">
             <div class="alert alert-danger" *ngIf="username.touched && !username.valid">
               <div *ngIf="username.errors.required">Email is required.</div>
+              <div *ngIf="username.errors.email">Email is not valid.</div>
             </div>
           </div>
           <div class="form-group">
