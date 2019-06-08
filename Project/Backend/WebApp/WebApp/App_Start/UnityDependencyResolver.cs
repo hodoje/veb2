@@ -104,11 +104,10 @@ namespace WebApp.App_Start
 				c.AddProfile<TransportationLineMappingProfile>();
 				c.AddProfile<ScheduleMappingProfile>();
                 c.AddProfile<UserTypeMappingProfile>();
+				c.AddProfile<PricelistMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
-
-			//GlobalConfiguration.Configuration.DependencyResolver = new UnityResolver(container);
 		}
 
         public void Dispose()
