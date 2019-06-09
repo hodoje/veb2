@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApp.Models.Dtos
 {
-    public class PricelistDto
-    {
-    }
+	public class AdminStationDto
+	{
+	}
 }
