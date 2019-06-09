@@ -104,7 +104,7 @@ namespace WebApp.App_Start
 				c.AddProfile<TransportationLineMappingProfile>();
 				c.AddProfile<ScheduleMappingProfile>();
                 c.AddProfile<UserTypeMappingProfile>();
-				c.AddProfile<PricelistMappingProfile>();
+				c.AddProfile<AdminPricelistMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));

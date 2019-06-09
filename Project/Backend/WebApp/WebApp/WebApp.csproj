@@ -222,7 +222,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\MappingProfiles\DayOfTheWeekMappingProfile.cs" />
-    <Compile Include="App_Start\MappingProfiles\PricelistMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\AdminPricelistMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineTypeMappingProfile.cs" />
@@ -326,6 +326,10 @@
     <Compile Include="Models\DomainModels\TransportationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
+    <Compile Include="Models\Dtos\AdminPricelistDto.cs" />
+    <Compile Include="Models\Dtos\AdminScheduleDto.cs" />
+    <Compile Include="Models\Dtos\AdminStationDto.cs" />
+    <Compile Include="Models\Dtos\AdminTransportationLineDto.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
     <Compile Include="Models\Dtos\ScheduleDto.cs" />
     <Compile Include="Models\Dtos\StationDto.cs" />
