@@ -51,7 +51,7 @@ namespace WebApp.Controllers.DomainControllers
 		public IHttpActionResult GetLatestPricelist()
 		{
 			Pricelist pricelist = unitOfWork.PricelistRepository.GetActivePricelist();
-			AdminPricelistDto pricelistDto = mapper.Map<Pricelist, AdminPricelistDto>(pricelist);
+			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
 			List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
 			foreach(TicketTypePricelist pltt in pltts)
 			{
@@ -114,10 +114,10 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // POST: api/Pricelists
-        [ResponseType(typeof(AdminPricelistDto))]
-        public IHttpActionResult PostPricelist(AdminPricelistDto pricelistDto)
+        [ResponseType(typeof(PricelistDto))]
+        public IHttpActionResult PostPricelist(PricelistDto pricelistDto)
         {
-			Pricelist pricelist = mapper.Map<AdminPricelistDto, Pricelist>(pricelistDto);
+			Pricelist pricelist = mapper.Map<PricelistDto, Pricelist>(pricelistDto);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

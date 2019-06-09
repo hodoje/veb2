@@ -8,14 +8,14 @@ using WebApp.Models.Dtos;
 
 namespace WebApp.App_Start.MappingProfiles
 {
-	public class AdminPricelistMappingProfile : Profile
+	public class PricelistMappingProfile : Profile
 	{
-		public AdminPricelistMappingProfile()
+		public PricelistMappingProfile()
 		{
-			CreateMap<Pricelist, AdminPricelistDto>()
+			CreateMap<Pricelist, PricelistDto>()
 				.ForMember(destination => destination.FromDate,
 				opts => opts.MapFrom(source => source.FromDate));
-			CreateMap<AdminPricelistDto, Pricelist>()
+			CreateMap<PricelistDto, Pricelist>()
 				.ForMember(destination => destination.FromDate,
 				opts => opts.MapFrom(source => source.FromDate));
 		}
