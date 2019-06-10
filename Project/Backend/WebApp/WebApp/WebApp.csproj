@@ -326,6 +326,10 @@
     <Compile Include="Migrations\201906101225514_TransportationLineRoute_AddModel1.Designer.cs">
       <DependentUpon>201906101225514_TransportationLineRoute_AddModel1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906101355241_ApplicationUserId.cs" />
+    <Compile Include="Migrations\201906101355241_ApplicationUserId.Designer.cs">
+      <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -514,6 +518,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906101225514_TransportationLineRoute_AddModel1.resx">
       <DependentUpon>201906101225514_TransportationLineRoute_AddModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101355241_ApplicationUserId.resx">
+      <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

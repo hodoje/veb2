@@ -1,22 +1,17 @@
 ﻿using AutoMapper;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
 using WebApp.Models.Dtos;
-using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.Controllers.DomainControllers
 {
-	public class TransportationLinesController : ApiController
+    public class TransportationLinesController : ApiController
     {
 		private IUnitOfWork unitOfWork;
 		private IMapper mapper;
@@ -44,6 +39,41 @@ namespace WebApp.Controllers.DomainControllers
             }
 
             return Ok(transportationLine);
+        }
+
+        // AUTHORIZATION !?
+        // GET: api/TransporationLines/GetPlan/5
+        public IHttpActionResult GetPlanForTransporationLine(int lineNum)
+        {
+            try
+            {
+                TransportationLine transportationLine = unitOfWork.TransportationLineRepository.Find(x => x.LineNum == lineNum).FirstOrDefault();
+
+                if (transportationLine == null)
+                {
+                    return null;
+                }
+
+                TransporationLinePlanDto planDto = new TransporationLinePlanDto() { LineNumber = transportationLine.LineNum, Routes = new List<RoutePointDto>() };
+
+                List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.Find(x => x.TransporationLineId == transportationLine.Id).ToList();
+                routes.Sort(TransportationLineRoute.CompareByRoutePoint);
+
+                foreach (TransportationLineRoute route in routes)
+                {
+                    planDto.Routes.Add(new RoutePointDto()
+                    {
+                        SequenceNumber = route.RoutePoint,
+                        Station = unitOfWork.StationRepository.Get(route.StationId)
+                    });
+                }
+
+                return Ok(planDto);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/TransportationLines/5
