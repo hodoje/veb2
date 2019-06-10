@@ -124,13 +124,8 @@ export class SchedulesModificationComponent implements OnInit {
     this.selectedTime = this.currentScheduleTimetable[0];
   }
 
-  addTime(newTime){
-    if(newTime){
-      this.currentScheduleTimetable.push(newTime);
-      this.currentScheduleTimetable.sort();
-      // Algorithm for setting a '.' on last time in an hour
-      // taking the end time so when we can check if we should put a '.' or not
-      let lastTime = this.currentScheduleTimetable[this.currentScheduleTimetable.length - 1];
+  getStringTimetableFromArray(){
+    let lastTime = this.currentScheduleTimetable[this.currentScheduleTimetable.length - 1];
       let lastDoubleDigitHour = lastTime.split(":");
       let lastHour = lastDoubleDigitHour[0];
       for(var i = 0; i < this.currentScheduleTimetable.length; i++){
@@ -151,8 +146,15 @@ export class SchedulesModificationComponent implements OnInit {
       // At this moment allTimesTogether is a string where between each item is a ','
       // only on end times we have '.,', that's why we split there
       let finalTimetable = allTimesTogether.replace(".,", ".");
+      return finalTimetable;
+  }
+
+  addTime(newTime){
+    if(newTime){
+      this.currentScheduleTimetable.push(newTime);
+      this.currentScheduleTimetable.sort();
       // Update on backend
-      this.currentSchedule.timetable = finalTimetable;
+      this.currentSchedule.timetable = this.getStringTimetableFromArray();
       this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
         (confirm) => {
           this.getData();
@@ -162,5 +164,20 @@ export class SchedulesModificationComponent implements OnInit {
         }
       );
     }
+  }
+
+  removeTime(){
+    this.currentScheduleTimetable = this.currentScheduleTimetable.filter((time) => {
+      return time !== this.selectedTime;
+    });
+    this.currentSchedule.timetable = this.getStringTimetableFromArray();
+    this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
+      (confirm) => {
+        this.getData();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
