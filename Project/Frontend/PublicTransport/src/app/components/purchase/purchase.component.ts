@@ -40,18 +40,21 @@ export class PurchaseComponent implements OnInit {
     this.ticketService.buyTicket(this.currentTicket.ticketId, email).subscribe(
       data =>{
         this.isTicketBought = true;
+        this.finally();
       },
       error =>{
         this.isTicketBought = false;
-      },
-      () => {
-        this.hideSpinner();
-        this.buttonPressed = true;
-        this.isProccessing = false;
+        this.finally();
       }
     );
   }
   
+  private finally() {
+    this.buttonPressed = true;
+    this.isProccessing = false;
+    this.hideSpinner();
+  }
+
   showSpinner() {
     this.ngxSpinner.show();
   }
