@@ -92,6 +92,7 @@ namespace WebApp.App_Start
 			container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
             container.RegisterType<IEmailSender, SMTPClient>();
+            container.RegisterType<ITransportationLineRouteRepository, TransportationLineRouteRepository>();
             // This allows usage of UnitOfWork in AccountController
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:52296"));

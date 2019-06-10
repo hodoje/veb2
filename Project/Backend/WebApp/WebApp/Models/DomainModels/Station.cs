@@ -14,6 +14,6 @@ namespace WebApp.Models.DomainModels
         public double Longitude { get; set; }
         // y coord
         public double Latitude { get; set; }
-        public ICollection<TransportationLine> TransportationLines { get; set; }
+        public ICollection<TransportationLineRoute> TransportationLineRoute { get; set; }
     }
 }

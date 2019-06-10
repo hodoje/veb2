@@ -105,29 +105,41 @@ namespace WebApp.Migrations
 			TransportationLineType tlType2 = context.TransporationLineTypes.First(tlt => tlt.Name == "Suburban");
             Station station = context.Stations.First();
 
+            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station, RoutePoint = 1 };
+
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
             {
                 TransportationLine transporationLine = new TransportationLine()
                 {
                     LineNum = 4,
                     TransportationLineType = tlType,
-                    Stations = new List<Station>(1) { station },
                 };
 
                 context.TransportationLines.Add(transporationLine);
+
+                context.SaveChanges();
+
+                lineRoute.TransporationLine = transporationLine;
+                context.TransportationLineRoutes.Add(lineRoute);
             }
 
 			if (!context.TransportationLines.Any(x => x.LineNum == 70))
 			{
+                lineRoute = new TransportationLineRoute() { Station = station, RoutePoint = 1 };
+
 				TransportationLine transporationLine = new TransportationLine()
 				{
 					LineNum = 70,
 					TransportationLineType = tlType2,
-					Stations = new List<Station>(1) { station },
 				};
 
 				context.TransportationLines.Add(transporationLine);
-			}
+
+                context.SaveChanges();
+
+                lineRoute.TransporationLine = transporationLine;
+                context.TransportationLineRoutes.Add(lineRoute);
+            }
 
 			context.SaveChanges();
         }
