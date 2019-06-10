@@ -10,7 +10,7 @@ namespace WebApp.BusinessComponents
         IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork);
         IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userExists);
 
-        int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false);
+        int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId);
 
 		bool ValidateTicket(IUnitOfWork unitOfWork, int ticketId);
     }

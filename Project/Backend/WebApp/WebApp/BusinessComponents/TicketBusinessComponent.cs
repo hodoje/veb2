@@ -13,34 +13,45 @@ namespace WebApp.BusinessComponents
 {
     public class TicketBusinessComponent : ITicketBusinessComponent
     {
-        public int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false)
+        public int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId)
         {
+            TicketType ticketType = unitOfWork.TicketTypeRepository.Get(ticketTypeId);
+
+            if (ticketType == null)
+            {
+                return -1;
+            }
+
+            int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
+            TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
+            Ticket boughtTicket = new Ticket(ticketType.Name) { PurchaseDate = DateTime.Now };
+
+            List<Ticket> tickets = unitOfWork.TicketRepository.GetAll().ToList();
+
             try
             {
-                TicketType ticketType = unitOfWork.TicketTypeRepository.Get(ticketTypeId);
-
-                if (ticketType == null)
-                {
-                    return -1;
-                }
-
-				int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
-                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
-                Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
-
-				unitOfWork.TicketRepository.Add(boughtTicket);
-
-                if (completeTransaction == true)
-                {
-                    unitOfWork.Complete();
-                }
-
-                return boughtTicket.Id;
+                unitOfWork.TicketRepository.Add(boughtTicket);
+                unitOfWork.Complete();
             }
             catch
             {
                 throw;
             }
+
+            boughtTicket.ApplicationUserId = user?.Id;
+            boughtTicket.TicketTypePricelistId = currentPLTT.Id;
+
+            try
+            {
+                unitOfWork.Complete();
+            }
+            catch(Exception e)
+            {
+                unitOfWork.TicketRepository.Remove(unitOfWork.TicketRepository.Get(boughtTicket.Id));
+                throw;
+            }
+
+            return boughtTicket.Id;
         }
 
         public IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork)

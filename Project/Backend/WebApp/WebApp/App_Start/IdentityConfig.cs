@@ -20,7 +20,9 @@ namespace WebApp
 
         public override Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            return Users.Include(x => x.UserType.Benefits)
+            return Users
+                .Include(x => x.UserType.Benefits)
+                .Include(x => x.Tickets)
                 .FirstOrDefaultAsync(x => x.UserName.Equals(userName));
         }
 
