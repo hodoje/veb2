@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { BaseHttpService } from './base-http.service';
-import { User } from '../models/user.model';
+import { LoginModel } from '../models/login.model';
 import { Registration } from '../models/registration.model';
 import { NgForm } from '@angular/forms';
 
@@ -14,7 +14,7 @@ export class AuthHttpService{
     constructor(private http: HttpClient){
     }
 
-    logIn(user: User, callback: any){
+    logIn(user: LoginModel, callback: any){
         let data = `username=${user.username}&password=${user.password}&grant_type=password`;
         let httpOptions = {
             headers: {
