@@ -12,7 +12,6 @@ export class TicketHttpService extends BaseHttpService<any>{
     }
 
     validateTicket(id: string): Observable<any>{
-        console.log(parseInt(id.substr(1)));
         let ticketDto = new TicketDto(parseInt(id.substr(1)), "");
         return this.httpClient.post<any>(this.base_url + this.specifiedUrl + "/ValidateTicket",
         ticketDto);
