@@ -76,11 +76,11 @@ namespace WebApp.Migrations
             bool sendTransaction = false;
             List<Schedule> schedules = new List<Schedule>(6)
                     {
-                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:00,7:15.8:00,8:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
-                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:00,9:15.10:00,10:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "07:00,07:15.08:00,08:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
+                        new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "09:00,09:15.10:00,10:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
                         new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:00,11:15.12:00,12:30", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 4).Id },
-						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "7:10,7:25.8:15,8:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
-						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "9:10,9:25.10:15,10:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
+						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Weekday"), Timetable = "07:10,07:25.08:15,08:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
+						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Saturday"), Timetable = "09:10,09:25.10:15,10:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id },
 						new Schedule() { DayOfTheWeek = context.DayOfTheWeeks.First(x => x.Name == "Sunday"), Timetable = "11:10,11:25.12:15,12:45", TransportationLineId = context.TransportationLines.First(tl => tl.LineNum == 70).Id }
 					};
 

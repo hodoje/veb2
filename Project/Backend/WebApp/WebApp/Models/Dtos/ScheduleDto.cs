@@ -8,6 +8,7 @@ namespace WebApp.Models.Dtos
 {
     public class ScheduleDto
     {
+		public int Id { get; set; }
 		public string DayOfTheWeek { get; set; }
 		public string Timetable { get; set; }
 		public string LineNum { get; set; }

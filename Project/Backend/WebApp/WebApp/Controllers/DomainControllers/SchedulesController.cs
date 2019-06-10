@@ -65,17 +65,24 @@ namespace WebApp.Controllers.DomainControllers
 
         // PUT: api/Schedules/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSchedule(int id, Schedule schedule)
+        public IHttpActionResult PutSchedule(int id, ScheduleDto scheduleDto)
         {
+			
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != schedule.Id)
+            if (id != scheduleDto.Id)
             {
                 return BadRequest();
             }
+			Schedule schedule = new Schedule();
+			schedule.Id = scheduleDto.Id;
+			schedule.Timetable = scheduleDto.Timetable;
+			schedule.DayOfTheWeekId = unitOfWork.DayOfTheWeekRepository.Find(d => d.Name == scheduleDto.DayOfTheWeek).FirstOrDefault().Id;
+			int lineNum = Int32.Parse(scheduleDto.LineNum);
+			schedule.TransportationLineId = unitOfWork.TransportationLineRepository.Find(tl => tl.LineNum == lineNum).FirstOrDefault().Id;
 
             try
             {

@@ -6,12 +6,15 @@
         <div class="page-header">
           <h2>Schedule</h2>
         </div>
+        <label for="currentLineType">Line Type</label>
         <select name="currentLineType" [(ngModel)]="currentLineType" (change)="currentLineTypeChanged()" class="form-control form-control-sm">
           <option *ngFor="let lineType of allLineTypes" [ngValue]="lineType">{{ lineType.name }}</option>
         </select>
+        <label for="currentDay">Day Of The Week</label>
         <select name="currentDay" [(ngModel)]="currentDay" class="form-control form-control-sm">
           <option *ngFor="let day of days" [ngValue]="day">{{ day.name }}</option>
         </select>
+        <label for="currentLine">Line</label>
         <select name="currentLine" [(ngModel)]="currentLine" class="form-control form-control-sm">
           <option *ngFor="let line of currentLines" [ngValue]="line">{{ line.lineNum }}</option>
         </select>
@@ -20,6 +23,7 @@
         </p>
         <br/>
         <div *ngIf="isScheduleShown">
+          <label for="currentLineType">Timetable</label>
           <table mdbTable striped="true" small="true" class="schedule table-responsive text-nowrap">
             <tbody>
               <tr mdbTableCol *ngFor="let row of currentScheduleTimetable">

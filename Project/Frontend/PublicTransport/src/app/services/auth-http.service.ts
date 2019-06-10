@@ -49,17 +49,20 @@ export class AuthHttpService{
     }
 
     logOut(callback){
-        this.http.post(this.base_url + this.logoutUrl, null).subscribe(
-            (confirm) => {
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("role");
-                callback(true);
-            },
-            (err) =>{
-                localStorage.removeItem("jwt");
-                localStorage.removeItem("role");
-                callback(true);
-            }
-        );
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("role");
+        callback(true);
+        // this.http.post(this.base_url + this.logoutUrl, null).subscribe(
+        //     (confirm) => {
+        //         localStorage.removeItem("jwt");
+        //         localStorage.removeItem("role");
+        //         callback(true);
+        //     },
+        //     (err) =>{
+        //         localStorage.removeItem("jwt");
+        //         localStorage.removeItem("role");
+        //         callback(true);
+        //     }
+        // );
     }
 }

@@ -114,14 +114,17 @@ export class ScheduleComponent implements OnInit {
   }
 
   showSchedule(){
+    console.log(this);
     this.currentSchedules.length = 0;
     this.currentScheduleTimetable.length = 0;
     this.currentSchedules = this.allSchedules.filter(s => s.lineNum === this.currentLine.lineNum);
     this.currentSchedule = this.currentSchedules.find(s => s.dayOfTheWeek === this.currentDay.name);
-    this.currentScheduleTimetable = this.currentSchedule.timetable.split(".");
-    this.currentScheduleTimetable = this.currentScheduleTimetable.map(row => {
-      return row.replace(",", " ");
-    });
-    this.isScheduleShown = true;
+    if(this.currentSchedule !== undefined){
+      this.currentScheduleTimetable = this.currentSchedule.timetable.split(".");
+      this.currentScheduleTimetable = this.currentScheduleTimetable.map(row => {
+        return row.replace(",", " ");
+      });
+      this.isScheduleShown = true;
+    }
   }
 }

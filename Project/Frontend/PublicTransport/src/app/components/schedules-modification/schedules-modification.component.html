@@ -1,3 +1,44 @@
-<p>
-  schedules-modification works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="page-header">
+          <h2>Schedule Modification</h2>
+        </div>
+        <form #f="ngForm">
+          <label for="currentLineType">Line Type</label>
+          <select name="currentLineType" [(ngModel)]="currentLineType" (change)="currentLineTypeChanged()" class="form-control form-control-sm">
+            <option *ngFor="let lineType of allLineTypes" [ngValue]="lineType">{{ lineType.name }}</option>
+          </select>
+          <label for="currentDay">Day Of The Week</label>
+          <select name="currentDay" [(ngModel)]="currentDay" class="form-control form-control-sm">
+            <option *ngFor="let day of days" [ngValue]="day">{{ day.name }}</option>
+          </select>
+          <label for="currentLine">Line</label>
+          <select name="currentLine" [(ngModel)]="currentLine" (change)="currentLineChanged()" class="form-control form-control-sm">
+            <option *ngFor="let line of currentLines" [ngValue]="line">{{ line.lineNum }}</option>
+          </select>
+          <label for="selectedTime">Timetable</label>       
+          <select name="selectedTime" [(ngModel)]="selectedTime" class="form-control form-control-sm">
+            <option *ngFor="let row of currentScheduleTimetable" [ngValue]="row">{{ row }}</option>
+          </select>
+          <div class="form-group">
+            <div class="collapse" id="addTimeCollapse">
+              <label for="timeToAdd">New Time</label>
+              <div class="card card-body">
+                <input type="time" name="timeToAdd" #timeToAdd="ngModel" ngModel>
+                <button class="btn btn-primary btn-sm" (click)="addTime(timeToAdd.value)">Ok</button>
+              </div>
+            </div>
+          </div>
+          <p>
+            <button id="removeTimeBtn" class="btn btn-primary btn-sm" (click)="removeTime()">Remove</button>
+            <button id="addTimeBtn" type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Add</button>
+          </p>
+        </form>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
