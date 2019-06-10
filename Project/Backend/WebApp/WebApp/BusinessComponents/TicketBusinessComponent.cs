@@ -80,7 +80,7 @@ namespace WebApp.BusinessComponents
             }
         }
 
-        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient)
+        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userExists)
         {
             try
             {
@@ -90,17 +90,31 @@ namespace WebApp.BusinessComponents
 
                 List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
 
-                pltts.ForEach(pltt =>
+                if (userExists)
                 {
-                    TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                    pltts.ForEach(pltt =>
                     {
-                        Price = pltt.BasePrice * discountCoefficient,
-                        Name = pltt.TicketType.Name,
-                        TicketId = pltt.TicketType.Id
-                    };
+                        TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                        {
+                            Price = pltt.BasePrice * discountCoefficient,
+                            Name = pltt.TicketType.Name,
+                            TicketId = pltt.TicketType.Id
+                        };
 
-                    tickets.Add(ticket);
-                });
+                        tickets.Add(ticket);
+                    });
+                }
+                else
+                {
+                    TicketTypePricelist plttHourly = pltts.First(x => x.TicketType.Name.Equals("Hourly"));
+
+                    tickets.Add(new TicketTypePricelistDto()
+                    {
+                        Price = plttHourly.BasePrice,
+                        Name = plttHourly.TicketType.Name,
+                        TicketId = plttHourly.TicketType.Id
+                    });
+                }
 
                 return tickets;
             }

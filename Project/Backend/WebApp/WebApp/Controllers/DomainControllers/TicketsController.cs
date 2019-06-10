@@ -132,7 +132,8 @@ namespace WebApp.Controllers.DomainControllers
                         TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
                         string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
                         string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
-                        if (emailSender.SendMail(subject, body, ticketDto.Email))
+                        if (//emailSender.SendMail(subject, body, ticketDto.Email)
+                            true)
                         {
                             return Ok();
                         }

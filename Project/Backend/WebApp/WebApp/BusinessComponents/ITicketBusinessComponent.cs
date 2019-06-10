@@ -8,7 +8,7 @@ namespace WebApp.BusinessComponents
     public interface ITicketBusinessComponent
     {
         IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork);
-        IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient);
+        IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userExists);
 
         int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false);
 
