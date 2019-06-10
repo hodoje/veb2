@@ -27,7 +27,8 @@ export class SchedulesModificationComponent implements OnInit {
   currentSchedule: Schedule
   currentScheduleTimetable: string[]
   selectedTime: string
-  timeToAdd: Time
+  timeToAdd: string
+  timeToUpdate: string
 
   constructor(private scheduleService: SchedulesHttpService,
               private transportationLinesService: TransportationLinesHttpService,
@@ -122,6 +123,11 @@ export class SchedulesModificationComponent implements OnInit {
     this.currentSchedule = this.currentSchedules.find(s => s.dayOfTheWeek === this.currentDay.name);
     this.currentScheduleTimetable = this.currentSchedule.timetable.split(new RegExp('[' + separators.join('|') + ']', 'g'));
     this.selectedTime = this.currentScheduleTimetable[0];
+    this.timeToUpdate = this.selectedTime;
+  }
+
+  currentScheduleChanged(){
+    this.timeToUpdate = this.selectedTime;
   }
 
   getStringTimetableFromArray(){
@@ -145,15 +151,35 @@ export class SchedulesModificationComponent implements OnInit {
       let allTimesTogether = this.currentScheduleTimetable.join();
       // At this moment allTimesTogether is a string where between each item is a ','
       // only on end times we have '.,', that's why we split there
-      let finalTimetable = allTimesTogether.replace(".,", ".");
+      let finalTimetable = allTimesTogether.replace(/(\.\,)/g, ".");
       return finalTimetable;
   }
 
-  addTime(newTime){
-    if(newTime){
-      this.currentScheduleTimetable.push(newTime);
+  addTime(){
+    if(this.timeToAdd){
+      if(this.currentScheduleTimetable.indexOf(this.timeToAdd) === -1){
+        this.currentScheduleTimetable.push(this.timeToAdd);
+        this.currentScheduleTimetable.sort();      
+        this.currentSchedule.timetable = this.getStringTimetableFromArray();
+        this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
+          (confirm) => {
+            this.getData();
+            this.timeToAdd = undefined;
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    }
+  }
+
+  removeTime(){
+    if(this.selectedTime){
+      this.currentScheduleTimetable = this.currentScheduleTimetable.filter((time) => {
+        return time !== this.selectedTime;
+      });
       this.currentScheduleTimetable.sort();
-      // Update on backend
       this.currentSchedule.timetable = this.getStringTimetableFromArray();
       this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
         (confirm) => {
@@ -166,18 +192,22 @@ export class SchedulesModificationComponent implements OnInit {
     }
   }
 
-  removeTime(){
-    this.currentScheduleTimetable = this.currentScheduleTimetable.filter((time) => {
-      return time !== this.selectedTime;
-    });
-    this.currentSchedule.timetable = this.getStringTimetableFromArray();
-    this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
-      (confirm) => {
-        this.getData();
-      },
-      (err) => {
-        console.log(err);
+  updateTime(){
+    if(this.timeToUpdate){
+      if(this.currentScheduleTimetable.indexOf(this.timeToUpdate) === -1){
+        let idx = this.currentScheduleTimetable.indexOf(this.selectedTime);
+        this.currentScheduleTimetable[idx] = this.timeToUpdate;
+        this.currentScheduleTimetable.sort();
+        this.currentSchedule.timetable = this.getStringTimetableFromArray();
+        this.scheduleService.put(this.currentSchedule.id, this.currentSchedule).subscribe(
+          (confirm) => {
+            this.getData();
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       }
-    );
+    }    
   }
 }

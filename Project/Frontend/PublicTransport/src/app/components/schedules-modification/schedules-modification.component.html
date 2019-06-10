@@ -20,20 +20,30 @@
             <option *ngFor="let line of currentLines" [ngValue]="line">{{ line.lineNum }}</option>
           </select>
           <label for="selectedTime">Timetable</label>       
-          <select name="selectedTime" [(ngModel)]="selectedTime" class="form-control form-control-sm">
+          <select name="selectedTime" [(ngModel)]="selectedTime" (change)="currentScheduleChanged()" class="form-control form-control-sm">
             <option *ngFor="let row of currentScheduleTimetable" [ngValue]="row">{{ row }}</option>
           </select>
           <div class="form-group">
             <div class="collapse" id="addTimeCollapse">
               <label for="timeToAdd">New Time</label>
               <div class="card card-body">
-                <input type="time" name="timeToAdd" #timeToAdd="ngModel" ngModel>
-                <button type="button" class="btn btn-primary btn-sm" (click)="addTime(timeToAdd.value)" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Ok</button>
+                <input type="time" name="timeToAdd" [(ngModel)]="timeToAdd">
+                <button type="button" class="btn btn-primary btn-sm" (click)="addTime()" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Ok</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="collapse" id="updateTimeCollapse">
+              <label for="timeToUpdate">Update Time</label>
+              <div class="card card-body">
+                <input type="time" name="timeToUpdate" [(ngModel)]="timeToUpdate">
+                <button type="button" class="btn btn-primary btn-sm" (click)="updateTime()" data-toggle="collapse" data-target="#updateTimeCollapse" aria-expanded="false" aria-controls="updateTimeCollapse">Ok</button>
               </div>
             </div>
           </div>
           <p>
             <button id="removeTimeBtn" class="btn btn-primary btn-sm" (click)="removeTime()">Remove</button>
+            <button id="updateTimeBtn" type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#updateTimeCollapse" aria-expanded="false" aria-controls="updateTimeCollapse">Update</button>
             <button id="addTimeBtn" type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Add</button>
           </p>
         </form>
