@@ -118,11 +118,9 @@ export class SchedulesModificationComponent implements OnInit {
     this.currentSchedules.length = 0;
     this.currentScheduleTimetable.length = 0;
     this.currentSchedules = this.allSchedules.filter(s => s.lineNum === this.currentLine.lineNum);
-    console.log(this.currentSchedules);
     let separators = [",", ".", " "];
     this.currentSchedule = this.currentSchedules.find(s => s.dayOfTheWeek === this.currentDay.name);
     this.currentScheduleTimetable = this.currentSchedule.timetable.split(new RegExp('[' + separators.join('|') + ']', 'g'));
-    console.log(this.currentScheduleTimetable);
     this.selectedTime = this.currentScheduleTimetable[0];
   }
 

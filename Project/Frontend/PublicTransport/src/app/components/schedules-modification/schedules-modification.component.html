@@ -28,7 +28,7 @@
               <label for="timeToAdd">New Time</label>
               <div class="card card-body">
                 <input type="time" name="timeToAdd" #timeToAdd="ngModel" ngModel>
-                <button class="btn btn-primary btn-sm" (click)="addTime(timeToAdd.value)">Ok</button>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addTime(timeToAdd.value)" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Ok</button>
               </div>
             </div>
           </div>
