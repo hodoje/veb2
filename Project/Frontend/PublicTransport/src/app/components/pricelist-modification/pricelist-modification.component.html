@@ -37,7 +37,7 @@
               <div *ngIf="yearly.errors.min">Yearly Base Price cannot be less than 0.</div>
               <div *ngIf="yearly.errors.pattern">Yearly Base Price field must contain only digits.</div>
             </div>
-            <label for="currentDate">Validation Date</label>
+            <label for="currentDate">Valid From</label>
             <input 
               required 
               type="date" name="currentDate" [min]="minDate" #fromDate [value]="currentDate | date:'yyyy-MM-dd'" (input)="currentDate=parseDate($event.target.value)" class="form-control form-control-sm">
