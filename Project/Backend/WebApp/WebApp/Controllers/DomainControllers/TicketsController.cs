@@ -125,15 +125,14 @@ namespace WebApp.Controllers.DomainControllers
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
                 int boughtTicketId;
 
-                if ((boughtTicketId = ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId, true)) > 0)
+                if ((boughtTicketId = ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId)) > 0)
                 {
                     if (!String.IsNullOrEmpty(ticketDto.Email))
                     {
                         TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
                         string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
                         string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
-                        if (//emailSender.SendMail(subject, body, ticketDto.Email)
-                            true)
+                        if (emailSender.SendMail(subject, body, ticketDto.Email))
                         {
                             return Ok();
                         }
@@ -147,7 +146,14 @@ namespace WebApp.Controllers.DomainControllers
                     }
                 }
 
-                return BadRequest();
+                if (user == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    return Ok();
+                }
             }
             catch (Exception e)
             {
@@ -155,37 +161,43 @@ namespace WebApp.Controllers.DomainControllers
             }
         }
 
-		[Route("api/Tickets/ValidateTicket")]
+        [Route("api/Tickets/ValidateTicket")]
         //USE
-		//[Authorize(Roles = "Controller")]
+        //[Authorize(Roles = "Controller")]
         //TEST
         [Authorize(Roles = "Admin")]
         [HttpPost]
-		public async Task<IHttpActionResult> ValidateTicket(TicketDto ticketDto)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-			try
-			{
-				if (ticketBusinessComponent.ValidateTicket(unitOfWork, ticketDto.TicketTypeId))
-				{
-					return Ok();
-				}
-				else
-				{
-					return Ok(true);
-				}
-			}
-			catch (Exception e)
-			{
-				return InternalServerError();
-			}
-		}
+        public IHttpActionResult ValidateTicket(TicketDto ticketDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                if (ticketBusinessComponent.ValidateTicket(unitOfWork, ticketDto.TicketTypeId))
+                {
+                    return Ok(new
+                    {
+                        isValid = "valid"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        isValid = "notValid"
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
 
-		// DELETE: api/Tickets/5
-		[ResponseType(typeof(Ticket))]
+        // DELETE: api/Tickets/5
+        [ResponseType(typeof(Ticket))]
         public IHttpActionResult DeleteTicket(int id)
         {
             Ticket ticket = unitOfWork.TicketRepository.Get(id);
