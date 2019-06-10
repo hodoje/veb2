@@ -15,6 +15,7 @@ import { StationsModificationComponent } from './components/stations-modificatio
 import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
 import { PricelistModificationComponent } from './components/pricelist-modification/pricelist-modification.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { UsersComponent } from './components/users/users.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: "profile",
         component: ProfileComponent
+      },
+      {
+        path: "users",
+        component: UsersComponent
       },
       {
         path: "**",

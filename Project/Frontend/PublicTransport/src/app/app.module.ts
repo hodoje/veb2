@@ -39,6 +39,7 @@ import { LinesModificationComponent } from './components/lines-modification/line
 import { StationsModificationComponent } from './components/stations-modification/stations-modification.component';
 import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { UsersComponent } from './components/users/users.component';
 
 @NgModule({
   declarations:[
@@ -61,7 +62,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     LinesModificationComponent,
     StationsModificationComponent,
     SchedulesModificationComponent,
-    ProfileComponent
+    ProfileComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

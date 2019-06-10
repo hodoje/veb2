@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthHttpService } from 'src/app/services/auth-http.service';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/user.model';
+import { LoginModel } from 'src/app/models/login.model';
 import { NgForm } from '@angular/forms';
 import { LoginToNavbarService } from 'src/app/services/login-to-navbar.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  login(user: User, form: NgForm){
+  login(user: LoginModel, form: NgForm){
     this.spinner.show();
     this.http.logIn(user, (isLoggedIn, errorStatus) => {
       if(isLoggedIn){
