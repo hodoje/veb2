@@ -66,9 +66,14 @@
         <form [formGroup]="documentForm">
           <div class="form-group">
             <label for="documentImage">Document image</label>
+            <div class="card card-body">
+                <img class="document-image" *ngIf="isImageLoaded" [attr.src]="imageToShow" alt="Place image title">
+                <img class="document-image" *ngIf="!isImageLoaded" src="../../../assets/fallbackimage.jpg" alt="Fallbackimage">
+              </div>
+              <br/>
             <div class="custom-file">
               <input formControlName="documentImage" type="file" name="documentImage" (change)="handleFileInput($event.target.files)" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              <label class="custom-file-label" for="inputGroupFile01">{{fileLabelText}}</label>
             </div>
           </div>
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">

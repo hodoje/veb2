@@ -5,6 +5,7 @@ import { UserTypeHttpService } from 'src/app/services/user-type-http.service';
 import { User } from 'src/app/models/user.model';
 import { AuthHttpService } from 'src/app/services/auth-http.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ImageHttpService } from 'src/app/services/image-http.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +18,9 @@ export class ProfileComponent implements OnInit {
   registrationSuccessful: boolean;
   currentUserType: UserType;
   userTypes: UserType[];
+  imageToShow: any;
+  isImageLoaded: boolean;
+  fileLabelText = "Choose file";
 
   //#region Forms
   personalDataForm = new FormGroup({
@@ -51,12 +55,14 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private accountService: AuthHttpService, 
-    private userTypeService: UserTypeHttpService) {
+    private userTypeService: UserTypeHttpService,
+    private imageService: ImageHttpService) {
     this.uploadedFile = null;
     this.registrationSuccessful = false;
     this.currentUserType = null;
     this.userTypes = [];
     this.myData = new User();
+    this.isImageLoaded = false;
   }
 
   ngOnInit() {
@@ -87,6 +93,15 @@ export class ProfileComponent implements OnInit {
           userType: this.currentUserType
         });
         this.personalDataForm.markAsPristine();
+        this.imageService.getImage().subscribe(
+          data => {
+            this.createImageFromBlob(data);
+            this.isImageLoaded = true;
+          }, 
+          error => {
+            this.isImageLoaded = true;
+            console.log(error);
+        });
       },
       (err) => {
         console.log(err);
@@ -94,8 +109,20 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  createImageFromBlob(image: Blob){
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+        this.imageToShow = reader.result;
+    }, false);
+
+    if (image) {
+        reader.readAsDataURL(image);
+    }
+  }
+
   handleFileInput(files: FileList) {
     this.uploadedFile = files.item(0);
+    this.fileLabelText = this.uploadedFile.name;
   }
 
   parseDate(dateString: string): Date {

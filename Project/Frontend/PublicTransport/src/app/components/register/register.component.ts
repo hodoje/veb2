@@ -17,6 +17,9 @@ export class RegisterComponent implements OnInit {
   registrationSuccessful: boolean;
   currentUserType: UserType;
   userTypes: UserType[];
+  imageToShow: any;
+  isImageLoaded: boolean;
+  fileLabelText = "Choose file";
 
   constructor(
     private registrationService: RegistrationHttpService, 
@@ -26,6 +29,7 @@ export class RegisterComponent implements OnInit {
     this.registrationSuccessful = false;
     this.currentUserType = null;
     this.userTypes = [];
+    this.isImageLoaded = false;
   }
 
   ngOnInit() {
@@ -42,6 +46,20 @@ export class RegisterComponent implements OnInit {
 
   handleFileInput(files: FileList) {
     this.uploadedFile = files.item(0);
+    this.fileLabelText = this.uploadedFile.name;
+    this.createImageFromBlob(this.uploadedFile);
+    this.isImageLoaded = true;
+  }
+  
+  createImageFromBlob(image: Blob){
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+        this.imageToShow = reader.result;
+    }, false);
+
+    if (image) {
+        reader.readAsDataURL(image);
+    }
   }
 
   register(registration, f: NgForm){
