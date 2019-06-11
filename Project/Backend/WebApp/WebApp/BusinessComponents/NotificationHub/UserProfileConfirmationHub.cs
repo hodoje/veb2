@@ -7,6 +7,7 @@ using WebApp.Models;
 using WebApp.Models.DomainModels;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
+using System.Security.Claims;
 
 namespace WebApp.BusinessComponents.NotificationHubs
 {
@@ -15,17 +16,12 @@ namespace WebApp.BusinessComponents.NotificationHubs
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<UserProfileConfirmationHub>();
 
-        private static ReaderWriterLock readerWriterLock;
+        private static object lockObject;
 
         private static List<ApplicationUserDto> notConfirmedUsers;
 
         private readonly int timeout = 5000;
 
-        public UserProfileConfirmationHub()
-        {
-            readerWriterLock = new ReaderWriterLock();
-            notConfirmedUsers = new List<ApplicationUserDto>();
-        }
 
         /// <summary>
         /// Used to notify all connected admins that there is a new user for confirmation.
@@ -36,15 +32,11 @@ namespace WebApp.BusinessComponents.NotificationHubs
         {
             try
             {
-                readerWriterLock.AcquireWriterLock(timeout);
-
-                ApplicationUserDto userDto = user;
-
-                notConfirmedUsers.Add(userDto);
-                
-                hubContext.Clients.Group("Admin").newUser(userDto);
-
-                readerWriterLock.ReleaseWriterLock();
+                lock (lockObject)
+                {
+                    ApplicationUserDto userDto = user;
+                    hubContext.Clients.Group("Admin").newUser(userDto);
+                }
 
                 return true;
             }
@@ -61,18 +53,14 @@ namespace WebApp.BusinessComponents.NotificationHubs
         /// <returns><b>True</b> if confirmation is successfull, otherwise <b>false</b>.</returns>
         public bool ConfirmRegistration(string userEmail)
         {
-            bool userRegistered;
             try
             {
-                readerWriterLock.AcquireWriterLock(timeout);
+                lock (lockObject)
+                {
+                    hubContext.Clients.Group("Admins").userRegistered(userEmail);
+                }
 
-                userRegistered = notConfirmedUsers.Remove(notConfirmedUsers.First(x => x.Email.Equals(userEmail)));
-
-                hubContext.Clients.Group("Admins").userRegistered(userEmail);
-
-                readerWriterLock.ReleaseWriterLock();
-
-                return userRegistered;
+                return true;
             }
             catch(Exception e)
             {
@@ -85,12 +73,6 @@ namespace WebApp.BusinessComponents.NotificationHubs
             if (Context.User.IsInRole("Admin"))
             {
                 Groups.Add(Context.ConnectionId, "Admins");
-
-                readerWriterLock.AcquireReaderLock(timeout);
-
-                Clients.Caller.usersToConfirm(notConfirmedUsers);
-
-                readerWriterLock.ReleaseReaderLock();
             }
 
             return base.OnConnected();
