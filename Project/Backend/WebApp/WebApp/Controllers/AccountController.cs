@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -20,10 +19,13 @@ using WebApp.Providers;
 using WebApp.Results;
 using System.Linq;
 using AutoMapper;
+using WebApp.BusinessComponents.NotificationHubs;
+using WebApp.Models.Dtos;
+using System.Threading;
 
 namespace WebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -31,16 +33,19 @@ namespace WebApp.Controllers
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
         private IMapper mapper;
+        private UserProfileConfirmationHub userProfileConfirmationHub;
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
 			IUnitOfWork uow,
-            IMapper imapper)
+            IMapper imapper,
+            UserProfileConfirmationHub hub)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
 			unitOfWork = uow;
             mapper = imapper;
+            this.userProfileConfirmationHub = hub;
         }
 
         public ApplicationUserManager UserManager
@@ -385,12 +390,14 @@ namespace WebApp.Controllers
                     LastName = model.LastName,
                     Birthday = model.Birthday,
                     Address = model.Address,
-                    UserTypeId = requestedUserType.Id,
+                    UserType = requestedUserType,
                     IsSuccessfullyRegistered = false,
                     DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+                userProfileConfirmationHub.AddNewUser(user);
 
                 if (!result.Succeeded)
                 {
@@ -399,9 +406,47 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
+            }
+        }
+
+        // POST api/Account/ConfirmRegistration
+        [Route("ConfirmRegistration")]
+        public async Task<IHttpActionResult> ConfirmRegistration(RegisterConfirmationDto registerConfirmation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
+            try
+            {
+                if (user.IsSuccessfullyRegistered == false)
+                {
+                    user.IsSuccessfullyRegistered = true;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    userProfileConfirmationHub.ConfirmRegistration(user.Email);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
             }
         }
 

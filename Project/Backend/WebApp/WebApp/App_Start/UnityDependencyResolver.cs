@@ -5,18 +5,17 @@ using Microsoft.Owin.Security;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Web.Http;
 using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
 using WebApp.App_Start.MappingProfiles;
 using WebApp.BusinessComponents;
+using WebApp.BusinessComponents.NotificationHubs;
 using WebApp.Models;
 using WebApp.Persistence;
 using WebApp.Persistence.ModelRepositories;
 using WebApp.Persistence.ModelRepositoryInterfaces;
-using WebApp.Persistence.Repository;
 using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
 
@@ -93,6 +92,7 @@ namespace WebApp.App_Start
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
             container.RegisterType<IEmailSender, SMTPClient>();
             container.RegisterType<ITransportationLineRouteRepository, TransportationLineRouteRepository>();
+            container.RegisterType<UserProfileConfirmationHub>();
             // This allows usage of UnitOfWork in AccountController
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:52296"));
