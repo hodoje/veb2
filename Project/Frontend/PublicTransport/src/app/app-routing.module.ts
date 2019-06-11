@@ -48,11 +48,23 @@ const routes: Routes = [
   },
   {
     path: "passenger",
-    component: PassengerComponent
+    component: PassengerComponent,
+    children: [
+      {
+        path: "profile",
+        component: ProfileComponent
+      }
+    ]
   },
   {
     path: "controller",
-    component: ControllerComponent
+    component: ControllerComponent,
+    children: [
+      {
+        path: "profile",
+        component: ProfileComponent
+      }
+    ]
   },
   {
     path: "admin",
