@@ -341,11 +341,13 @@
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
+    <Compile Include="Models\Dtos\RoutePointDto.cs" />
     <Compile Include="Models\Dtos\ScheduleDto.cs" />
     <Compile Include="Models\Dtos\StationDto.cs" />
     <Compile Include="Models\Dtos\TicketDto.cs" />
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
+    <Compile Include="Models\Dtos\TransporationLinePlanDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
     <Compile Include="Models\Dtos\UserTypeDto.cs" />
