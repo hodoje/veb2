@@ -40,6 +40,8 @@ import { SchedulesModificationComponent } from './components/schedules-modificat
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { PasswordEqualValidatorDirective } from './common/directives/password-equal-validator.directive';
+import { UserConfirmationService } from './services/user-confirmation.service';
+import { UserHttpService } from './services/user-http.service';
 
 @NgModule({
   declarations:[
@@ -87,7 +89,9 @@ import { PasswordEqualValidatorDirective } from './common/directives/password-eq
     DayOfTheWeekHttpService, 
     RegistrationHttpService,
     UserTypeHttpService,
-    PricelistHttpService
+    PricelistHttpService,
+    UserConfirmationService,
+    UserHttpService
   ],
   bootstrap: [AppComponent]
 })
