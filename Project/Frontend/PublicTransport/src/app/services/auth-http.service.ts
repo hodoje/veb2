@@ -10,6 +10,7 @@ export class AuthHttpService{
     base_url = "http://localhost:52296/";
     loginUrl = "oauth/token"
     logoutUrl = "api/account/logout"
+    getUserDataUrl = "api/account/getUserPersonalData"
 
     constructor(private http: HttpClient){
     }
@@ -64,5 +65,9 @@ export class AuthHttpService{
         //         callback(true);
         //     }
         // );
+    }
+
+    getUserPersonalData(){
+        return this.http.get(this.base_url + this.getUserDataUrl);
     }
 }
