@@ -265,6 +265,7 @@
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\UserProfileConfirmationHub.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DomainControllers\BenefitsController.cs" />
     <Compile Include="Controllers\DomainControllers\DayOfTheWeeksController.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
+    <Compile Include="Models\Dtos\RegisterConfirmationDto.cs" />
     <Compile Include="Models\Dtos\RoutePointDto.cs" />
     <Compile Include="Models\Dtos\ScheduleDto.cs" />
     <Compile Include="Models\Dtos\StationDto.cs" />

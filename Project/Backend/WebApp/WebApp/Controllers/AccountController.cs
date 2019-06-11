@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -22,10 +21,14 @@ using System.Linq;
 using AutoMapper;
 using System.Drawing;
 using System.IO;
+using WebApp.BusinessComponents.NotificationHubs;
+using WebApp.Models.Dtos;
+using System.Threading;
+using System.Data.Entity;
 
 namespace WebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -33,16 +36,19 @@ namespace WebApp.Controllers
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
         private IMapper mapper;
+        private UserProfileConfirmationHub userProfileConfirmationHub;
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
 			IUnitOfWork uow,
-            IMapper imapper)
+            IMapper imapper,
+            UserProfileConfirmationHub hub)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
 			unitOfWork = uow;
             mapper = imapper;
+            this.userProfileConfirmationHub = hub;
         }
 
         public ApplicationUserManager UserManager
@@ -413,13 +419,15 @@ namespace WebApp.Controllers
                     LastName = model.LastName,
                     Birthday = model.Birthday,
                     Address = model.Address,
-                    UserTypeId = requestedUserType.Id,
+                    UserType = requestedUserType,
                     IsSuccessfullyRegistered = false,
                     DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "AppUser");
+
+                userProfileConfirmationHub.AddNewUser(user);
 
                 if (!result.Succeeded)
                 {
@@ -428,9 +436,65 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
+            }
+        }
+
+        // GET api/Account/PendingUsers
+        [Route("PendingUsers")]
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult PendingUsers()
+        {
+            List<ApplicationUser> users = UserManager.Users.Include(x => x.UserType)
+                .Where(user => user.IsSuccessfullyRegistered == false).ToList();
+            List<ApplicationUserDto> userDtos = new List<ApplicationUserDto>(users.Count);
+
+            foreach (var user in users)
+            {
+                userDtos.Add(user);
+            }
+
+            return Ok(userDtos);
+        }
+
+        // POST api/Account/ConfirmRegistration
+        [Route("ConfirmRegistration")]
+        public async Task<IHttpActionResult> ConfirmRegistration(RegisterConfirmationDto registerConfirmation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
+            try
+            {
+                if (user.IsSuccessfullyRegistered == false)
+                {
+                    user.IsSuccessfullyRegistered = true;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    userProfileConfirmationHub.ConfirmRegistration(user.Email);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
             }
         }
 

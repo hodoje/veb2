@@ -42,6 +42,8 @@ import { UsersComponent } from './components/users/users.component';
 import { PasswordEqualValidatorDirective } from './common/directives/password-equal-validator.directive';
 import { PasswordPatternValidatorDirective } from './common/directives/password-pattern-validator.directive';
 import { ImageHttpService } from './services/image-http.service';
+import { UserConfirmationService } from './services/user-confirmation.service';
+import { UserHttpService } from './services/user-http.service';
 
 @NgModule({
   declarations:[
@@ -91,7 +93,9 @@ import { ImageHttpService } from './services/image-http.service';
     RegistrationHttpService,
     UserTypeHttpService,
     PricelistHttpService,
-    ImageHttpService
+    ImageHttpService,
+    UserConfirmationService,
+    UserHttpService
   ],
   bootstrap: [AppComponent]
 })

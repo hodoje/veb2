@@ -11,4 +11,8 @@ Kod uredjivanja reda voznje:
 	- Brisanje: iz dropdowna se selektovano vreme obrise
 
 TODO:
-	2.5 Postupak verifikovanja profila putnika
+	-(joki backend + frontend(service))2.5 Postupak verifikovanja profila putnika
+	-(hodoje)Bug where: Unconfirmed users can buy tickets.
+	-(hodoje)ConfirmRegistrationComponent-
+		-logout
+		-direct login

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Web;
 using WebApp.Models.DomainModels;
 using WebApp.Models.DomainModels.Benefits;
 
@@ -64,6 +63,19 @@ namespace WebApp.Models
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
             // Add custom user claims here
             return userIdentity;
+        }
+
+        public static implicit operator ApplicationUserDto(ApplicationUser user)
+        {
+            return new ApplicationUserDto()
+            {
+                Name = user.Name,
+                UserType = new Dtos.UserTypeDto() { Name = user.UserType.Name },
+                Birthday = user.Birthday,
+                Address = user.Address,
+                Email = user.Email,
+                Lastname = user.LastName
+            };
         }
 
         public static string HashPassword(string password)
