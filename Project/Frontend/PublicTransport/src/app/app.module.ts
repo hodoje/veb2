@@ -1,5 +1,4 @@
 import { PricelistHttpService } from './services/pricelist-http.service';
-import { ConfirmPasswordValidatorDirective } from './common/directives/confirm-password-validator.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -40,6 +39,7 @@ import { StationsModificationComponent } from './components/stations-modificatio
 import { SchedulesModificationComponent } from './components/schedules-modification/schedules-modification.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
+import { PasswordEqualValidatorDirective } from './common/directives/password-equal-validator.directive';
 
 @NgModule({
   declarations:[
@@ -50,8 +50,7 @@ import { UsersComponent } from './components/users/users.component';
     RegisterComponent,
     PassengerComponent,
     ControllerComponent,
-    AdminComponent,
-    ConfirmPasswordValidatorDirective,
+    AdminComponent,    
     TicketsComponent,
     PricelistComponent,
     PurchaseComponent,
@@ -63,7 +62,8 @@ import { UsersComponent } from './components/users/users.component';
     StationsModificationComponent,
     SchedulesModificationComponent,
     ProfileComponent,
-    UsersComponent
+    UsersComponent,
+    PasswordEqualValidatorDirective
   ],
   imports: [
     BrowserModule,

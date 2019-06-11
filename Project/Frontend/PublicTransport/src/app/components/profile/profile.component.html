@@ -1,3 +1,137 @@
-<p>
-  profile works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row" *ngIf="!registrationSuccessful">
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1>Personal Data</h1>
+        </div>
+        <form [formGroup]="personalDataForm">
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input formControlName="email" readonly="true" email type="text" name="email" class="form-control form-control-sm">
+            </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input formControlName="name" type="text" name="name" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="name?.touched && !name.valid">
+              <div *ngIf="name.errors.required">Name is required.</div>
+              <div *ngIf="name.errors.minlength">Name needs to be at least 3 characters long.</div>
+              <div *ngIf="name.errors.maxlength">Name needs to be maximum of 30 characters long.</div>
+              <div *ngIf="name.errors.pattern">Name can contain only ASCII characters.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastname">Lastname</label>
+            <input formControlName="lastname" type="text" name="lastname" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="lastname?.touched && !lastname.valid">
+              <div *ngIf="lastname.errors.required">Lastname is required.</div>
+              <div *ngIf="lastname.errors.minlength">Lastname needs to be at least 3 characters long.</div>
+              <div *ngIf="lastname.errors.maxlength">Lastname needs to be maximum of 30 characters long.</div>
+              <div *ngIf="lastname.errors.pattern">Lastname can contain only ASCII characters.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input formControlName="address" type="text" name="address" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="address?.touched && !address.valid">
+              <div *ngIf="address.errors.required">Address is required.</div>
+              <div *ngIf="address.errors.minlength">Address needs to be at least 3 characters long.</div>
+              <div *ngIf="address.errors.maxlength">Address can't be longer than 100 characters.</div>
+              <div *ngIf="address.errors.pattern">Address can contain only alphanumeric characters.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="birthday">Birthday</label>
+            <input formControlName="birthday" type="date" name="birthday" #birthday [value]="myData.birthday | date:'yyyy-MM-dd'" (input)="myData.birthday=parseDate($event.target.value)" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="birthday?.touched && !birthday.valid">
+              <div *ngIf="birthday.errors.required">Birthday is required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="requestedUserType">User type</label>
+            <select formControlName="userType" name="requestedUserType" class="form-control form-control-sm">
+              <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType.name }}</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="userType?.touched && !userType.valid">
+              <div *ngIf="userType.errors.required">User type is required.</div>
+            </div>
+          </div>
+          <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeData(personalDataForm.value)" [disabled]="!personalDataForm.dirty && personalDataForm.valid">
+        </form>  
+      </div>
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1>Document</h1>
+        </div>
+        <form [formGroup]="documentForm">
+          <div class="form-group">
+            <label for="documentImage">Document image</label>
+            <div class="custom-file">
+              <input formControlName="documentImage" type="file" name="documentImage" (change)="handleFileInput($event.target.files)" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+            </div>
+          </div>
+          <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">
+        </form>
+      </div>
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1>Change Password</h1>
+        </div>
+        <form #changePasswordForm="ngForm">
+          <div class="form-group required">
+            <label for="oldPassword">Old Password</label>
+            <input 
+              required 
+              minlength="3"
+              maxlength="30"
+              type="password" name="oldPassword" appPasswordPatternValidator ngModel #oldPassword="ngModel" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="oldPassword?.touched && !oldPassword.valid">
+              <div *ngIf="oldPassword.errors.required">Old Password is required.</div>
+              <div *ngIf="oldPassword.errors.minlength">Old Password needs to be at least 3 characters long.</div>
+              <div *ngIf="oldPassword.errors.maxlength">Old Password needs to be maximum of 30 characters long.</div>
+              <div *ngIf="oldPassword.errors.notUpperCase">Old Password must contain at least one upper case letter.</div>
+              <div *ngIf="oldPassword.errors.notLowerCase">Old Password must contain at least one lower case letter.</div>
+              <div *ngIf="oldPassword.errors.notNumber">Old Password must contain at least one digit.</div>
+              <div *ngIf="oldPassword.errors.notPunctuation">Old Password must contain at least one punctuation mark.</div>
+              <div></div>
+            </div>
+          </div>
+          <div class="form-group required">
+            <label for="newPassword">New Password</label>
+            <input 
+              required 
+              minlength="3"
+              maxlength="30"
+              type="password" name="newPassword" appPasswordPatternValidator ngModel #newPassword="ngModel" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="newPassword?.touched && !newPassword.valid">
+              <div *ngIf="newPassword.errors.required">New Password is required.</div>
+              <div *ngIf="newPassword.errors.minlength">New Password needs to be at least 3 characters long.</div>
+              <div *ngIf="newPassword.errors.maxlength">New Password needs to be maximum of 30 characters long.</div>
+              <div *ngIf="newPassword.errors.notUpperCase">New Password must contain at least one upper case letter.</div>
+              <div *ngIf="newPassword.errors.notLowerCase">New Password must contain at least one lower case letter.</div>
+              <div *ngIf="newPassword.errors.notNumber">New Password must contain at least one digit.</div>
+              <div *ngIf="newPassword.errors.notPunctuation">New Password must contain at least one punctuation mark.</div>
+              <div></div>
+            </div>
+          </div>
+          <div class="form-group required">
+            <label for="confirmPassword">Confirm Password</label>
+            <input 
+              required 
+              minlength="3"
+              maxlength="30"
+              type="password" name="confirmPassword" appPasswordEqualValidator="newPassword" ngModel #confirmPassword="ngModel" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="confirmPassword?.touched && !confirmPassword.valid">
+              <div *ngIf="confirmPassword.errors.required">Confirm Password is required.</div>
+              <div *ngIf="confirmPassword.errors.minlength">Confirm Password needs to be at least 3 characters long.</div>
+              <div *ngIf="confirmPassword.errors.maxlength">Confirm Password needs to be maximum of 30 characters long.</div>
+              <div *ngIf="confirmPassword.errors.notEqual">Confirm Password and Confirm Password do not match.</div>
+            </div>
+          </div>
+          <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changePassword(changePasswordForm.value)" [disabled]="!changePasswordForm.valid">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
