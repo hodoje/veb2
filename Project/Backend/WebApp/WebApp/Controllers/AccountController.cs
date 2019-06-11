@@ -20,6 +20,8 @@ using WebApp.Providers;
 using WebApp.Results;
 using System.Linq;
 using AutoMapper;
+using System.Drawing;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -59,12 +61,38 @@ namespace WebApp.Controllers
 
         // GET api/Account/
         [Route("GetUserPersonalData")]
+        [HttpGet]
         public async Task<ApplicationUserDto> GetUserPersonalDataAsync()
         {
             string username = User.Identity.GetUserName();
             ApplicationUser user = await UserManager.FindByNameAsync(username);
             ApplicationUserDto userDto = mapper.Map<ApplicationUser, ApplicationUserDto>(user);
             return userDto;
+        }
+
+        [Route("GetUserDocument")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetUserDocumentAsync()
+        {
+            string username = User.Identity.GetUserName();
+            ApplicationUser user = await UserManager.FindByNameAsync(username);
+            Image img = GetUserImage(user.DocumentImage);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+                HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+                result.Content = new ByteArrayContent(ms.ToArray());
+                result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+
+                return result;
+            }
+        }
+
+        private Image GetUserImage(string userImagePath)
+        {
+            string imgPath = HttpContext.Current.Server.MapPath("~/Resources/" + userImagePath);
+            return new Bitmap(imgPath);
         }
 
         // GET api/Account/UserInfo
@@ -391,6 +419,7 @@ namespace WebApp.Controllers
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                UserManager.AddToRole(user.Id, "AppUser");
 
                 if (!result.Succeeded)
                 {
