@@ -19,6 +19,7 @@ using WebApp.Persistence.UnitOfWork;
 using WebApp.Providers;
 using WebApp.Results;
 using System.Linq;
+using AutoMapper;
 
 namespace WebApp.Controllers
 {
@@ -29,14 +30,17 @@ namespace WebApp.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
+        private IMapper mapper;
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
-			IUnitOfWork uow)
+			IUnitOfWork uow,
+            IMapper imapper)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
 			unitOfWork = uow;
+            mapper = imapper;
         }
 
         public ApplicationUserManager UserManager
@@ -52,6 +56,16 @@ namespace WebApp.Controllers
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
+
+        // GET api/Account/
+        [Route("GetUserPersonalData")]
+        public async Task<ApplicationUserDto> GetUserPersonalDataAsync()
+        {
+            string username = User.Identity.GetUserName();
+            ApplicationUser user = await UserManager.FindByNameAsync(username);
+            ApplicationUserDto userDto = mapper.Map<ApplicationUser, ApplicationUserDto>(user);
+            return userDto;
+        }
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
