@@ -13,34 +13,45 @@ namespace WebApp.BusinessComponents
 {
     public class TicketBusinessComponent : ITicketBusinessComponent
     {
-        public int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId, bool completeTransaction = false)
+        public int BuyTicket(IUnitOfWork unitOfWork, ApplicationUser user, int ticketTypeId)
         {
+            TicketType ticketType = unitOfWork.TicketTypeRepository.Get(ticketTypeId);
+
+            if (ticketType == null)
+            {
+                return -1;
+            }
+
+            int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
+            TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
+            Ticket boughtTicket = new Ticket(ticketType.Name) { PurchaseDate = DateTime.Now };
+
+            List<Ticket> tickets = unitOfWork.TicketRepository.GetAll().ToList();
+
             try
             {
-                TicketType ticketType = unitOfWork.TicketTypeRepository.Get(ticketTypeId);
-
-                if (ticketType == null)
-                {
-                    return -1;
-                }
-
-				int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
-                TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
-                Ticket boughtTicket = new Ticket(ticketType.Name) { ApplicationUser = user, PurchaseDate = DateTime.Now, TicketTypePricelist = currentPLTT };
-
-				unitOfWork.TicketRepository.Add(boughtTicket);
-
-                if (completeTransaction == true)
-                {
-                    unitOfWork.Complete();
-                }
-
-                return boughtTicket.Id;
+                unitOfWork.TicketRepository.Add(boughtTicket);
+                unitOfWork.Complete();
             }
             catch
             {
                 throw;
             }
+
+            boughtTicket.ApplicationUserId = user?.Id;
+            boughtTicket.TicketTypePricelistId = currentPLTT.Id;
+
+            try
+            {
+                unitOfWork.Complete();
+            }
+            catch(Exception e)
+            {
+                unitOfWork.TicketRepository.Remove(unitOfWork.TicketRepository.Get(boughtTicket.Id));
+                throw;
+            }
+
+            return boughtTicket.Id;
         }
 
         public IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork)
@@ -80,7 +91,7 @@ namespace WebApp.BusinessComponents
             }
         }
 
-        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient)
+        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userExists)
         {
             try
             {
@@ -90,17 +101,31 @@ namespace WebApp.BusinessComponents
 
                 List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
 
-                pltts.ForEach(pltt =>
+                if (userExists)
                 {
-                    TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                    pltts.ForEach(pltt =>
                     {
-                        Price = pltt.BasePrice * discountCoefficient,
-                        Name = pltt.TicketType.Name,
-                        TicketId = pltt.TicketType.Id
-                    };
+                        TicketTypePricelistDto ticket = new TicketTypePricelistDto()
+                        {
+                            Price = pltt.BasePrice * discountCoefficient,
+                            Name = pltt.TicketType.Name,
+                            TicketId = pltt.TicketType.Id
+                        };
 
-                    tickets.Add(ticket);
-                });
+                        tickets.Add(ticket);
+                    });
+                }
+                else
+                {
+                    TicketTypePricelist plttHourly = pltts.First(x => x.TicketType.Name.Equals("Hourly"));
+
+                    tickets.Add(new TicketTypePricelistDto()
+                    {
+                        Price = plttHourly.BasePrice,
+                        Name = plttHourly.TicketType.Name,
+                        TicketId = plttHourly.TicketType.Id
+                    });
+                }
 
                 return tickets;
             }

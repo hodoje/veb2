@@ -8,6 +8,20 @@
     margin-right: 0;
 }
 
-.table-header{
-    text-align: center;
+/* Main container */
+.overlay-spinner {
+    border-radius: 25px;
 }
+
+div {
+    border-radius: 25px;
+}
+
+/* Spinner */
+.overlay-image .spinner {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 25px;
+}
+   

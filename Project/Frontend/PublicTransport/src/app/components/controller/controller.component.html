@@ -10,24 +10,48 @@
         <div class="col-md-4"></div>
     </div>
     <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-5">
-          <div class="form-group required">
-            <label for="ticketId">Ticket ID: </label>
-            <input required ticketId type="text" name="ticketId" #ticketId="ngModel" ngModel ngModel class="form-control form-control-sm"
-                  pattern="#[0-9]+" placeholder="(example: #1234567890)">
-            <div class="alert alert-danger" *ngIf="ticketId?.touched && !ticketId?.valid">
-              <div *ngIf="ticketId.errors.required">Ticket ID is required.</div>
-              <div *ngIf="ticketId.errors.pattern">Ticket ID pattern is invalid.</div>
+      <div class="col-md-2"></div>
+      <div class="col-md-5">
+        <div class="form-group required">
+          <label for="ticketId">Ticket ID: </label>
+          <input required ticketId type="text" name="ticketId" #ticketId="ngModel" ngModel ngModel class="form-control form-control-sm"
+                pattern="#[0-9]+" placeholder="(example: #1234567890)"
+                (ngModelChange)="clearFeedback()">
+          <div class="alert alert-danger" *ngIf="ticketId?.touched && !ticketId?.valid">
+            <div *ngIf="ticketId.errors.required">Ticket ID is required.</div>
+            <div *ngIf="ticketId.errors.pattern">Ticket ID pattern is invalid.</div>
+          </div>
+          <p>
+            <button id="validateBtn"
+              class="btn btn-primary btn-sm float-right"
+              (click)="onValidateTicket(ticketId?.value)"
+              [disabled]="!ticketId?.valid">Validate</button>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+    <div class="row">
+      <div class="col col-md-2"></div>
+      <div class="col col-md-5">
+        <div *ngIf="isButtonPressed">
+          <div [ngSwitch]="getResponseStatus()">
+            <div *ngSwitchCase="'valid'" class="alert alert-success">
+              <p>Ticket is valid!</p>
             </div>
-            <p>
-              <button id="validateBtn"
-                class="btn btn-primary btn-sm float-right"
-                (click)="validateTicket(ticketId?.value)">Validate</button>
-            </p>
+            <div *ngSwitchCase="'notValid'">
+              <div class="alert alert-danger">
+                <p>Ticket is not valid!</p>
+              </div>
+            </div>
+            <div *ngSwitchCase="'internalError'" class="alert alert-danger">
+              <p>Service encountered internal error, please try later.</p>
+            </div>
+            <div *ngSwitchDefault></div>
           </div>
         </div>
-        <div class="col-md-2"></div>
+      </div>
+      <div class="col col-md-2"></div>
     </div>
   </div>
 </div>

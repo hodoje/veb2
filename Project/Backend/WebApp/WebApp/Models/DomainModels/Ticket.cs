@@ -41,7 +41,7 @@ namespace WebApp.Models.DomainModels
         public DateTime ExpirationDate { get; set; }
         public int? TicketTypePricelistId { get; set; }
         public TicketTypePricelist TicketTypePricelist { get; set; }
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
 }

@@ -275,6 +275,7 @@
     <Compile Include="Controllers\DomainControllers\TicketTypePricelistsController.cs" />
     <Compile Include="Controllers\DomainControllers\TicketTypesController.cs" />
     <Compile Include="Controllers\DomainControllers\TransporationLineTypesController.cs" />
+    <Compile Include="Controllers\DomainControllers\TransportationLineRoutesController.cs" />
     <Compile Include="Controllers\DomainControllers\TransportationLinesController.cs" />
     <Compile Include="Controllers\DomainControllers\UserTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -318,6 +319,18 @@
     <Compile Include="Migrations\201906070825423_UpdatedPriceList.Designer.cs">
       <DependentUpon>201906070825423_UpdatedPriceList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906101224372_TransportationLineRoute_AddModel.cs" />
+    <Compile Include="Migrations\201906101224372_TransportationLineRoute_AddModel.Designer.cs">
+      <DependentUpon>201906101224372_TransportationLineRoute_AddModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906101225514_TransportationLineRoute_AddModel1.cs" />
+    <Compile Include="Migrations\201906101225514_TransportationLineRoute_AddModel1.Designer.cs">
+      <DependentUpon>201906101225514_TransportationLineRoute_AddModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906101355241_ApplicationUserId.cs" />
+    <Compile Include="Migrations\201906101355241_ApplicationUserId.Designer.cs">
+      <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -325,21 +338,25 @@
     <Compile Include="Models\DomainModels\ApplicationUserDto.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
+    <Compile Include="Models\DomainModels\TransportationLineRoute.cs" />
     <Compile Include="Models\DomainModels\TransportationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
+    <Compile Include="Models\Dtos\RoutePointDto.cs" />
     <Compile Include="Models\Dtos\ScheduleDto.cs" />
     <Compile Include="Models\Dtos\StationDto.cs" />
     <Compile Include="Models\Dtos\TicketDto.cs" />
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
+    <Compile Include="Models\Dtos\TransporationLinePlanDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
     <Compile Include="Models\Dtos\UserTypeDto.cs" />
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TransportationLineRouteRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransporationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\UserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\DayOfTheWeekRepository.cs" />
@@ -348,6 +365,7 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineRouteRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
@@ -498,6 +516,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906070825423_UpdatedPriceList.resx">
       <DependentUpon>201906070825423_UpdatedPriceList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101224372_TransportationLineRoute_AddModel.resx">
+      <DependentUpon>201906101224372_TransportationLineRoute_AddModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101225514_TransportationLineRoute_AddModel1.resx">
+      <DependentUpon>201906101225514_TransportationLineRoute_AddModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906101355241_ApplicationUserId.resx">
+      <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

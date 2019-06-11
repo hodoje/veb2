@@ -73,7 +73,7 @@ namespace WebApp.Controllers.DomainControllers
 
                 double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
 
-                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient);
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient, user != null);
 
                 return Ok(tickets);
             }

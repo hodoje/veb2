@@ -8,17 +8,44 @@ import { TicketHttpService } from 'src/app/services/ticket-http.service';
 })
 export class ControllerComponent implements OnInit {
 
-  isTicketValid: Boolean;
+  responseStatus: String;
+  isButtonPressed: Boolean = false;
+  isServiceProcessing: Boolean = false;
+
   constructor(private ticketService: TicketHttpService) { }
 
   ngOnInit() {
   }
 
-  validateTicket(id: string){
+  onValidateTicket(id: string){
+    this.isServiceProcessing = true;
+
     this.ticketService.validateTicket(id).subscribe(
-      isValid => this.isTicketValid = isValid,
-      error => this.isTicketValid = false
+      data => {
+        this.finally();
+        this.responseStatus = data.isValid;
+        console.log(this.responseStatus);
+      },
+      error =>{
+        this.finally();
+        this.responseStatus = "internalError"
+        console.log(this.responseStatus);
+      },
     );
+  }
+
+  private finally(){
+    this.isServiceProcessing = false;
+    this.isButtonPressed = true;
+  }
+
+  clearFeedback(){
+    this.isButtonPressed = false;
+    console.log(this.isButtonPressed);
+  }
+
+  getResponseStatus() {
+    return this.responseStatus;
   }
 
 }
