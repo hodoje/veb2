@@ -22,6 +22,7 @@ using AutoMapper;
 using WebApp.BusinessComponents.NotificationHubs;
 using WebApp.Models.Dtos;
 using System.Threading;
+using System.Data.Entity;
 
 namespace WebApp.Controllers
 {
@@ -410,6 +411,24 @@ namespace WebApp.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        // GET api/Account/PendingUsers
+        [Route("PendingUsers")]
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IHttpActionResult PendingUsers()
+        {
+            List<ApplicationUser> users = UserManager.Users.Include(x => x.UserType)
+                .Where(user => user.IsSuccessfullyRegistered == false).ToList();
+            List<ApplicationUserDto> userDtos = new List<ApplicationUserDto>(users.Count);
+
+            foreach (var user in users)
+            {
+                userDtos.Add(user);
+            }
+
+            return Ok(userDtos);
         }
 
         // POST api/Account/ConfirmRegistration
