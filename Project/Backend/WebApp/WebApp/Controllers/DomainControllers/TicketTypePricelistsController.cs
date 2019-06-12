@@ -35,7 +35,7 @@ namespace WebApp.Controllers.DomainControllers
             this.ticketBusiness = ticketBusiness;
 		}
 
-        public ApplicationUserManager UserManager
+        private ApplicationUserManager UserManager
         {
             get { return userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             set { userManager = value; }

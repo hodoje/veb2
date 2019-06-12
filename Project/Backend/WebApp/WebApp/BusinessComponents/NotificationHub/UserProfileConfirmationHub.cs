@@ -20,10 +20,6 @@ namespace WebApp.BusinessComponents.NotificationHubs
 
         private static object lockObject = new object();
 
-        private static List<ApplicationUserDto> notConfirmedUsers;
-
-        private readonly int timeout = 5000;
-
 
         /// <summary>
         /// Used to notify all connected admins that there is a new user for confirmation.

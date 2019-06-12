@@ -12,8 +12,8 @@ Kod uredjivanja reda voznje:
 
 TODO:
 	-(hodoje)Bug where: Unconfirmed users can buy tickets.
-	-Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token.
-	-Izlistavanje svih cenovnika
+	-(hodoje)Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token. Treba ConfirmRegistrationComponent.
+	-(hodoje)Izlistavanje svih cenovnika
 	-Manipulacija nad stanicama
 	-Manipulacija nad linijama
 	-Line Grid
@@ -24,3 +24,5 @@ TODO:
 old password != newpassword
 
 srediti atribute na back-u
+
+[PriceList]
