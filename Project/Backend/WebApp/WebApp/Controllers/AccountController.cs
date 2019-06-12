@@ -568,10 +568,7 @@ namespace WebApp.Controllers
 
                 try
                 {
-                    if (emailSender.SendMail("Registration confirmation", "<a href=\"http://localhost:4200/login\">Confirm registration</a>", user.Email))
-                    {
-                        t.Start();
-                    }
+                    t.Start();
                 }
                 catch(Exception e)
                 {
