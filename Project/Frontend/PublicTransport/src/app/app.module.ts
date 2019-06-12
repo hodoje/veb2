@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
 import { LoginComponent } from './components/login/login.component';
-import { AuthHttpService } from './services/auth-http.service';
+import { AccountHttpService } from './services/account-http.service';
 import { PLTTService } from './services/price-list-ticket-type-http.service';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -82,7 +82,7 @@ import { UserHttpService } from './services/user-http.service';
   providers: 
   [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    AuthHttpService,
+    AccountHttpService,
     PLTTService,
     LoginToNavbarService,
     SchedulesHttpService,

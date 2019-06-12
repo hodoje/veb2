@@ -6,11 +6,12 @@ import { Registration } from '../models/registration.model';
 import { NgForm } from '@angular/forms';
 
 @Injectable()
-export class AuthHttpService{
+export class AccountHttpService{
     base_url = "http://localhost:52296/";
     loginUrl = "oauth/token"
     logoutUrl = "api/account/logout"
     getUserDataUrl = "api/account/getUserPersonalData"
+    changePasswordUrl = "api/account/changePassword"
 
     constructor(private http: HttpClient){
     }
