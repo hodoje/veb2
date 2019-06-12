@@ -1,4 +1,4 @@
-import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator } from '../../common/reactiveFormsValidators/password-validators.directive';
+import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator, checkOldNewPasswordValidator } from '../../common/reactiveFormsValidators/password-validators.directive';
 import { ChangePasswordModel } from './../../models/change-password.model';
 import { Component, OnInit } from '@angular/core';
 import { UserType } from 'src/app/models/user-type.model';
@@ -56,33 +56,34 @@ export class ProfileComponent implements OnInit {
 
   changePasswordForm = new FormGroup({
     oldPassword: new FormControl(
-      null,
+      "",
       [
         Validators.required, 
-        Validators.min(3), 
-        Validators.max(30),
+        Validators.minLength(3), 
+        Validators.maxLength(30),
         checkIfContainsAtLeastOneUpperCaseLetterValidator,
         checkIfContainsAtLeastOneLowerCaseLetterValidator,
         checkIfContainsAtLeastOneNumberValidator,
-        checkIfContainsAtLeastOnePunctuationMarkValidator
+        checkIfContainsAtLeastOnePunctuationMarkValidator,
+        checkOldNewPasswordValidator("newPassword")
       ]
     ),
     newPassword: new FormControl(
-      null,
+      "",
       [
         Validators.required, 
-        Validators.min(3), 
-        Validators.max(30),
+        Validators.minLength(3), 
+        Validators.maxLength(30),
         checkIfContainsAtLeastOneUpperCaseLetterValidator,
         checkIfContainsAtLeastOneLowerCaseLetterValidator,
         checkIfContainsAtLeastOneNumberValidator,
         checkIfContainsAtLeastOnePunctuationMarkValidator,
         checkIfPasswordsEqualValidator("confirmPassword"),
-        checkIfPasswordsEqualValidator("oldPassword")
+        // checkOldNewPasswordValidator("oldPassword")
       ]
     ),
     confirmPassword: new FormControl(
-      null,
+      "",
       [
         Validators.required,
         checkIfPasswordsEqualValidator("newPassword")

@@ -108,7 +108,7 @@
               <div *ngIf="cpForm.newPassword.errors.notLowerCase">New Password must contain at least one lower case letter.</div>
               <div *ngIf="cpForm.newPassword.errors.notNumber">New Password must contain at least one digit.</div>
               <div *ngIf="cpForm.newPassword.errors.notPunctuation">New Password must contain at least one punctuation mark.</div>
-              <div *ngIf="cpForm.newPassword.errors.oldNewEqual">New Password and Old Password can't be equal.</div>
+              <div *ngIf="cpForm.newPassword.errors.oldNewEqual === true">New Password and Old Password can't be equal.</div>
               <div></div>
             </div>
           </div>
