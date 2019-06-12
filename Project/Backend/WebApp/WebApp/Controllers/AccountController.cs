@@ -105,6 +105,96 @@ namespace WebApp.Controllers
             return new Bitmap(imgPath);
         }
 
+		[Route("ChangeUserData")]
+		[HttpPost]
+		public async Task<IHttpActionResult> ChangeUserData(RegisterBindingModel model)
+		{
+			string username = User.Identity.GetUserName();
+			ApplicationUser user = await UserManager.FindByNameAsync(username);
+
+			if (!String.IsNullOrWhiteSpace(model.Name))
+			{
+				user.Name = model.Name;
+			}
+
+			if (!String.IsNullOrWhiteSpace(model.LastName))
+			{
+				user.Name = model.LastName;
+			}
+
+			if (!String.IsNullOrWhiteSpace(model.Address))
+			{
+				user.Name = model.Address;
+			}
+
+			if (model.Birthday != null)
+			{
+				user.Birthday = model.Birthday;
+			}
+
+			UserType requestedUserType = unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType).FirstOrDefault();
+			if(requestedUserType != null)
+			{
+				user.UserType = requestedUserType;
+			}
+
+			try
+			{
+				UserManager.Update(user);
+			}
+			catch(Exception e)
+			{
+				return BadRequest();
+			}
+
+			return Ok();
+		}
+
+		[Route("ChangeUserDocument")]
+		[HttpPost]
+		public async Task<IHttpActionResult> ChangeUserDocumentAsync()
+		{
+			var httpRequest = HttpContext.Current.Request;
+
+			string documentImageFileName = null;
+			if (httpRequest.Files.Count > 0)
+			{
+				foreach (string file in httpRequest.Files)
+				{
+					var postedFile = httpRequest.Files[file];
+					var filePath = HttpContext.Current.Server.MapPath("~/Resources/" + postedFile.FileName);
+					postedFile.SaveAs(filePath);
+					documentImageFileName = postedFile.FileName;
+					break;
+				}
+			}
+			else
+			{
+				return BadRequest();
+			}
+
+			try
+			{
+				if (!String.IsNullOrWhiteSpace(documentImageFileName))
+				{
+					string username = User.Identity.GetUserName();
+					ApplicationUser user = await UserManager.FindByNameAsync(username);
+					user.DocumentImage = documentImageFileName;
+					UserManager.Update(user);
+
+					return Ok();
+				}
+				else
+				{
+					return BadRequest();
+				}
+			}
+			catch (Exception ex)
+			{
+				return BadRequest();
+			}
+		}
+
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
