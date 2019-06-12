@@ -10,12 +10,18 @@ export class UserConfirmationService {
     private proxy: any;  
     private proxyName: string = 'userConfirmation';  
     private connection: any;  
-    public connectionExists: Boolean; 
+    private isEmitterInitialized = true
 
-    public notificationReceived: EventEmitter<User>;  
+    public connectionExists: Boolean; 
+    
+    public addUserNotification: EventEmitter<User>;
+    public userConfirmedNotification: EventEmitter<string>;
+    public userDeclinedNotification: EventEmitter<string>;
 
     constructor() {
-        this.notificationReceived = new EventEmitter<User>();
+        this.addUserNotification = new EventEmitter<User>();
+        this.userConfirmedNotification = new EventEmitter<string>();
+        this.userDeclinedNotification = new EventEmitter<string>();
         this.connectionExists = false;
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
@@ -49,20 +55,26 @@ export class UserConfirmationService {
           });
     }
 
+    public resetEmitters() {
+        this.proxy = this.connection.createHubProxy(this.proxyName);
+    }
+
     public registerForNewUsers(): void {
-        this.proxy.on('newUser', (data: User) => {  
-            this.notificationReceived.emit(data);
+        this.proxy.on('newUser', (data: User) => {
+            
+            this.addUserNotification.emit(data);
         }); 
     }
 
+    public registerForUserConfirmation(): void {
+        this.proxy.on('confirmUser', (data: string) => {
+            this.userConfirmedNotification.emit(data);
+        });
+    }
 
-    //temp
-    public addNewUnregisteredUser() {
-        return Observable.create((observer) => {
-            this.proxy.on('getUsers', (data: User[]) => {
-                console.log("initial users: " + data);
-                observer.next(data);
-            })
+    public registerForUserDeclining(): void {
+        this.proxy.on('declineUser', (data: string) => {
+            this.userDeclinedNotification.emit(data);
         });
     }
 
