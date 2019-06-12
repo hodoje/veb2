@@ -82,17 +82,21 @@ namespace WebApp.Controllers
         {
             string username = User.Identity.GetUserName();
             ApplicationUser user = await UserManager.FindByNameAsync(username);
-            Image img = GetUserImage(user.DocumentImage);
-            using (MemoryStream ms = new MemoryStream())
-            {
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+			if (!String.IsNullOrWhiteSpace(user.DocumentImage))
+			{
+				Image img = GetUserImage(user.DocumentImage);
+				using (MemoryStream ms = new MemoryStream())
+				{
+					img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
 
-                HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
-                result.Content = new ByteArrayContent(ms.ToArray());
-                result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+					HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+					result.Content = new ByteArrayContent(ms.ToArray());
+					result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
 
-                return result;
-            }
+					return result;
+				}
+			}
+			return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
         }
 
         private Image GetUserImage(string userImagePath)
