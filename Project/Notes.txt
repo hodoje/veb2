@@ -15,4 +15,4 @@ TODO:
 	-(hodoje)Bug where: Unconfirmed users can buy tickets.
 	-(hodoje)ConfirmRegistrationComponent-
 		-logout
-		-direct login
+		-redirect to login
