@@ -1,9 +1,11 @@
+import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator } from './../../common/reactiveFormsValidators/password-validators.directive';
+import { ChangePasswordModel } from './../../models/change-password.model';
 import { Component, OnInit } from '@angular/core';
 import { UserType } from 'src/app/models/user-type.model';
 import { RegistrationHttpService } from 'src/app/services/registration-http.service';
 import { UserTypeHttpService } from 'src/app/services/user-type-http.service';
 import { User } from 'src/app/models/user.model';
-import { AuthHttpService } from 'src/app/services/auth-http.service';
+import { AccountHttpService } from 'src/app/services/account-http.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ImageHttpService } from 'src/app/services/image-http.service';
 
@@ -51,10 +53,50 @@ export class ProfileComponent implements OnInit {
   documentForm = new FormGroup({
     documentImage: new FormControl()
   });
+
+  changePasswordForm = new FormGroup({
+    oldPassword: new FormControl(
+      null,
+      [
+        Validators.required, 
+        Validators.min(3), 
+        Validators.max(30),
+        checkIfContainsAtLeastOneUpperCaseLetterValidator,
+        checkIfContainsAtLeastOneLowerCaseLetterValidator,
+        checkIfContainsAtLeastOneNumberValidator,
+        checkIfContainsAtLeastOnePunctuationMarkValidator
+      ]
+    ),
+    newPassword: new FormControl(
+      null,
+      [
+        Validators.required, 
+        Validators.min(3), 
+        Validators.max(30),
+        checkIfContainsAtLeastOneUpperCaseLetterValidator,
+        checkIfContainsAtLeastOneLowerCaseLetterValidator,
+        checkIfContainsAtLeastOneNumberValidator,
+        checkIfContainsAtLeastOnePunctuationMarkValidator,
+        checkIfPasswordsEqualValidator("confirmPassword"),
+        checkIfPasswordsEqualValidator("oldPassword")
+      ]
+    ),
+    confirmPassword: new FormControl(
+      null,
+      [
+        Validators.required,
+        checkIfPasswordsEqualValidator("newPassword")
+      ]
+    )
+  });
+
+  get cpForm(){
+    return this.changePasswordForm.controls;
+  }
   //#endregion
 
   constructor(
-    private accountService: AuthHttpService, 
+    private accountService: AccountHttpService, 
     private userTypeService: UserTypeHttpService,
     private imageService: ImageHttpService) {
     this.uploadedFile = null;
@@ -93,20 +135,24 @@ export class ProfileComponent implements OnInit {
           userType: this.currentUserType
         });
         this.personalDataForm.markAsPristine();
-        this.imageService.getImage().subscribe(
-          data => {
-            this.createImageFromBlob(data);
-            this.isImageLoaded = true;
-          }, 
-          error => {
-            this.isImageLoaded = true;
-            console.log(error);
-        });
+        this.getUserImage();
       },
       (err) => {
         console.log(err);
       }
     );
+  }
+
+  getUserImage(){
+    this.imageService.getImage().subscribe(
+      data => { 
+        this.createImageFromBlob(data);
+        this.isImageLoaded = true;
+      }, 
+      error => {
+        this.isImageLoaded = false;
+        console.log(error);
+    });
   }
 
   createImageFromBlob(image: Blob){
@@ -123,6 +169,8 @@ export class ProfileComponent implements OnInit {
   handleFileInput(files: FileList) {
     this.uploadedFile = files.item(0);
     this.fileLabelText = this.uploadedFile.name;
+    this.createImageFromBlob(this.uploadedFile);
+    this.isImageLoaded = true;
   }
 
   parseDate(dateString: string): Date {
@@ -132,23 +180,40 @@ export class ProfileComponent implements OnInit {
     return null;
   }
 
-  changeData(registration){
+  changeData(personalDataFormValue){
+    personalDataFormValue.requestedUserType = this.currentUserType.name;
+    this.accountService.changeUserData(personalDataFormValue).subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  changeDocument(){
     let formData = new FormData();
-    formData.append("email", registration.email);
-    formData.append("password", registration.password);
-    formData.append("confirmPassword", registration.confirmPassword);
-    formData.append("name", registration.name);
-    formData.append("lastname", registration.lastname);
-    formData.append("address", registration.address);
-    let birthdaystr = (new Date(registration.birthday)).toUTCString();
-    formData.append("birthday", birthdaystr);
-    formData.append("requestedUserType", this.currentUserType.name);
     formData.append("documentImage", this.uploadedFile);
+    this.accountService.changeUserDocument(formData).subscribe(
+      (data) => {
+        this.getUserImage();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
-  changeDocument(documentFormValue){
-  }
-
-  changePassword(passwordFormValue){
+  changePassword(passwordFormValue: ChangePasswordModel){
+    this.accountService.changePassword(passwordFormValue).subscribe(
+      (confirm) => {
+        console.log(confirm);
+        this.changePasswordForm.reset();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
