@@ -343,6 +343,7 @@
     <Compile Include="Models\DomainModels\TransportationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
+    <Compile Include="Models\Dtos\CheckEmailExistsDto.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
     <Compile Include="Models\Dtos\RegisterConfirmationDto.cs" />
     <Compile Include="Models\Dtos\RoutePointDto.cs" />

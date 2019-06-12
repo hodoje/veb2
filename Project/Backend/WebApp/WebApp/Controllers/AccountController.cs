@@ -65,6 +65,28 @@ namespace WebApp.Controllers
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+        [AllowAnonymous]
+        [Route("CheckIfEmailExists")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CheckIfEmailExistsAsync(CheckEmailExistsDto check)
+        {
+            ApplicationUser user = await UserManager.FindByNameAsync(check.Email);
+            if(user == null)
+            {
+                return Ok(new
+                {
+                    exists = false
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    exists = true
+                });
+            }
+        }
+
         // GET api/Account/
         [Route("GetUserPersonalData")]
         [HttpGet]
@@ -119,12 +141,12 @@ namespace WebApp.Controllers
 
 			if (!String.IsNullOrWhiteSpace(model.LastName))
 			{
-				user.Name = model.LastName;
+				user.LastName = model.LastName;
 			}
 
 			if (!String.IsNullOrWhiteSpace(model.Address))
 			{
-				user.Name = model.Address;
+				user.Address = model.Address;
 			}
 
 			if (model.Birthday != null)
