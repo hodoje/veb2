@@ -31,6 +31,7 @@ namespace WebApp.Models
 		[StringLength(60, MinimumLength = 2)]
 		public string Address { get; set; }
         public bool IsSuccessfullyRegistered { get; set; }
+        public bool ProfileInProcessing { get; set; }
         public string DocumentImage { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
 		public int? UserTypeId { get; set; }

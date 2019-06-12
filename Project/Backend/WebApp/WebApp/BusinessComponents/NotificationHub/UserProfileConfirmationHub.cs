@@ -66,12 +66,29 @@ namespace WebApp.BusinessComponents.NotificationHubs
             {
                 lock (lockObject)
                 {
-                    hubContext.Clients.Group("Admins").userRegistered(userEmail);
+                    hubContext.Clients.Group("Admins").confirmUser(userEmail);
                 }
 
                 return true;
             }
             catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool DeclineRegistration(string userEmail)
+        {
+            try
+            {
+                lock (lockObject)
+                {
+                    hubContext.Clients.Group("Admins").declineUser(userEmail);
+                }
+
+                return true;
+            }
+            catch
             {
                 return false;
             }

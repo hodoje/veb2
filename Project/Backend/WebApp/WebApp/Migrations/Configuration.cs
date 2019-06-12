@@ -223,16 +223,19 @@ namespace WebApp.Migrations
             {
                 UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Regular"));
                 var user = new ApplicationUser()
-				{
-					Id = "admin",
-					UserName = "admin@yahoo.com",
-					Email = "admin@yahoo.com",
-					PasswordHash = ApplicationUser.HashPassword("Admin123!"),
-					UserType = userType,
-					Name = "joki",
-					LastName = "ziz",
-					Birthday = DateTime.Now,
-					Address = "zizova gajba" };
+                {
+                    Id = "admin",
+                    UserName = "admin@yahoo.com",
+                    Email = "admin@yahoo.com",
+                    PasswordHash = ApplicationUser.HashPassword("Admin123!"),
+                    UserType = userType,
+                    Name = "joki",
+                    LastName = "ziz",
+                    Birthday = DateTime.Now,
+                    Address = "zizova gajba",
+                    IsSuccessfullyRegistered = true,
+                    ProfileInProcessing = false
+                };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Admin");
             }
