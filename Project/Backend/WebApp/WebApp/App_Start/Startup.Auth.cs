@@ -65,6 +65,7 @@ namespace WebApp
             app.UseJwtBearerAuthentication(
                 new JwtBearerAuthenticationOptions
                 {
+                    Provider = new QueryStringOAuthBearerProvider("token"),
                     AuthenticationMode = AuthenticationMode.Active,
                     AllowedAudiences = new[] { audienceId },
                     IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]

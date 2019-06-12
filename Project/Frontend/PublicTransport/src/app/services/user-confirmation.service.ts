@@ -20,7 +20,7 @@ export class UserConfirmationService {
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
         console.log(localStorage.getItem("jwt"));
-        this.connection.qs = { "token" : `Bearer ${localStorage.getItem("jwt")}` };
+        this.connection.qs = { "token" : "Bearer " + localStorage.getItem("jwt") };
         // create new proxy with the given name 
         this.proxy = this.connection.createHubProxy(this.proxyName); 
     }
