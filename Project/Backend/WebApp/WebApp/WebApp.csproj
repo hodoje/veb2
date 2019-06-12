@@ -336,6 +336,10 @@
     <Compile Include="Migrations\201906121433100_ApplicationUser-ProfileProgression.Designer.cs">
       <DependentUpon>201906121433100_ApplicationUser-ProfileProgression.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906121809468_TimeStampAddedToModels.cs" />
+    <Compile Include="Migrations\201906121809468_TimeStampAddedToModels.Designer.cs">
+      <DependentUpon>201906121809468_TimeStampAddedToModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -536,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906121433100_ApplicationUser-ProfileProgression.resx">
       <DependentUpon>201906121433100_ApplicationUser-ProfileProgression.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906121809468_TimeStampAddedToModels.resx">
+      <DependentUpon>201906121809468_TimeStampAddedToModels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

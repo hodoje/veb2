@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.DomainModels
 {
@@ -15,5 +13,7 @@ namespace WebApp.Models.DomainModels
         // y coord
         public double Latitude { get; set; }
         public ICollection<TransportationLineRoute> TransportationLineRoutes { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
     }
 }

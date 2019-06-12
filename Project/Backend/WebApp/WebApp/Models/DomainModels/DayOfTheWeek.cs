@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.DomainModels
 {
@@ -11,5 +9,7 @@ namespace WebApp.Models.DomainModels
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<Schedule> Schedules { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
     }
 }

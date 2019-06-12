@@ -36,9 +36,11 @@ namespace WebApp.Models
         public ICollection<Ticket> Tickets { get; set; }
 		public int? UserTypeId { get; set; }
 		public UserType UserType { get; set; }
-		#endregion
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
+        #endregion
 
-		#region Methods
+        #region Methods
 
         /// <summary>
         /// Finds the discount coefficient for the given user.

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 using WebApp.Models.Enumerations;
 
 namespace WebApp.Models.DomainModels
@@ -43,5 +41,7 @@ namespace WebApp.Models.DomainModels
         public TicketTypePricelist TicketTypePricelist { get; set; }
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
     }
 }

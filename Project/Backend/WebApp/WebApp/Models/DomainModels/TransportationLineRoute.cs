@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -13,6 +14,8 @@ namespace WebApp.Models.DomainModels
         public virtual TransportationLine TransporationLine { get; set; }
         public int StationId { get; set; }
         public virtual Station Station { get; set; }
+        [Timestamp]
+        public byte[] Timestamp { get; set; }
 
         public static int CompareByRoutePoint(TransportationLineRoute x, TransportationLineRoute y)
         {
