@@ -27,15 +27,15 @@ namespace WebApp.Providers
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.!!!!");
+                context.SetError("invalid_grant", "The user name or password is incorrect!");
                 return;
             }
 
-            //if (!user.EmailConfirmed)
-            //{
-            //    context.SetError("invalid_grant", "AppUser did not confirm email.");
-            //    return;
-            //}
+            if (!user.IsSuccessfullyRegistered)
+            {
+                context.SetError("invalid_grant", "AppUser did not confirm email!");
+                return;
+            }
 
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
           

@@ -20,17 +20,15 @@ export class PasswordEqualValidatorDirective implements Validator{
       // in this case control is "password"
       if(controlToCompare){
         if(controlToCompare.value === control.value){
+          controlToCompare.setErrors(null);
           controlToCompare.markAsUntouched();
-          controlToCompare.setErrors({
-            "notEqual": false
-          });
         }
         else{
           if(controlToCompare.value !== ""){
-            controlToCompare.markAsTouched();
             controlToCompare.setErrors({
               "notEqual": true
             });
+            controlToCompare.markAsTouched();
           }
         }
         return null;
