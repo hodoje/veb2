@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LoginToNavbarService } from 'src/app/services/login-to-navbar.service';
-import { AuthHttpService } from 'src/app/services/auth-http.service';
+import { AccountHttpService } from 'src/app/services/account-http.service';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +15,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private loginToNavbarService: LoginToNavbarService, 
-    private authService: AuthHttpService, 
+    private accountService: AccountHttpService, 
     private router: Router) {
     if(localStorage.jwt !== undefined){
       this.isLoggedIn = true;
@@ -34,7 +33,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(){
-    this.authService.logOut((isLoggedOut) => {
+    this.accountService.logOut((isLoggedOut) => {
       if(isLoggedOut){
         this.isLoggedIn = false;
         this.userRole = undefined;
