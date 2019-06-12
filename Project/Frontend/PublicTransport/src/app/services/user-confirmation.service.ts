@@ -10,17 +10,23 @@ export class UserConfirmationService {
     private proxy: any;  
     private proxyName: string = 'userConfirmation';  
     private connection: any;  
-    public connectionExists: Boolean; 
+    private isEmitterInitialized = true
 
-    public notificationReceived: EventEmitter < User[] >;  
+    public connectionExists: Boolean; 
+    
+    public addUserNotification: EventEmitter<User>;
+    public userConfirmedNotification: EventEmitter<string>;
+    public userDeclinedNotification: EventEmitter<string>;
 
     constructor() {
-        this.notificationReceived = new EventEmitter<User[]>();
+        this.addUserNotification = new EventEmitter<User>();
+        this.userConfirmedNotification = new EventEmitter<string>();
+        this.userDeclinedNotification = new EventEmitter<string>();
         this.connectionExists = false;
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
         console.log(localStorage.getItem("jwt"));
-        this.connection.qs = { "token" : `Bearer ${localStorage.getItem("jwt")}` };
+        this.connection.qs = { "token" : "Bearer " + localStorage.getItem("jwt") };
         // create new proxy with the given name 
         this.proxy = this.connection.createHubProxy(this.proxyName); 
     }
@@ -34,15 +40,13 @@ export class UserConfirmationService {
         return Observable.create((observer) => {
            
             this.connection.start()
-            .done((data: any) => {  
-                console.log('Now connected ' + data.transport.name + ', connection ID= ' + data.id)
+            .done((data: any) => {
                 this.connectionExists = true;
     
                 observer.next(true);
                 observer.complete();
             })
-            .fail((error: any) => {  
-                console.log('Could not connect ' + error);
+            .fail((error: any) => {
                 this.connectionExists = false;
     
                 observer.next(false);
@@ -51,19 +55,26 @@ export class UserConfirmationService {
           });
     }
 
-    public registerForInitialUsers(): void {
-        this.proxy.on('getUsers', (data: User[]) => {  
-            console.log('received notification: ' + data);  
-            this.notificationReceived.emit(data);
+    public resetEmitters() {
+        this.proxy = this.connection.createHubProxy(this.proxyName);
+    }
+
+    public registerForNewUsers(): void {
+        this.proxy.on('newUser', (data: User) => {
+            
+            this.addUserNotification.emit(data);
         }); 
     }
 
-    public addNewUnregisteredUser() {
-        return Observable.create((observer) => {
-            this.proxy.on('getUsers', (data: User[]) => {
-                console.log("initial users: " + data);
-                observer.next(data);
-            })
+    public registerForUserConfirmation(): void {
+        this.proxy.on('confirmUser', (data: string) => {
+            this.userConfirmedNotification.emit(data);
+        });
+    }
+
+    public registerForUserDeclining(): void {
+        this.proxy.on('declineUser', (data: string) => {
+            this.userDeclinedNotification.emit(data);
         });
     }
 

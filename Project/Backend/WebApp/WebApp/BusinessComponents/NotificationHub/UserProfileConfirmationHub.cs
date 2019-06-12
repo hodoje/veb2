@@ -8,6 +8,8 @@ using WebApp.Models.DomainModels;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Security.Claims;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApp.BusinessComponents.NotificationHubs
 {
@@ -16,7 +18,7 @@ namespace WebApp.BusinessComponents.NotificationHubs
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<UserProfileConfirmationHub>();
 
-        private static object lockObject;
+        private static object lockObject = new object();
 
         private static List<ApplicationUserDto> notConfirmedUsers;
 
@@ -35,7 +37,14 @@ namespace WebApp.BusinessComponents.NotificationHubs
                 lock (lockObject)
                 {
                     ApplicationUserDto userDto = user;
-                    hubContext.Clients.Group("Admin").newUser(userDto);
+                    var jsonSerializerSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    };
+                    var interimObject = JsonConvert.DeserializeObject<ApplicationUserDto>(JsonConvert.SerializeObject(userDto));
+                    var myJsonOutput = JsonConvert.SerializeObject(interimObject, jsonSerializerSettings);
+
+                    hubContext.Clients.Group("Admins").newUser(userDto);
                 }
 
                 return true;
@@ -57,12 +66,29 @@ namespace WebApp.BusinessComponents.NotificationHubs
             {
                 lock (lockObject)
                 {
-                    hubContext.Clients.Group("Admins").userRegistered(userEmail);
+                    hubContext.Clients.Group("Admins").confirmUser(userEmail);
                 }
 
                 return true;
             }
             catch(Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool DeclineRegistration(string userEmail)
+        {
+            try
+            {
+                lock (lockObject)
+                {
+                    hubContext.Clients.Group("Admins").declineUser(userEmail);
+                }
+
+                return true;
+            }
+            catch
             {
                 return false;
             }

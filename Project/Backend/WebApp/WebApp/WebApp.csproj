@@ -332,11 +332,15 @@
     <Compile Include="Migrations\201906101355241_ApplicationUserId.Designer.cs">
       <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906121433100_ApplicationUser-ProfileProgression.cs" />
+    <Compile Include="Migrations\201906121433100_ApplicationUser-ProfileProgression.Designer.cs">
+      <DependentUpon>201906121433100_ApplicationUser-ProfileProgression.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\DomainModels\ApplicationUserDto.cs" />
+    <Compile Include="Models\Dtos\ApplicationUserDto.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
     <Compile Include="Models\DomainModels\TransportationLineRoute.cs" />
@@ -398,6 +402,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\CustomJwtFormat.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
+    <Compile Include="Providers\QueryStringOAuthBearerProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -528,6 +533,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906101355241_ApplicationUserId.resx">
       <DependentUpon>201906101355241_ApplicationUserId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906121433100_ApplicationUser-ProfileProgression.resx">
+      <DependentUpon>201906121433100_ApplicationUser-ProfileProgression.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

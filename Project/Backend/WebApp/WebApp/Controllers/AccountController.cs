@@ -541,7 +541,8 @@ namespace WebApp.Controllers
                     Address = model.Address,
                     UserTypeId = requestedUserType.Id,
                     IsSuccessfullyRegistered = false,
-                    DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
+                    DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName,
+                    ProfileInProcessing = true
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
@@ -595,7 +596,7 @@ namespace WebApp.Controllers
         public IHttpActionResult PendingUsers()
         {
             List<ApplicationUser> users = UserManager.Users.Include(x => x.UserType)
-                .Where(user => user.IsSuccessfullyRegistered == false).ToList();
+                .Where(user => user.IsSuccessfullyRegistered == false && user.ProfileInProcessing == true).ToList();
             List<ApplicationUserDto> userDtos = new List<ApplicationUserDto>(users.Count);
 
             foreach (var user in users)
@@ -608,6 +609,8 @@ namespace WebApp.Controllers
 
         // POST api/Account/ConfirmRegistration
         [Route("ConfirmRegistration")]
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IHttpActionResult> ConfirmRegistration(RegisterConfirmationDto registerConfirmation)
         {
             if (!ModelState.IsValid)
@@ -618,7 +621,7 @@ namespace WebApp.Controllers
             ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
             try
             {
-                if (user.IsSuccessfullyRegistered == false)
+                if (user.IsSuccessfullyRegistered == false && user.ProfileInProcessing == true)
                 {
                     user.IsSuccessfullyRegistered = true;
 
@@ -630,6 +633,46 @@ namespace WebApp.Controllers
                     }
 
                     userProfileConfirmationHub.ConfirmRegistration(user.Email);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
+        // POST api/Account/DeclineUser
+        [Route("DeclineUser")]
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IHttpActionResult> DeclineUser(RegisterConfirmationDto registerConfirmation)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
+            try
+            {
+                if (user.IsSuccessfullyRegistered == false)
+                {
+                    user.ProfileInProcessing = false;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    userProfileConfirmationHub.DeclineRegistration(user.Email);
 
                     return Ok();
                 }

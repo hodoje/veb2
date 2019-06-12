@@ -11,7 +11,15 @@ Kod uredjivanja reda voznje:
 	- Brisanje: iz dropdowna se selektovano vreme obrise
 
 TODO:
-	-(joki backend + frontend(service))2.5 Postupak verifikovanja profila putnika			
+	-(hodoje)Bug where: Unconfirmed users can buy tickets.
+	-Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token.
+	-Izlistavanje svih cenovnika
+	-Manipulacija nad stanicama
+	-Manipulacija nad linijama
+	-Line Grid
+	-Vehicles Map
+	-Ubaciti timestamp za modele
+	
 
 old password != newpassword
 
