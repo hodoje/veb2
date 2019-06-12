@@ -16,3 +16,9 @@ TODO:
 	-(hodoje)ConfirmRegistrationComponent-
 		-logout
 		-direct login
+
+old password != newpassword
+
+pri registraciji asinhrono proveravati da li vec postoji takav mejl
+
+srediti atribute na back-u
