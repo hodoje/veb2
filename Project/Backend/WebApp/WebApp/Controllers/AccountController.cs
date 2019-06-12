@@ -539,7 +539,7 @@ namespace WebApp.Controllers
                     LastName = model.LastName,
                     Birthday = model.Birthday,
                     Address = model.Address,
-                    UserType = requestedUserType,
+                    UserTypeId = requestedUserType.Id,
                     IsSuccessfullyRegistered = false,
                     DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName
                 };
@@ -567,10 +567,7 @@ namespace WebApp.Controllers
 
                 try
                 {
-                    if (emailSender.SendMail("Registration confirmation", "<a href=\"http://localhost:4200/login\">Confirm registration</a>", user.Email))
-                    {
-                        t.Start();
-                    }
+                    t.Start();
                 }
                 catch(Exception e)
                 {
