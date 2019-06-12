@@ -1,4 +1,4 @@
-import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator } from './../../common/reactiveFormsValidators/password-validators.directive';
+import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator } from '../../common/reactiveFormsValidators/password-validators.directive';
 import { ChangePasswordModel } from './../../models/change-password.model';
 import { Component, OnInit } from '@angular/core';
 import { UserType } from 'src/app/models/user-type.model';
@@ -93,6 +93,10 @@ export class ProfileComponent implements OnInit {
   get cpForm(){
     return this.changePasswordForm.controls;
   }
+
+  get pdForm(){
+    return this.personalDataForm.controls;
+  }
   //#endregion
 
   constructor(
@@ -184,7 +188,7 @@ export class ProfileComponent implements OnInit {
     personalDataFormValue.requestedUserType = this.currentUserType.name;
     this.accountService.changeUserData(personalDataFormValue).subscribe(
       (data) => {
-        console.log(data);
+        this.personalDataForm.markAsPristine();
       },
       (err) => {
         console.log(err);
@@ -198,6 +202,7 @@ export class ProfileComponent implements OnInit {
     this.accountService.changeUserDocument(formData).subscribe(
       (data) => {
         this.getUserImage();
+        this.documentForm.markAsPristine();
       },
       (err) => {
         console.log(err);

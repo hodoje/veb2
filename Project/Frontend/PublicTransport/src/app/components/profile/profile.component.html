@@ -13,38 +13,38 @@
           <div class="form-group">
             <label for="name">Name</label>
             <input formControlName="name" type="text" name="name" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="name?.touched && !name.valid">
-              <div *ngIf="name.errors.required">Name is required.</div>
-              <div *ngIf="name.errors.minlength">Name needs to be at least 3 characters long.</div>
-              <div *ngIf="name.errors.maxlength">Name needs to be maximum of 30 characters long.</div>
-              <div *ngIf="name.errors.pattern">Name can contain only ASCII characters.</div>
+            <div class="alert alert-danger" *ngIf="pdForm.name?.touched && !pdForm.name.valid">
+              <div *ngIf="pdForm.name.errors.required">Name is required.</div>
+              <div *ngIf="pdForm.name.errors.minlength">Name needs to be at least 3 characters long.</div>
+              <div *ngIf="pdForm.name.errors.maxlength">Name needs to be maximum of 30 characters long.</div>
+              <div *ngIf="pdForm.name.errors.pattern">Name can contain only ASCII characters.</div>
             </div>
           </div>
           <div class="form-group">
             <label for="lastname">Lastname</label>
             <input formControlName="lastname" type="text" name="lastname" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="lastname?.touched && !lastname.valid">
-              <div *ngIf="lastname.errors.required">Lastname is required.</div>
-              <div *ngIf="lastname.errors.minlength">Lastname needs to be at least 3 characters long.</div>
-              <div *ngIf="lastname.errors.maxlength">Lastname needs to be maximum of 30 characters long.</div>
-              <div *ngIf="lastname.errors.pattern">Lastname can contain only ASCII characters.</div>
+            <div class="alert alert-danger" *ngIf="pdForm.lastname?.touched && !pdForm.lastname.valid">
+              <div *ngIf="pdForm.lastname.errors.required">Lastname is required.</div>
+              <div *ngIf="pdForm.lastname.errors.minlength">Lastname needs to be at least 3 characters long.</div>
+              <div *ngIf="pdForm.lastname.errors.maxlength">Lastname needs to be maximum of 30 characters long.</div>
+              <div *ngIf="pdForm.lastname.errors.pattern">Lastname can contain only ASCII characters.</div>
             </div>
           </div>
           <div class="form-group">
             <label for="address">Address</label>
             <input formControlName="address" type="text" name="address" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="address?.touched && !address.valid">
-              <div *ngIf="address.errors.required">Address is required.</div>
-              <div *ngIf="address.errors.minlength">Address needs to be at least 3 characters long.</div>
-              <div *ngIf="address.errors.maxlength">Address can't be longer than 100 characters.</div>
-              <div *ngIf="address.errors.pattern">Address can contain only alphanumeric characters.</div>
+            <div class="alert alert-danger" *ngIf="pdForm.address?.touched && !pdForm.address.valid">
+              <div *ngIf="pdForm.address.errors.required">Address is required.</div>
+              <div *ngIf="pdForm.address.errors.minlength">Address needs to be at least 3 characters long.</div>
+              <div *ngIf="pdForm.address.errors.maxlength">Address can't be longer than 100 characters.</div>
+              <div *ngIf="pdForm.address.errors.pattern">Address can contain only alphanumeric characters.</div>
             </div>
           </div>
           <div class="form-group">
             <label for="birthday">Birthday</label>
             <input formControlName="birthday" type="date" name="birthday" #birthday [value]="myData.birthday | date:'yyyy-MM-dd'" (input)="myData.birthday=parseDate($event.target.value)" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="birthday?.touched && !birthday.valid">
-              <div *ngIf="birthday.errors.required">Birthday is required.</div>
+            <div class="alert alert-danger" *ngIf="pdForm.birthday?.touched && !pdForm.birthday.valid">
+              <div *ngIf="pdForm.birthday.errors.required">Birthday is required.</div>
             </div>
           </div>
           <div class="form-group">
@@ -52,8 +52,8 @@
             <select formControlName="userType" name="requestedUserType" class="form-control form-control-sm">
               <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType.name }}</option>
             </select>
-            <div class="alert alert-danger" *ngIf="userType?.touched && !userType.valid">
-              <div *ngIf="userType.errors.required">User type is required.</div>
+            <div class="alert alert-danger" *ngIf="pdForm.userType?.touched && !pdForm.userType.valid">
+              <div *ngIf="pdForm.userType.errors.required">User type is required.</div>
             </div>
           </div>
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeData(personalDataForm.value)" [disabled]="!personalDataForm.dirty && personalDataForm.valid">
