@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
         checkIfContainsAtLeastOneNumberValidator,
         checkIfContainsAtLeastOnePunctuationMarkValidator,
         checkIfPasswordsEqualValidator("confirmPassword"),
-        // checkOldNewPasswordValidator("oldPassword")
+        checkOldNewPasswordValidator("oldPassword")
       ]
     ),
     confirmPassword: new FormControl(

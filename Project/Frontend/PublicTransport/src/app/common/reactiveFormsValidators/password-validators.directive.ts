@@ -129,19 +129,14 @@ import { ValidatorFn, ValidationErrors, FormControl, FormGroup, AbstractControl 
               controlToCompare.setErrors({
                 "oldNewEqual": true
               });
+              controlToCompare.updateValueAndValidity();
             }
-            // else{
-            //   if(controlToCompare.value){
-            //     controlToCompare.setErrors({"oldNewEqual": false});
-            //     controlToCompare.markAsUntouched();
-            //   }
-            //   else{
-            //     controlToCompare.setErrors({"oldNewEqual": false});
-            //     controlToCompare.markAsTouched();
-            //   }
-
-            //   console.log(controlToCompare);
-            // }
+            else{
+              controlToCompare.setErrors({
+                "oldNewEqual": false
+              });
+              controlToCompare.updateValueAndValidity();
+            }
           }
         }
         else if(controlToCompareName === "oldPassword"){
