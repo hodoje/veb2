@@ -44,6 +44,7 @@ import { PasswordPatternValidatorDirective } from './common/directives/password-
 import { ImageHttpService } from './services/image-http.service';
 import { UserConfirmationService } from './services/user-confirmation.service';
 import { UserHttpService } from './services/user-http.service';
+import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
 
 @NgModule({
   declarations:[
@@ -68,7 +69,8 @@ import { UserHttpService } from './services/user-http.service';
     ProfileComponent,
     UsersComponent,
     PasswordEqualValidatorDirective,
-    PasswordPatternValidatorDirective
+    PasswordPatternValidatorDirective,
+    EmailExistsValidatorDirective
   ],
   imports: [
     BrowserModule,

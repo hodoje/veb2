@@ -15,6 +15,7 @@ export class AccountHttpService{
     changeUserDataUrl = "api/account/changeUserData"
     changePasswordUrl = "api/account/changePassword"
     changeUserDocumentUrl = "api/account/changeUserDocument"
+    checkIfEmailExistsUrl = "api/account/checkIfEmailExists"
 
     constructor(private http: HttpClient){
     }
@@ -88,5 +89,9 @@ export class AccountHttpService{
             headers: new HttpHeaders().delete('Content-Type')
         }
         return this.http.post(this.base_url + this.changeUserDocumentUrl, changedUserDocumentData, httpOptions);
+    }
+
+    checkIfEmailExists(emailToCheck: string){
+        return this.http.post(this.base_url + this.checkIfEmailExistsUrl, { email: emailToCheck });
     }
 }
