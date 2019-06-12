@@ -25,6 +25,7 @@ using WebApp.BusinessComponents.NotificationHubs;
 using WebApp.Models.Dtos;
 using System.Threading;
 using System.Data.Entity;
+using WebApp.BusinessComponents;
 
 namespace WebApp.Controllers
 {
@@ -36,18 +37,21 @@ namespace WebApp.Controllers
         private ApplicationUserManager _userManager;
 		private IUnitOfWork unitOfWork;
         private IMapper mapper;
+        private IEmailSender emailSender;
         private UserProfileConfirmationHub userProfileConfirmationHub;
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
 			IUnitOfWork uow,
             IMapper imapper,
+            IEmailSender eSender,
             UserProfileConfirmationHub hub)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
 			unitOfWork = uow;
             mapper = imapper;
+            emailSender = eSender;
             this.userProfileConfirmationHub = hub;
         }
 
@@ -543,6 +547,35 @@ namespace WebApp.Controllers
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "AppUser");
 
+                // Registration confirmation email retry
+                Task t = new Task(() =>
+                {
+                    int tries = 6;
+                    while (emailSender.SendMail("Registration confirmation", "<a href=\"http://localhost:4200/login\">Confirm registration</a>", user.Email))
+                    {
+                        tries--;
+                        if (tries != 0)
+                        {
+                            Thread.Sleep(10000);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                });
+
+                try
+                {
+                    if (emailSender.SendMail("Registration confirmation", "<a href=\"http://localhost:4200/login\">Confirm registration</a>", user.Email))
+                    {
+                        t.Start();
+                    }
+                }
+                catch(Exception e)
+                {
+                    t.Start();
+                }
                 userProfileConfirmationHub.AddNewUser(user);
 
                 if (!result.Succeeded)
