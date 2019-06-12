@@ -11,14 +11,10 @@ Kod uredjivanja reda voznje:
 	- Brisanje: iz dropdowna se selektovano vreme obrise
 
 TODO:
-	-(joki backend + frontend(service))2.5 Postupak verifikovanja profila putnika
-	-(hodoje)Bug where: Unconfirmed users can buy tickets.
-	-(hodoje)ConfirmRegistrationComponent-
-		-logout
-		-direct login
+	-(joki backend + frontend(service))2.5 Postupak verifikovanja profila putnika			
 
 old password != newpassword
 
-pri registraciji asinhrono proveravati da li vec postoji takav mejl
+registrovani korisnik ( ali jos neprihvacen ) nece dobiti token.
 
 srediti atribute na back-u
