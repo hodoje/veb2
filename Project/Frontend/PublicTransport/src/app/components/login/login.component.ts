@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthHttpService } from 'src/app/services/auth-http.service';
+import { AccountHttpService } from 'src/app/services/account-http.service';
 import { Router } from '@angular/router';
 import { LoginModel } from 'src/app/models/login.model';
 import { NgForm } from '@angular/forms';
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   isOtherError: boolean;
 
   constructor(
-    private http: AuthHttpService, 
+    private accountService: AccountHttpService, 
     private router: Router,
     private loginToNavbar: LoginToNavbarService,
     private spinner: NgxSpinnerService) { }
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   login(user: LoginModel, form: NgForm){
     this.spinner.show();
-    this.http.logIn(user, (isLoggedIn, errorStatus) => {
+    this.accountService.logIn(user, (isLoggedIn, errorStatus) => {
       if(isLoggedIn){
         this.isLoggedIn = isLoggedIn;
         this.loginToNavbar.login();

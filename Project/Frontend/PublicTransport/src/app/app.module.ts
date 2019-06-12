@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from 'src/app/interceptors/token.interceptor';
 import { LoginComponent } from './components/login/login.component';
-import { AuthHttpService } from './services/auth-http.service';
+import { AccountHttpService } from './services/account-http.service';
 import { PLTTService } from './services/price-list-ticket-type-http.service';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -40,6 +40,8 @@ import { SchedulesModificationComponent } from './components/schedules-modificat
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { PasswordEqualValidatorDirective } from './common/directives/password-equal-validator.directive';
+import { PasswordPatternValidatorDirective } from './common/directives/password-pattern-validator.directive';
+import { ImageHttpService } from './services/image-http.service';
 import { UserConfirmationService } from './services/user-confirmation.service';
 import { UserHttpService } from './services/user-http.service';
 
@@ -65,7 +67,8 @@ import { UserHttpService } from './services/user-http.service';
     SchedulesModificationComponent,
     ProfileComponent,
     UsersComponent,
-    PasswordEqualValidatorDirective
+    PasswordEqualValidatorDirective,
+    PasswordPatternValidatorDirective
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,7 @@ import { UserHttpService } from './services/user-http.service';
   providers: 
   [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    AuthHttpService,
+    AccountHttpService,
     PLTTService,
     LoginToNavbarService,
     SchedulesHttpService,
@@ -90,6 +93,7 @@ import { UserHttpService } from './services/user-http.service';
     RegistrationHttpService,
     UserTypeHttpService,
     PricelistHttpService,
+    ImageHttpService,
     UserConfirmationService,
     UserHttpService
   ],

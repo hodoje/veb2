@@ -1,16 +1,20 @@
+import { ChangePasswordModel } from './../models/change-password.model';
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BaseHttpService } from './base-http.service';
 import { LoginModel } from '../models/login.model';
 import { Registration } from '../models/registration.model';
 import { NgForm } from '@angular/forms';
 
 @Injectable()
-export class AuthHttpService{
+export class AccountHttpService{
     base_url = "http://localhost:52296/";
     loginUrl = "oauth/token"
     logoutUrl = "api/account/logout"
     getUserDataUrl = "api/account/getUserPersonalData"
+    changeUserDataUrl = "api/account/changeUserData"
+    changePasswordUrl = "api/account/changePassword"
+    changeUserDocumentUrl = "api/account/changeUserDocument"
 
     constructor(private http: HttpClient){
     }
@@ -69,5 +73,20 @@ export class AuthHttpService{
 
     getUserPersonalData(){
         return this.http.get(this.base_url + this.getUserDataUrl);
+    }
+
+    changeUserData(changeUserData){
+        return this.http.post(this.base_url + this.changeUserDataUrl, changeUserData);
+    }
+
+    changePassword(changedPasswordModel: ChangePasswordModel){
+        return this.http.post(this.base_url + this.changePasswordUrl, changedPasswordModel);
+    }
+
+    changeUserDocument(changedUserDocumentData){
+        let httpOptions = {
+            headers: new HttpHeaders().delete('Content-Type')
+        }
+        return this.http.post(this.base_url + this.changeUserDocumentUrl, changedUserDocumentData, httpOptions);
     }
 }

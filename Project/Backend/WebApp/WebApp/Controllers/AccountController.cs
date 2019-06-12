@@ -19,6 +19,8 @@ using WebApp.Providers;
 using WebApp.Results;
 using System.Linq;
 using AutoMapper;
+using System.Drawing;
+using System.IO;
 using WebApp.BusinessComponents.NotificationHubs;
 using WebApp.Models.Dtos;
 using System.Threading;
@@ -65,6 +67,7 @@ namespace WebApp.Controllers
 
         // GET api/Account/
         [Route("GetUserPersonalData")]
+        [HttpGet]
         public async Task<ApplicationUserDto> GetUserPersonalDataAsync()
         {
             string username = User.Identity.GetUserName();
@@ -72,6 +75,125 @@ namespace WebApp.Controllers
             ApplicationUserDto userDto = mapper.Map<ApplicationUser, ApplicationUserDto>(user);
             return userDto;
         }
+
+        [Route("GetUserDocument")]
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetUserDocumentAsync()
+        {
+            string username = User.Identity.GetUserName();
+            ApplicationUser user = await UserManager.FindByNameAsync(username);
+			if (!String.IsNullOrWhiteSpace(user.DocumentImage))
+			{
+				Image img = GetUserImage(user.DocumentImage);
+				using (MemoryStream ms = new MemoryStream())
+				{
+					img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+					HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+					result.Content = new ByteArrayContent(ms.ToArray());
+					result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+
+					return result;
+				}
+			}
+			return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+        }
+
+        private Image GetUserImage(string userImagePath)
+        {
+            string imgPath = HttpContext.Current.Server.MapPath("~/Resources/" + userImagePath);
+            return new Bitmap(imgPath);
+        }
+
+		[Route("ChangeUserData")]
+		[HttpPost]
+		public async Task<IHttpActionResult> ChangeUserData(RegisterBindingModel model)
+		{
+			string username = User.Identity.GetUserName();
+			ApplicationUser user = await UserManager.FindByNameAsync(username);
+
+			if (!String.IsNullOrWhiteSpace(model.Name))
+			{
+				user.Name = model.Name;
+			}
+
+			if (!String.IsNullOrWhiteSpace(model.LastName))
+			{
+				user.Name = model.LastName;
+			}
+
+			if (!String.IsNullOrWhiteSpace(model.Address))
+			{
+				user.Name = model.Address;
+			}
+
+			if (model.Birthday != null)
+			{
+				user.Birthday = model.Birthday;
+			}
+
+			UserType requestedUserType = unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType).FirstOrDefault();
+			if(requestedUserType != null)
+			{
+				user.UserType = requestedUserType;
+			}
+
+			try
+			{
+				UserManager.Update(user);
+			}
+			catch(Exception e)
+			{
+				return BadRequest();
+			}
+
+			return Ok();
+		}
+
+		[Route("ChangeUserDocument")]
+		[HttpPost]
+		public async Task<IHttpActionResult> ChangeUserDocumentAsync()
+		{
+			var httpRequest = HttpContext.Current.Request;
+
+			string documentImageFileName = null;
+			if (httpRequest.Files.Count > 0)
+			{
+				foreach (string file in httpRequest.Files)
+				{
+					var postedFile = httpRequest.Files[file];
+					var filePath = HttpContext.Current.Server.MapPath("~/Resources/" + postedFile.FileName);
+					postedFile.SaveAs(filePath);
+					documentImageFileName = postedFile.FileName;
+					break;
+				}
+			}
+			else
+			{
+				return BadRequest();
+			}
+
+			try
+			{
+				if (!String.IsNullOrWhiteSpace(documentImageFileName))
+				{
+					string username = User.Identity.GetUserName();
+					ApplicationUser user = await UserManager.FindByNameAsync(username);
+					user.DocumentImage = documentImageFileName;
+					UserManager.Update(user);
+
+					return Ok();
+				}
+				else
+				{
+					return BadRequest();
+				}
+			}
+			catch (Exception ex)
+			{
+				return BadRequest();
+			}
+		}
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -397,6 +519,7 @@ namespace WebApp.Controllers
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                UserManager.AddToRole(user.Id, "AppUser");
 
                 userProfileConfirmationHub.AddNewUser(user);
 

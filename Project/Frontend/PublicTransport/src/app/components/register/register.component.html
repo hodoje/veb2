@@ -30,7 +30,7 @@
               required 
               minlength="3"
               maxlength="30"
-              type="password" name="password" appPasswordPatternValidator ngModel #password="ngModel" class="form-control form-control-sm">
+              type="password" name="password" appPasswordPatternValidator appPasswordEqualValidator="confirmPassword" ngModel #password="ngModel" class="form-control form-control-sm">
             <div class="alert alert-danger" *ngIf="password?.touched && !password.valid">
               <div *ngIf="password.errors.required">Password is required.</div>
               <div *ngIf="password.errors.minlength">Password needs to be at least 3 characters long.</div>
@@ -46,14 +46,10 @@
             <label for="confirmPassword">Confirm Password</label>
             <input 
               required 
-              minlength="3"
-              maxlength="30"
               type="password" name="confirmPassword" appPasswordEqualValidator="password" ngModel #confirmPassword="ngModel" class="form-control form-control-sm">
             <div class="alert alert-danger" *ngIf="confirmPassword?.touched && !confirmPassword.valid">
               <div *ngIf="confirmPassword.errors.required">Confirm Password is required.</div>
-              <div *ngIf="confirmPassword.errors.minlength">Confirm Password needs to be at least 3 characters long.</div>
-              <div *ngIf="confirmPassword.errors.maxlength">Confirm Password needs to be maximum of 30 characters long.</div>
-              <div *ngIf="confirmPassword.errors.notEqual">Confirm Password and Confirm Password do not match.</div>
+              <div *ngIf="confirmPassword.errors.notEqual">Password and Confirm Password do not match.</div>
             </div>
           </div>
           <div class="form-group required">
@@ -121,9 +117,14 @@
           </div>
           <div class="form-group">
             <label for="documentImage">Document image</label>
+            <div class="card card-body">
+              <img class="document-image" *ngIf="isImageLoaded" [attr.src]="imageToShow" alt="Place image title">
+              <img class="document-image" *ngIf="!isImageLoaded" src="../../../assets/addImage.png" alt="Fallbackimage">
+            </div>
+            <br/>
             <div class="custom-file">
               <input type="file" name="documentImage" ngModel #documentImage="ngModel" (change)="handleFileInput($event.target.files)" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              <label class="custom-file-label" for="inputGroupFile01">{{fileLabelText}}</label>
             </div>
           </div>
           <input class="btn btn-primary" type="submit" value="Register" [disabled]="!f.valid">

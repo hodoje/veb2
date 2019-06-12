@@ -3,7 +3,7 @@
     <div class="row" *ngIf="!registrationSuccessful">
       <div class="col-md-4">
         <div class="page-header">
-          <h1>Personal Data</h1>
+          <h2>Personal Data</h2>
         </div>
         <form [formGroup]="personalDataForm">
           <div class="form-group">
@@ -61,14 +61,18 @@
       </div>
       <div class="col-md-4">
         <div class="page-header">
-          <h1>Document</h1>
+          <h2>Document</h2>
         </div>
         <form [formGroup]="documentForm">
           <div class="form-group">
-            <label for="documentImage">Document image</label>
+            <div class="card card-body zoom">
+                <img class="document-image" *ngIf="isImageLoaded" [attr.src]="imageToShow" alt="Place image title">
+                <img class="document-image" *ngIf="!isImageLoaded" src="../../../assets/fallbackimage.jpg" alt="Fallbackimage">
+              </div>
+              <br/>
             <div class="custom-file">
               <input formControlName="documentImage" type="file" name="documentImage" (change)="handleFileInput($event.target.files)" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-              <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              <label class="custom-file-label" for="inputGroupFile01">{{fileLabelText}}</label>
             </div>
           </div>
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">
@@ -76,57 +80,44 @@
       </div>
       <div class="col-md-4">
         <div class="page-header">
-          <h1>Change Password</h1>
+          <h2>Change Password</h2>
         </div>
-        <form #changePasswordForm="ngForm">
+        <form [formGroup]="changePasswordForm">
           <div class="form-group required">
             <label for="oldPassword">Old Password</label>
-            <input 
-              required 
-              minlength="3"
-              maxlength="30"
-              type="password" name="oldPassword" appPasswordPatternValidator ngModel #oldPassword="ngModel" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="oldPassword?.touched && !oldPassword.valid">
-              <div *ngIf="oldPassword.errors.required">Old Password is required.</div>
-              <div *ngIf="oldPassword.errors.minlength">Old Password needs to be at least 3 characters long.</div>
-              <div *ngIf="oldPassword.errors.maxlength">Old Password needs to be maximum of 30 characters long.</div>
-              <div *ngIf="oldPassword.errors.notUpperCase">Old Password must contain at least one upper case letter.</div>
-              <div *ngIf="oldPassword.errors.notLowerCase">Old Password must contain at least one lower case letter.</div>
-              <div *ngIf="oldPassword.errors.notNumber">Old Password must contain at least one digit.</div>
-              <div *ngIf="oldPassword.errors.notPunctuation">Old Password must contain at least one punctuation mark.</div>
+            <input formControlName="oldPassword" type="password" name="oldPassword" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="cpForm.oldPassword?.touched && !cpForm.oldPassword.valid">
+              <div *ngIf="cpForm.oldPassword.errors.required">Old Password is required.</div>
+              <div *ngIf="cpForm.oldPassword.errors.minlength">Old Password needs to be at least 3 characters long.</div>
+              <div *ngIf="cpForm.oldPassword.errors.maxlength">Old Password needs to be maximum of 30 characters long.</div>
+              <div *ngIf="cpForm.oldPassword.errors.notUpperCase">Old Password must contain at least one upper case letter.</div>
+              <div *ngIf="cpForm.oldPassword.errors.notLowerCase">Old Password must contain at least one lower case letter.</div>
+              <div *ngIf="cpForm.oldPassword.errors.notNumber">Old Password must contain at least one digit.</div>
+              <div *ngIf="cpForm.oldPassword.errors.notPunctuation">Old Password must contain at least one punctuation mark.</div>
               <div></div>
             </div>
           </div>
           <div class="form-group required">
             <label for="newPassword">New Password</label>
-            <input 
-              required 
-              minlength="3"
-              maxlength="30"
-              type="password" name="newPassword" appPasswordPatternValidator ngModel #newPassword="ngModel" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="newPassword?.touched && !newPassword.valid">
-              <div *ngIf="newPassword.errors.required">New Password is required.</div>
-              <div *ngIf="newPassword.errors.minlength">New Password needs to be at least 3 characters long.</div>
-              <div *ngIf="newPassword.errors.maxlength">New Password needs to be maximum of 30 characters long.</div>
-              <div *ngIf="newPassword.errors.notUpperCase">New Password must contain at least one upper case letter.</div>
-              <div *ngIf="newPassword.errors.notLowerCase">New Password must contain at least one lower case letter.</div>
-              <div *ngIf="newPassword.errors.notNumber">New Password must contain at least one digit.</div>
-              <div *ngIf="newPassword.errors.notPunctuation">New Password must contain at least one punctuation mark.</div>
+            <input formControlName="newPassword" type="password" name="newPassword" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="cpForm.newPassword?.touched && !cpForm.newPassword.valid">
+              <div *ngIf="cpForm.newPassword.errors.required">New Password is required.</div>
+              <div *ngIf="cpForm.newPassword.errors.minlength">New Password needs to be at least 3 characters long.</div>
+              <div *ngIf="cpForm.newPassword.errors.maxlength">New Password needs to be maximum of 30 characters long.</div>
+              <div *ngIf="cpForm.newPassword.errors.notUpperCase">New Password must contain at least one upper case letter.</div>
+              <div *ngIf="cpForm.newPassword.errors.notLowerCase">New Password must contain at least one lower case letter.</div>
+              <div *ngIf="cpForm.newPassword.errors.notNumber">New Password must contain at least one digit.</div>
+              <div *ngIf="cpForm.newPassword.errors.notPunctuation">New Password must contain at least one punctuation mark.</div>
+              <div *ngIf="cpForm.newPassword.errors.oldNewEqual">New Password and Old Password can't be equal.</div>
               <div></div>
             </div>
           </div>
           <div class="form-group required">
             <label for="confirmPassword">Confirm Password</label>
-            <input 
-              required 
-              minlength="3"
-              maxlength="30"
-              type="password" name="confirmPassword" appPasswordEqualValidator="newPassword" ngModel #confirmPassword="ngModel" class="form-control form-control-sm">
-            <div class="alert alert-danger" *ngIf="confirmPassword?.touched && !confirmPassword.valid">
-              <div *ngIf="confirmPassword.errors.required">Confirm Password is required.</div>
-              <div *ngIf="confirmPassword.errors.minlength">Confirm Password needs to be at least 3 characters long.</div>
-              <div *ngIf="confirmPassword.errors.maxlength">Confirm Password needs to be maximum of 30 characters long.</div>
-              <div *ngIf="confirmPassword.errors.notEqual">Confirm Password and Confirm Password do not match.</div>
+            <input formControlName="confirmPassword" type="password" name="confirmPassword" class="form-control form-control-sm">
+            <div class="alert alert-danger" *ngIf="cpForm.confirmPassword?.touched && !cpForm.confirmPassword.valid">
+              <div *ngIf="cpForm.confirmPassword.errors.required">Confirm Password is required.</div>
+              <div *ngIf="cpForm.confirmPassword.errors.notEqual">New Password and Confirm Password do not match.</div>
             </div>
           </div>
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changePassword(changePasswordForm.value)" [disabled]="!changePasswordForm.valid">
