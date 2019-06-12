@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { UserConfirmationService } from 'src/app/services/user-confirmation.service';
 import { User } from 'src/app/models/user.model';
 import { UserHttpService } from 'src/app/services/user-http.service';
 import { jsonpCallbackContext } from '@angular/common/http/src/module';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators'
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -14,20 +17,20 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.userConfirmationService.disconnect();
   }
 
-  unregisteredUsers: User[] = [];
+  unregisteredUsers: User[];
   isConnected: Boolean;
 
-  constructor(private userConfirmationService: UserConfirmationService, private userHttpService: UserHttpService) { }
+  constructor(private userConfirmationService: UserConfirmationService, private userHttpService: UserHttpService, private ngZone: NgZone) { }
 
   ngOnInit() {
     this.checkConnection();
     this.initialize();
 
-    this.userHttpService.getAll().subscribe(users => {
+    this.userHttpService.getAllUnConfirmedUsers().subscribe(users => {
       this.unregisteredUsers = users;
     });
 
-    this.userConfirmationService.registerForInitialUsers();
+    this.userConfirmationService.registerForNewUsers();
   }
 
   private checkConnection() {
@@ -35,15 +38,12 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   private initialize() {
-    this.userConfirmationService.addNewUnregisteredUser().subscribe(e => this.addUser(e));
+    this.userConfirmationService.notificationReceived.subscribe(e => this.addUser(e));
   }
 
-  private addUser(user: User) {
-    console.log("NEW UNREGISTERD USER" + JSON.stringify(user));
-    this.unregisteredUsers.push(user);
-  }
-
-  onClick() {
-
+  private addUser(user: any) {
+    this.ngZone.run(() => {
+      this.unregisteredUsers.push(user);
+    }); 
   }
 }

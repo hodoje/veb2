@@ -12,10 +12,10 @@ export class UserConfirmationService {
     private connection: any;  
     public connectionExists: Boolean; 
 
-    public notificationReceived: EventEmitter < User[] >;  
+    public notificationReceived: EventEmitter<User>;  
 
     constructor() {
-        this.notificationReceived = new EventEmitter<User[]>();
+        this.notificationReceived = new EventEmitter<User>();
         this.connectionExists = false;
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
@@ -34,15 +34,13 @@ export class UserConfirmationService {
         return Observable.create((observer) => {
            
             this.connection.start()
-            .done((data: any) => {  
-                console.log('Now connected ' + data.transport.name + ', connection ID= ' + data.id)
+            .done((data: any) => {
                 this.connectionExists = true;
     
                 observer.next(true);
                 observer.complete();
             })
-            .fail((error: any) => {  
-                console.log('Could not connect ' + error);
+            .fail((error: any) => {
                 this.connectionExists = false;
     
                 observer.next(false);
@@ -51,13 +49,14 @@ export class UserConfirmationService {
           });
     }
 
-    public registerForInitialUsers(): void {
-        this.proxy.on('getUsers', (data: User[]) => {  
-            console.log('received notification: ' + data);  
+    public registerForNewUsers(): void {
+        this.proxy.on('newUser', (data: User) => {  
             this.notificationReceived.emit(data);
         }); 
     }
 
+
+    //temp
     public addNewUnregisteredUser() {
         return Observable.create((observer) => {
             this.proxy.on('getUsers', (data: User[]) => {
