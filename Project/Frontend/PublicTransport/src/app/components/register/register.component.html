@@ -110,13 +110,13 @@
           <div class="form-group required">
             <label for="requestedUserType">User type</label>
             <select required name="requestedUserType" [(ngModel)]="currentUserType" class="form-control form-control-sm">
-              <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType.name }}</option>
+              <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType?.name }}</option>
             </select>
             <div class="alert alert-danger" *ngIf="userType?.touched && !userType.valid">
               <div *ngIf="userType.errors.required">User type is required.</div>
             </div>
           </div>
-          <div class="form-group" *ngIf="currentUserType.name!='Regular'">
+          <div class="form-group" *ngIf="currentUserType?.name !== 'Regular'">
             <label for="documentImage">Document image</label>
             <div class="card card-body">
               <img class="document-image" *ngIf="isImageLoaded" [attr.src]="imageToShow" alt="Place image title">
