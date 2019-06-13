@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="container-fluid">
     <div class="row" *ngIf="!registrationSuccessful">
-      <div class="col-md-4">
+      <div class="col col-md-4 account-overlay">
         <div class="page-header">
           <h2>Personal Data</h2>
         </div>
@@ -59,7 +59,7 @@
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeData(personalDataForm.value)" [disabled]="!personalDataForm.dirty && personalDataForm.valid">
         </form>  
       </div>
-      <div class="col-md-4">
+      <div class="col col-md-4">
         <div class="page-header">
           <h2>Document</h2>
         </div>
@@ -77,8 +77,13 @@
           </div>
           <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">
         </form>
+        <div class="alert alert-warning">
+          <h2>You're account is still not verified.</h2>
+          <p>All functionalities are disabled.</p>
+          <p *ngIf="!isImageLoaded">If you're a student or a retiree, please upload an image of your document.</p>
+        </div>
       </div>
-      <div class="col-md-4">
+      <div class="col col-md-4 account-overlay">
         <div class="page-header">
           <h2>Change Password</h2>
         </div>
