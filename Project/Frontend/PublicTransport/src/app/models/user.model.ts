@@ -9,4 +9,5 @@ export class User{
     registrationStatus: string;
     userType: UserType;
     documentImage: File;
+    banned: boolean;
 }

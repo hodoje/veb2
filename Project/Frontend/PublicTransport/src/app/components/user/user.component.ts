@@ -10,23 +10,9 @@ import { UserHttpService } from 'src/app/services/user-http.service';
 export class UserComponent implements OnInit {
   @Input() userDetails: User;
 
-  constructor(private userConfirmationHttp: UserHttpService) { }
+  constructor() { }
 
   ngOnInit() {
 
-  }
-
-  onAccept() {
-    this.userConfirmationHttp.confirmUser(this.userDetails.email).subscribe(
-      (yay) => console.log("confirmed"),
-      (error) => console.log("error")
-    );
-  }
-
-  onDecline() {
-    this.userConfirmationHttp.declineUser(this.userDetails.email).subscribe(
-      (naaay) => console.log("declined"),
-      (error) => console.log("error")
-    );
   }
 }

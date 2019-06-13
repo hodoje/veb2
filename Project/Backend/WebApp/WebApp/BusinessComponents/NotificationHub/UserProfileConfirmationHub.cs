@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNet.SignalR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using WebApp.Models;
 using WebApp.Models.DomainModels;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
-using System.Security.Claims;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -115,6 +111,38 @@ namespace WebApp.BusinessComponents.NotificationHubs
             {
                 UnregisteredUsers.Add(Context.User.Identity.Name, Context.ConnectionId);
             }            
+        public bool BanUser(string userEmail)
+        {
+            try
+            {
+                lock (lockObject)
+                {
+                    hubContext.Clients.Group("Admins").banUser(userEmail);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool UnbanUser(string userEmail)
+        {
+            try
+            {
+                lock (lockObject)
+                {
+                    hubContext.Clients.Group("Admins").unbanUser(userEmail);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public override Task OnConnected()

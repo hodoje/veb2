@@ -71,6 +71,30 @@ namespace WebApp.Controllers
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+        // GET api/Account/AllUsers
+        [Authorize(Roles = "Admin")]
+        [Route("AllRegisteredUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllRegisteredUsers()
+        {
+            try
+            {
+                List<ApplicationUser> allRegisteredUsers = await UserManager.GetAllRegisteredUsers();
+                List<ApplicationUserDto> dtos = new List<ApplicationUserDto>(allRegisteredUsers.Count);
+
+                foreach (var user in allRegisteredUsers)
+                {
+                    dtos.Add(mapper.Map<ApplicationUser, ApplicationUserDto>(user));
+                }
+
+                return Ok(dtos);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
         [AllowAnonymous]
         [Route("CheckIfEmailExists")]
         [HttpPost]
@@ -676,6 +700,88 @@ namespace WebApp.Controllers
                     }
 
                     userProfileConfirmationHub.DeclineRegistration(user.Email);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
+        // POST api/Account/BanUser
+        [Route("BanUser")]
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IHttpActionResult> BanUser(RegisterConfirmationDto banDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                ApplicationUser user = UserManager.FindByName(banDto?.Email);
+
+                if (user != null && !user.Banned)
+                {
+                    user.Banned = true;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    userProfileConfirmationHub.BanUser(banDto.Email);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
+        // POST api/Account/UnbanUser
+        [Route("UnbanUser")]
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IHttpActionResult> UnbanUser(RegisterConfirmationDto unbanDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                ApplicationUser user = await UserManager.FindByEmailAsync(unbanDto?.Email);
+
+                if (user != null && user.Banned)
+                {
+                    user.Banned = false;
+
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    userProfileConfirmationHub.UnbanUser(unbanDto.Email);
 
                     return Ok();
                 }

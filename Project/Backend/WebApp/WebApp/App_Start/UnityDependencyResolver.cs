@@ -92,6 +92,7 @@ namespace WebApp.App_Start
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
             container.RegisterType<IEmailSender, SMTPClient>();
             container.RegisterType<ITransportationLineRouteRepository, TransportationLineRouteRepository>();
+            container.RegisterType<ITransporationLineComponent, TransporationLineComponent>();
             container.RegisterType<UserProfileConfirmationHub>();
             // This allows usage of UnitOfWork in AccountController
             container.RegisterType<ApplicationUserManager>();

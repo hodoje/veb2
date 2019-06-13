@@ -104,9 +104,12 @@ namespace WebApp.Migrations
         {
 			TransportationLineType tlType = context.TransporationLineTypes.First(tlt => tlt.Name == "Urban");
 			TransportationLineType tlType2 = context.TransporationLineTypes.First(tlt => tlt.Name == "Suburban");
-            Station station = context.Stations.First();
+            Station station1 = context.Stations.First();
+            Station station2 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station2"));
+            Station station3 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station3"));
 
-            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station, RoutePoint = 1 };
+            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station1, RoutePoint = 1 };
+            TransportationLineRoute lineRoute2 = new TransportationLineRoute() { Station = station2, RoutePoint = 2 };
 
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
             {
@@ -121,14 +124,18 @@ namespace WebApp.Migrations
                 context.SaveChanges();
 
                 lineRoute.TransporationLine = transporationLine;
+                lineRoute2.TransporationLine = transporationLine;
                 context.TransportationLineRoutes.Add(lineRoute);
+                context.TransportationLineRoutes.Add(lineRoute2);
             }
+
 
 			if (!context.TransportationLines.Any(x => x.LineNum == 70))
 			{
-                lineRoute = new TransportationLineRoute() { Station = station, RoutePoint = 1 };
+                lineRoute = new TransportationLineRoute() { Station = station1, RoutePoint = 1 };
+                lineRoute2 = new TransportationLineRoute() { Station = station3, RoutePoint = 2 };
 
-				TransportationLine transporationLine = new TransportationLine()
+                TransportationLine transporationLine = new TransportationLine()
 				{
 					LineNum = 70,
 					TransportationLineType = tlType2,
@@ -139,7 +146,9 @@ namespace WebApp.Migrations
                 context.SaveChanges();
 
                 lineRoute.TransporationLine = transporationLine;
+                lineRoute2.TransporationLine = transporationLine;
                 context.TransportationLineRoutes.Add(lineRoute);
+                context.TransportationLineRoutes.Add(lineRoute2);
             }
 
 			context.SaveChanges();
@@ -179,10 +188,20 @@ namespace WebApp.Migrations
 		{
 			if (!context.Stations.Any(x => x.Name.Equals("Station1")))
 			{
-				context.Stations.Add(new Station() { Name = "Station1", Longitude = 45.259302, Latitude = 19.832563 });
+				context.Stations.Add(new Station() { Name = "Station1", Latitude = 45.259302, Longitude = 19.832563 });
 			}
 
-			context.SaveChanges();
+            if (!context.Stations.Any(x => x.Name.Equals("Station2")))
+            {
+                context.Stations.Add(new Station() { Name = "Station2", Latitude = 45.252026, Longitude = 19.8368170 });
+            }
+
+            if (!context.Stations.Any(x => x.Name.Equals("Station3")))
+            {
+                context.Stations.Add(new Station() { Name = "Station3", Latitude = 45.24781110, Longitude = 19.8391915 });
+            }
+
+            context.SaveChanges();
 		}
 
 		private void PopulateUserRoles(ApplicationDbContext context)

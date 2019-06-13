@@ -263,9 +263,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="BusinessComponents\IEmailSender.cs" />
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
+    <Compile Include="BusinessComponents\ITransporationLineComponent.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\NotificationHub\UserProfileConfirmationHub.cs" />
+    <Compile Include="BusinessComponents\TransporationLineComponent.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DomainControllers\BenefitsController.cs" />
     <Compile Include="Controllers\DomainControllers\DayOfTheWeeksController.cs" />
@@ -343,6 +345,10 @@
     <Compile Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.cs" />
     <Compile Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.Designer.cs">
       <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.cs" />
+    <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.Designer.cs">
+      <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -551,6 +557,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.resx">
       <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906131238050_ApplicationUser-Bannable.resx">
+      <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

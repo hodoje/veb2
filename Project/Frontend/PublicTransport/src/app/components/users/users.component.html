@@ -1,1 +1,50 @@
-<app-user *ngFor="let user of unregisteredUsers" [userDetails]="user"></app-user>
+<div class="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-6">
+                <h2>Pending users</h2>
+                <hr/>
+                <div *ngIf="unregisteredUsers?.length === 0">
+                    There are no pending users.
+                </div>
+                <div *ngIf="unregisteredUsers?.length > 0" class="side-list">
+                    <table class="table table-hover">
+                        <tr *ngFor="let user of unregisteredUsers">
+                            <td>
+                                <app-user [userDetails]="user"></app-user>
+                                <button type="button" (click)="onDecline(user.email)" class="btn btn-danger btn-sm float-right">
+                                        Decline
+                                </button>
+                                <button type="button" (click)="onAccept(user.email)" class="btn btn-success btn-sm float-right">
+                                        Accept
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <h2>Registered users</h2>
+                <hr/>
+                <div *ngIf="registeredUsers?.length === 0">
+                    There are no registered users.
+                </div>
+                <div *ngIf="registeredUsers?.length > 0" class="side-list">
+                    <table class="table table-hover">
+                        <tr *ngFor="let user of registeredUsers">
+                            <td>
+                                <app-user [userDetails]="user"></app-user>
+                                <button type="button" (click)="onBan(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
+                                    Ban
+                                </button>
+                                <button type="button" (click)="onUnban(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
+                                    Unban
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

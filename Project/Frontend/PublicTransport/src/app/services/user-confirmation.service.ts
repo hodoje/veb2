@@ -10,18 +10,23 @@ export class UserConfirmationService {
     private proxy: any;  
     private proxyName: string = 'userConfirmation';  
     private connection: any;  
-    private isEmitterInitialized = true
+    private events: string[] = [];
 
     public connectionExists: Boolean; 
     
     public addUserNotification: EventEmitter<User>;
     public userConfirmedNotification: EventEmitter<string>;
     public userDeclinedNotification: EventEmitter<string>;
+    public userBannedNotification: EventEmitter<string>;
+    public userUnbanNotification: EventEmitter<string>;
 
     constructor() {
         this.addUserNotification = new EventEmitter<User>();
         this.userConfirmedNotification = new EventEmitter<string>();
         this.userDeclinedNotification = new EventEmitter<string>();
+        this.userBannedNotification = new EventEmitter<string>();
+        this.userUnbanNotification = new EventEmitter<string>();
+
         this.connectionExists = false;
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
@@ -56,31 +61,56 @@ export class UserConfirmationService {
     }
 
     public resetEmitters() {
-        this.proxy.off('newUser');
-        this.proxy.off('confirmUser');
-        this.proxy.off('declineUser');
+        this.events.forEach(event => this.proxy.off(event));
     }
 
     public registerForNewUsers(): void {
-        this.proxy.on('newUser', (data: User) => {
+        let eventName = 'newUser';
+        this.events.push(eventName);
+
+        this.proxy.on(eventName, (data: User) => {
             this.addUserNotification.emit(data);
         }); 
     }
 
     public registerForUserConfirmation(): void {
-        this.proxy.on('confirmUser', (data: string) => {
+        let eventName = 'confirmUser';
+        this.events.push(eventName);
+
+        this.proxy.on(eventName, (data: string) => {
             this.userConfirmedNotification.emit(data);
         });
     }
 
     public registerForUserDeclining(): void {
-        this.proxy.on('declineUser', (data: string) => {
+        let eventName = 'declineUser';
+        this.events.push(eventName);
+
+        this.proxy.on(eventName, (data: string) => {
             this.userDeclinedNotification.emit(data);
         });
     }
 
     public AwaitRegistration(){
         this.proxy.invoke("AwaitRegistration");
+    }
+    
+    public registerForUserBan(): void {
+        let eventName = 'banUser';
+        this.events.push(eventName);
+
+        this.proxy.on(eventName, (data: string) => {
+            this.userBannedNotification.emit(data);
+        });
+    }
+
+    public registerForUserUnban(): void {
+        let eventName = 'unbanUser';
+        this.events.push(eventName)
+
+        this.proxy.on(eventName, (data: string) => {
+            this.userUnbanNotification.emit(data);
+        });
     }
 
     public closeConnection() {
