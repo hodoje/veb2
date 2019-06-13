@@ -11,6 +11,7 @@ Kod uredjivanja reda voznje:
 	- Brisanje: iz dropdowna se selektovano vreme obrise
 
 TODO:
+	-User registration status ... css missing
 	-(hodoje)Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token. Treba ConfirmRegistrationComponent.
 	-(hodoje)Izlistavanje svih cenovnika
 	-Manipulacija nad stanicama
