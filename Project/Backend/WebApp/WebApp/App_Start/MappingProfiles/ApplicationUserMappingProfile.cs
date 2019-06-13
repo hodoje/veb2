@@ -28,7 +28,9 @@ namespace WebApp.App_Start.MappingProfiles
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,
-                opts => opts.MapFrom(source => source.UserType));
+                opts => opts.MapFrom(source => source.UserType))
+                .ForMember(destination => destination.Banned,
+                opts => opts.MapFrom(source => source.Banned));
             CreateMap<ApplicationUserDto, ApplicationUser>()
                 .ForMember(destination => destination.Email,
                 opts => opts.MapFrom(source => source.Email))
@@ -45,7 +47,9 @@ namespace WebApp.App_Start.MappingProfiles
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,
-                opts => opts.MapFrom(source => source.UserType));
+                opts => opts.MapFrom(source => source.UserType))
+                .ForMember(destination => destination.Banned,
+                opts => opts.MapFrom(source => source.Banned));
         }
     }
 }

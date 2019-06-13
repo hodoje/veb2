@@ -6,6 +6,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using WebApp.Models;
 using WebApp.Persistence;
+using System.Collections.Generic;
+using System.Linq;
+using WebApp.Models.Enumerations;
 
 namespace WebApp
 {
@@ -16,6 +19,13 @@ namespace WebApp
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+        }
+
+        public Task<List<ApplicationUser>> GetAllRegisteredUsers()
+        {
+            return Users.Include(user => user.UserType)
+                .Where(user => user.RegistrationStatus == RegistrationStatus.Accepted)
+                .ToListAsync();
         }
 
         public override Task<ApplicationUser> FindByNameAsync(string userName)

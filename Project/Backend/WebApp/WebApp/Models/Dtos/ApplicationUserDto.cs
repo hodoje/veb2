@@ -23,5 +23,7 @@ namespace WebApp.Models.DomainModels
         public string DocumentImage { get; set; }
         [JsonProperty("userType")]
         public UserTypeDto UserType { get; set; }
+        [JsonProperty("banned")]
+        public bool Banned { get; set; }
     }
 }

@@ -38,6 +38,7 @@ namespace WebApp.Models
 		public UserType UserType { get; set; }
         [Timestamp]
         public byte[] Timestamp { get; set; }
+        public bool Banned { get; set; }
         #endregion
 
         #region Methods

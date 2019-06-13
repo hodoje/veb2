@@ -344,6 +344,10 @@
     <Compile Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.Designer.cs">
       <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.cs" />
+    <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.Designer.cs">
+      <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -551,6 +555,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.resx">
       <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906131238050_ApplicationUser-Bannable.resx">
+      <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
