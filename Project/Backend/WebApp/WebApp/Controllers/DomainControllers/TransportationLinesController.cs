@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
+using WebApp.BusinessComponents;
 using WebApp.Models.DomainModels;
 using WebApp.Models.Dtos;
 using WebApp.Persistence.UnitOfWork;
@@ -15,11 +16,13 @@ namespace WebApp.Controllers.DomainControllers
     {
 		private IUnitOfWork unitOfWork;
 		private IMapper mapper;
+        private ITransporationLineComponent transporationLineComponent;
 
-		public TransportationLinesController(IUnitOfWork uow, IMapper imapper)
+		public TransportationLinesController(IUnitOfWork uow, IMapper imapper, ITransporationLineComponent transporationLineComponent)
 		{
 			unitOfWork = uow;
 			mapper = imapper;
+            this.transporationLineComponent = transporationLineComponent;
 		}
 
 		// GET: api/TransportationLines
@@ -41,34 +44,43 @@ namespace WebApp.Controllers.DomainControllers
             return Ok(transportationLine);
         }
 
-        // AUTHORIZATION !?
-        // GET: api/TransporationLines/GetPlan/5
-        public IHttpActionResult GetPlanForTransporationLine(int lineNum)
+        // GET: api/TransportationLines/Plan/5
+        [Route("api/TransportationLines/Plan")]
+        public IHttpActionResult GetPlanForTransporationLine(int lineNumber)
         {
             try
             {
-                TransportationLine transportationLine = unitOfWork.TransportationLineRepository.Find(x => x.LineNum == lineNum).FirstOrDefault();
+                TransporationLinePlanDto planDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, lineNumber);
 
-                if (transportationLine == null)
+                if (planDto == null)
                 {
-                    return null;
-                }
-
-                TransporationLinePlanDto planDto = new TransporationLinePlanDto() { LineNumber = transportationLine.LineNum, Routes = new List<RoutePointDto>() };
-
-                List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.Find(x => x.TransporationLineId == transportationLine.Id).ToList();
-                routes.Sort(TransportationLineRoute.CompareByRoutePoint);
-
-                foreach (TransportationLineRoute route in routes)
-                {
-                    planDto.Routes.Add(new RoutePointDto()
-                    {
-                        SequenceNumber = route.RoutePoint,
-                        Station = unitOfWork.StationRepository.Get(route.StationId)
-                    });
+                    return BadRequest();
                 }
 
                 return Ok(planDto);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET api/TransportationLines/Plans
+        [Route("api/TransportationLines/Plans")]
+        public IHttpActionResult GetPlansForTransporationLine()
+        {
+            try
+            {
+                List<int> transporationLines = unitOfWork.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
+                List<TransporationLinePlanDto> plans = new List<TransporationLinePlanDto>(transporationLines.Count);
+
+                foreach (int lineNumber in transporationLines)
+                {
+                    plans.Add(transporationLineComponent.GetTransporationLinePlan(unitOfWork, lineNumber));
+                }
+
+
+                return Ok(plans);
             }
             catch
             {

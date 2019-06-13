@@ -263,9 +263,11 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="BusinessComponents\IEmailSender.cs" />
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
+    <Compile Include="BusinessComponents\ITransporationLineComponent.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\NotificationHub\UserProfileConfirmationHub.cs" />
+    <Compile Include="BusinessComponents\TransporationLineComponent.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DomainControllers\BenefitsController.cs" />
     <Compile Include="Controllers\DomainControllers\DayOfTheWeeksController.cs" />

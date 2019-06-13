@@ -7,7 +7,7 @@ namespace WebApp.Models.Dtos
 {
     public class TransportationLineDto
 	{
-		public string LineNum { get; set; }
+		public int LineNum { get; set; }
 		public TransportationLineTypeDto TransportationLineType { get; set; }
 	}
 }

@@ -81,7 +81,7 @@ namespace WebApp.Controllers.DomainControllers
 			schedule.Id = scheduleDto.Id;
 			schedule.Timetable = scheduleDto.Timetable;
 			schedule.DayOfTheWeekId = unitOfWork.DayOfTheWeekRepository.Find(d => d.Name == scheduleDto.DayOfTheWeek).FirstOrDefault().Id;
-			int lineNum = Int32.Parse(scheduleDto.LineNum);
+			int lineNum = scheduleDto.LineNum;
 			schedule.TransportationLineId = unitOfWork.TransportationLineRepository.Find(tl => tl.LineNum == lineNum).FirstOrDefault().Id;
 
             try

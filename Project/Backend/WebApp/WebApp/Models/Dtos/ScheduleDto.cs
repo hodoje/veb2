@@ -11,7 +11,7 @@ namespace WebApp.Models.Dtos
 		public int Id { get; set; }
 		public string DayOfTheWeek { get; set; }
 		public string Timetable { get; set; }
-		public string LineNum { get; set; }
+		public int LineNum { get; set; }
 		public string LineType { get; set; }
 	}
 }

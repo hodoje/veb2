@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Unity;
 using WebApp.Persistence.ModelRepositoryInterfaces;
 using WebApp.Persistence.Repository;
@@ -44,7 +45,7 @@ namespace WebApp.Persistence.UnitOfWork
         public ITransportationLineRouteRepository TransportationLineRouteRepository { get; set; }
 
 
-        public List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> GetAllRoles()
+        public List<IdentityRole> GetAllRoles()
         {
             return (_context as ApplicationDbContext).Roles.ToList();
         }
@@ -57,6 +58,11 @@ namespace WebApp.Persistence.UnitOfWork
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        public List<IdentityRole> GetAllRolesIncludeUsers()
+        {
+            return (_context as ApplicationDbContext).Roles.Include(role => role.Users).ToList();
         }
     }
 }
