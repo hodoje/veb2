@@ -6,7 +6,7 @@ export class User{
     birthday: Date;
     address: string;
     email: string;
-    registrationStatus: RegistrationStatus;
+    registrationStatus: string;
     userType: UserType;
     documentImage: File;
     banned: boolean;

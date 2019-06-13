@@ -15,6 +15,11 @@ import { ImageHttpService } from 'src/app/services/image-http.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  RegistrationStatuses = {
+    Processing: "Processing",
+    Rejected: "Rejected",
+    Accepted: "Accepted"
+  };
   myData: User;
   uploadedFile: File;
   registrationSuccessful: boolean;
@@ -23,6 +28,7 @@ export class ProfileComponent implements OnInit {
   imageToShow: any;
   isImageLoaded: boolean;
   fileLabelText = "Choose file";
+  userRegistrationStatus: string;
 
   //#region Forms
   personalDataForm = new FormGroup({
@@ -139,6 +145,7 @@ export class ProfileComponent implements OnInit {
           birthday: this.myData.birthday,
           userType: this.currentUserType
         });
+        this.userRegistrationStatus = data.registrationStatus;
         this.personalDataForm.markAsPristine();
         this.getUserImage();
       },

@@ -578,7 +578,7 @@ namespace WebApp.Controllers
                 {
                     int tries = 6;
                     var body = new StringBuilder();
-                    body.Append("<html><head><body><a href=\"http://localhost:4200/confirmRegistration\">Confirm registration</a></body></head></html>");
+                    body.Append("<html><head><body><h1>You're registration was successful.</h1><br/><h2>If you're logged in, please log out and log in again. :)</h2></body></head></html>");
                     while (!emailSender.SendMail("Registration confirmation", body.ToString(), user.Email))
                     {
                         tries--;

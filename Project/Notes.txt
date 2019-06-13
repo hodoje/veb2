@@ -12,14 +12,11 @@ Kod uredjivanja reda voznje:
 
 TODO:
 	-User registration status ... css missing
-	-(hodoje)Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token. Treba ConfirmRegistrationComponent.
 	-(hodoje)Izlistavanje svih cenovnika
-	-Manipulacija nad stanicama
+	-(hodoje)Manipulacija nad stanicama
 	-Manipulacija nad linijama
 	-Line Grid
 	-Vehicles Map
-	
-
-old password != newpassword
+	-dodati guardove svuda gde treba
 
 srediti atribute na back-u

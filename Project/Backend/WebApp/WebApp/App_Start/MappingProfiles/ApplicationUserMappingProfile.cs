@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using WebApp.Models;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Enumerations;
 
 namespace WebApp.App_Start.MappingProfiles
 {
@@ -24,7 +25,7 @@ namespace WebApp.App_Start.MappingProfiles
                 .ForMember(destination => destination.Address,
                 opts => opts.MapFrom(source => source.Address))
                 .ForMember(destination => destination.RegistrationStatus,
-                opts => opts.MapFrom(source => source.RegistrationStatus))
+                opts => opts.MapFrom(source => (source.RegistrationStatus).ToString()))
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,
@@ -43,7 +44,7 @@ namespace WebApp.App_Start.MappingProfiles
                 .ForMember(destination => destination.Address,
                 opts => opts.MapFrom(source => source.Address))
                 .ForMember(destination => destination.RegistrationStatus,
-                opts => opts.MapFrom(source => source.RegistrationStatus))
+                opts => opts.MapFrom(source => Enum.Parse(typeof(RegistrationStatus), source.RegistrationStatus)))
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,

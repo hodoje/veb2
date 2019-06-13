@@ -18,7 +18,7 @@ namespace WebApp.Models.DomainModels
         [JsonProperty("address")]
         public string Address { get; set; }
         [JsonProperty("registrationStatus")]
-        public RegistrationStatus RegistrationStatus { get; set; }
+        public string RegistrationStatus { get; set; }
         [JsonProperty("documentImage")]
         public string DocumentImage { get; set; }
         [JsonProperty("userType")]
