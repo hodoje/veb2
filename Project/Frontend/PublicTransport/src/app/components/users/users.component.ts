@@ -15,6 +15,7 @@ import { forkJoin } from 'rxjs';
 export class UsersComponent implements OnInit, OnDestroy {
 
   unregisteredUsers: User[];
+  registeredUsers: User[];
   isConnected: Boolean;
   subscriptions: Subscription[] = [];
 
@@ -33,14 +34,22 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.subscribeForAddNewUser();
     this.subscribeForUserConfirmation();
     this.subscribeForUserDeclined();
+    this.subscribeForUserBanned();
+    this.subscribeForUserUnban();
 
     this.userHttpService.getAllUnConfirmedUsers().subscribe(users => {
       this.unregisteredUsers = users;
     });
 
+    this.userHttpService.getAllRegisteredUsers().subscribe(users => {
+      this.registeredUsers = users;
+    })
+
     this.userConfirmationService.registerForNewUsers();
     this.userConfirmationService.registerForUserConfirmation();
     this.userConfirmationService.registerForUserDeclining();
+    this.userConfirmationService.registerForUserBan();
+    this.userConfirmationService.registerForUserUnban();
   }
 
   private checkConnection() {
@@ -59,6 +68,14 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.userConfirmationService.userDeclinedNotification.subscribe(e => this.declineUser(e)));
   }
 
+  private subscribeForUserBanned() {
+    this.subscriptions.push(this.userConfirmationService.userBannedNotification.subscribe(e => this.banUser(e)));
+  }
+
+  private subscribeForUserUnban() {
+    this.subscriptions.push(this.userConfirmationService.userUnbanNotification.subscribe(e => this.unbanUser(e)));
+  }
+
   private declineUser(email: string) {
     this.ngZone.run(() => {
       let confirmedUser = this.unregisteredUsers.find(user => user.email === email);
@@ -72,13 +89,50 @@ export class UsersComponent implements OnInit, OnDestroy {
       let confirmedUser = this.unregisteredUsers.find(user => user.email === email);
       // TODO ANIMACIJA ?
       this.unregisteredUsers = this.unregisteredUsers.filter(user => user.email !== email);
+      this.registeredUsers.push(confirmedUser);
     });
   }
 
   private addUser(user: any) {
     this.ngZone.run(() => {
-      console.log("EVENT NEW USER");
+      // TODO ANIMACIJA ?
       this.unregisteredUsers.push(user);
     }); 
+  }
+
+  private banUser(email: string) {
+    this.ngZone.run(() => {
+      let bannedUser = this.registeredUsers.find(user => user.email === email);
+      bannedUser.banned = true;
+    });
+  }
+
+  private unbanUser(email: string) {
+    this.ngZone.run(() => {
+      let unbannedUser = this.registeredUsers.find(user => user.email === email);
+      unbannedUser.banned = false;
+    });
+  }
+
+  onAccept(email: string) {
+    this.userHttpService.confirmUser(email).subscribe(
+      (yay) => console.log("confirmed"),
+      (error) => console.log("error")
+    );
+  }
+
+  onDecline(email: string) {
+    this.userHttpService.declineUser(email).subscribe(
+      (naaay) => console.log("declined"),
+      (error) => console.log("error")
+    );
+  }
+
+  onBan(email: string) {
+    this.userHttpService.banUser(email).subscribe();
+  }
+
+  onUnban(email: string) {
+    this.userHttpService.unbanUser(email).subscribe();
   }
 }
