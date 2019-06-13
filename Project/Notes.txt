@@ -11,7 +11,6 @@ Kod uredjivanja reda voznje:
 	- Brisanje: iz dropdowna se selektovano vreme obrise
 
 TODO:
-	-(hodoje)Bug where: Unconfirmed users can buy tickets.
 	-(hodoje)Registrovani korisnik ( ali jos ne prihvacen ) nece dobiti token. Treba ConfirmRegistrationComponent.
 	-(hodoje)Izlistavanje svih cenovnika
 	-Manipulacija nad stanicama
