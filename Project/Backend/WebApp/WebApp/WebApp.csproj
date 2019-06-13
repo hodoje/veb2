@@ -265,6 +265,7 @@
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\ITransporationLineComponent.cs" />
     <Compile Include="BusinessComponents\NotificationHub\SimulatorHub.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\SimulatorComponents\CurrentPosition.cs" />
     <Compile Include="BusinessComponents\NotificationHub\VehicleModel.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />

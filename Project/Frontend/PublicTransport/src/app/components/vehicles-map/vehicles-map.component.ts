@@ -43,7 +43,7 @@ export class VehiclesMapComponent implements OnInit, OnDestroy {
 
   moveVehicles(newMarkers: MarkerInfo[]) {
     this.ngZone.run(() => {
-      
+      this.currentPositions = newMarkers;
     });
   }
 }
