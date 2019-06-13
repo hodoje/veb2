@@ -17,6 +17,7 @@ using WebApp.Models;
 using WebApp.Models.DomainModels;
 using WebApp.Models.DomainModels.Benefits;
 using WebApp.Models.Dtos;
+using WebApp.Models.Enumerations;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
@@ -72,8 +73,9 @@ namespace WebApp.Controllers.DomainControllers
                 ApplicationUser user = await UserManager.FindByNameAsync(userName);
 
                 double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
+                bool userConfirmed = user != null && user.RegistrationStatus == RegistrationStatus.Accepted;
 
-                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient, user != null);
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient, userConfirmed);
 
                 return Ok(tickets);
             }
