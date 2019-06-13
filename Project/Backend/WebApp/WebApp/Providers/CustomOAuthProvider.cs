@@ -31,11 +31,11 @@ namespace WebApp.Providers
                 return;
             }
 
-            if (!user.IsSuccessfullyRegistered)
-            {
-                context.SetError("invalid_grant", "AppUser did not confirm email!");
-                return;
-            }
+            //if (!user.IsSuccessfullyRegistered)
+            //{
+            //    context.SetError("invalid_grant", "AppUser did not confirm email!");
+            //    return;
+            //}
 
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
           
