@@ -340,6 +340,10 @@
     <Compile Include="Migrations\201906121809468_TimeStampAddedToModels.Designer.cs">
       <DependentUpon>201906121809468_TimeStampAddedToModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.cs" />
+    <Compile Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.Designer.cs">
+      <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -365,6 +369,7 @@
     <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
     <Compile Include="Models\Dtos\UserTypeDto.cs" />
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
+    <Compile Include="Models\Enumerations\RegistrationStatus.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransportationLineRouteRepository.cs" />
@@ -543,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906121809468_TimeStampAddedToModels.resx">
       <DependentUpon>201906121809468_TimeStampAddedToModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906130914516_ApplicationUser-ProfileProgressionUpdate.resx">
+      <DependentUpon>201906130914516_ApplicationUser-ProfileProgressionUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
