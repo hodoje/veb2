@@ -53,7 +53,14 @@ namespace WebApp.BusinessComponents.NotificationHub
 
         public void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            // SIMULATE
+            List<VehicleModel> currentVehicleState;
+            foreach (var vehicle in vehicles)
+            {
+                vehicle.GetNextStop();
+            }
+            currentVehicleState = new List<VehicleModel>(vehicles);
+
+            // TODO SEND TO ALL LISTNEERES
         }
     }
 }

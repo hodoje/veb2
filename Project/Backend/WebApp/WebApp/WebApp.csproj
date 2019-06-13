@@ -264,6 +264,8 @@
     <Compile Include="BusinessComponents\IEmailSender.cs" />
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\ITransporationLineComponent.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\SimulatorHub.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\VehicleModel.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\NotificationHub\UserProfileConfirmationHub.cs" />
