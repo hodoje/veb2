@@ -91,7 +91,7 @@ namespace WebApp.BusinessComponents
             }
         }
 
-        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userExists)
+        public IEnumerable<TicketTypePricelistDto> ListTicketPricesForUser(IUnitOfWork unitOfWork, double discountCoefficient, bool userConfirmed)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace WebApp.BusinessComponents
 
                 List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
 
-                if (userExists)
+                if (userConfirmed)
                 {
                     pltts.ForEach(pltt =>
                     {
