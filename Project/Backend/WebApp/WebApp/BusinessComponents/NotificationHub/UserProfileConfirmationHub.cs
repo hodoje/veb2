@@ -20,6 +20,15 @@ namespace WebApp.BusinessComponents.NotificationHubs
 
         private static object lockObject = new object();
 
+        /// <summary>
+        ///  Type parameters:
+        //   Key:
+        //     Unregistered User email.
+        //
+        //   Value:
+        //     Context.Connection.Id
+        /// </summary>
+        private static Dictionary<string, string> UnregisteredUsers = new Dictionary<string, string>();
 
         /// <summary>
         /// Used to notify all connected admins that there is a new user for confirmation.
@@ -63,6 +72,11 @@ namespace WebApp.BusinessComponents.NotificationHubs
                 lock (lockObject)
                 {
                     hubContext.Clients.Group("Admins").confirmUser(userEmail);
+                    if (UnregisteredUsers.TryGetValue(userEmail, out string connectionId))
+                    {
+                        hubContext.Clients.Client(connectionId).confirmUser(userEmail);
+                        UnregisteredUsers.Remove(userEmail);
+                    }                    
                 }
 
                 return true;
@@ -80,6 +94,11 @@ namespace WebApp.BusinessComponents.NotificationHubs
                 lock (lockObject)
                 {
                     hubContext.Clients.Group("Admins").declineUser(userEmail);
+                    if (UnregisteredUsers.TryGetValue(userEmail, out string connectionId))
+                    {
+                        hubContext.Clients.Client(connectionId).declineUser(userEmail);
+                        UnregisteredUsers.Remove(userEmail);
+                    }
                 }
 
                 return true;
@@ -88,6 +107,14 @@ namespace WebApp.BusinessComponents.NotificationHubs
             {
                 return false;
             }
+        }
+
+        public void AwaitRegistration()
+        {
+            if (!UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
+            {
+                UnregisteredUsers.Add(Context.User.Identity.Name, Context.ConnectionId);
+            }            
         }
 
         public override Task OnConnected()
@@ -105,6 +132,10 @@ namespace WebApp.BusinessComponents.NotificationHubs
             if (Context.User.IsInRole("Admin"))
             {
                 Groups.Remove(Context.ConnectionId, "Admins");
+            }
+            if(UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
+            {
+                UnregisteredUsers.Remove(Context.User.Identity.Name);
             }
 
             return base.OnDisconnected(stopCalled);

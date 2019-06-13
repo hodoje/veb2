@@ -291,9 +291,10 @@ namespace WebApp.Migrations
             bool sendTransaction = false;
             Dictionary<string, double> roleBenefits = new Dictionary<string, double>(3)
             {
-                {"Student", 0.8 },
+                {"Regular", 1 },
                 {"Retiree", 0.85 },
-                {"Regular", 1 }
+                {"Student", 0.8 }                
+
             };
 
             foreach (var roleBenefit in roleBenefits)
