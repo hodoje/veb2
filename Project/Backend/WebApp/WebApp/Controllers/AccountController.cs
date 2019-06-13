@@ -27,6 +27,7 @@ using System.Threading;
 using System.Data.Entity;
 using WebApp.BusinessComponents;
 using System.Text;
+using WebApp.Models.Enumerations;
 
 namespace WebApp.Controllers
 {
@@ -541,9 +542,8 @@ namespace WebApp.Controllers
                     Birthday = model.Birthday,
                     Address = model.Address,
                     UserTypeId = requestedUserType.Id,
-                    IsSuccessfullyRegistered = false,
+                    RegistrationStatus = RegistrationStatus.Processing,
                     DocumentImage = (String.IsNullOrWhiteSpace(documentImageFileName)) ? null : documentImageFileName,
-                    ProfileInProcessing = true
                 };
 
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
@@ -599,7 +599,7 @@ namespace WebApp.Controllers
         public IHttpActionResult PendingUsers()
         {
             List<ApplicationUser> users = UserManager.Users.Include(x => x.UserType)
-                .Where(user => user.IsSuccessfullyRegistered == false && user.ProfileInProcessing == true).ToList();
+                .Where(user => user.RegistrationStatus == RegistrationStatus.Processing).ToList();
             List<ApplicationUserDto> userDtos = new List<ApplicationUserDto>(users.Count);
 
             foreach (var user in users)
@@ -624,9 +624,9 @@ namespace WebApp.Controllers
             ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
             try
             {
-                if (user.IsSuccessfullyRegistered == false && user.ProfileInProcessing == true)
+                if (user.RegistrationStatus == RegistrationStatus.Processing)
                 {
-                    user.IsSuccessfullyRegistered = true;
+                    user.RegistrationStatus = RegistrationStatus.Accepted;
 
                     IdentityResult result = await UserManager.UpdateAsync(user);
 
@@ -664,9 +664,9 @@ namespace WebApp.Controllers
             ApplicationUser user = UserManager.FindByName(registerConfirmation?.Email);
             try
             {
-                if (user.IsSuccessfullyRegistered == false)
+                if (user.RegistrationStatus == RegistrationStatus.Processing)
                 {
-                    user.ProfileInProcessing = false;
+                    user.RegistrationStatus = RegistrationStatus.Rejected;
 
                     IdentityResult result = await UserManager.UpdateAsync(user);
 

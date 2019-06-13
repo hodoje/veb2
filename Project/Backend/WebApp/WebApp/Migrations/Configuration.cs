@@ -12,7 +12,8 @@ namespace WebApp.Migrations
 	using System.Linq;
 	using System.Text;
 	using WebApp.Models;
-	using WebApp.Persistence;
+    using WebApp.Models.Enumerations;
+    using WebApp.Persistence;
 
 	internal sealed class Configuration : DbMigrationsConfiguration<WebApp.Persistence.ApplicationDbContext>
     {
@@ -233,8 +234,7 @@ namespace WebApp.Migrations
                     LastName = "ziz",
                     Birthday = DateTime.Now,
                     Address = "zizova gajba",
-                    IsSuccessfullyRegistered = true,
-                    ProfileInProcessing = false
+                    RegistrationStatus = RegistrationStatus.Accepted
                 };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Admin");

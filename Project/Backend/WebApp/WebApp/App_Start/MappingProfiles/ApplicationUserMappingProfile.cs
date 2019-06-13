@@ -23,8 +23,8 @@ namespace WebApp.App_Start.MappingProfiles
                 opts => opts.MapFrom(source => source.Birthday))
                 .ForMember(destination => destination.Address,
                 opts => opts.MapFrom(source => source.Address))
-                .ForMember(destination => destination.IsSuccessfullyRegistered,
-                opts => opts.MapFrom(source => source.IsSuccessfullyRegistered))
+                .ForMember(destination => destination.RegistrationStatus,
+                opts => opts.MapFrom(source => source.RegistrationStatus))
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,
@@ -40,8 +40,8 @@ namespace WebApp.App_Start.MappingProfiles
                 opts => opts.MapFrom(source => source.Birthday))
                 .ForMember(destination => destination.Address,
                 opts => opts.MapFrom(source => source.Address))
-                .ForMember(destination => destination.IsSuccessfullyRegistered,
-                opts => opts.MapFrom(source => source.IsSuccessfullyRegistered))
+                .ForMember(destination => destination.RegistrationStatus,
+                opts => opts.MapFrom(source => source.RegistrationStatus))
                 .ForMember(destination => destination.DocumentImage,
                 opts => opts.MapFrom(source => source.DocumentImage))
                 .ForMember(destination => destination.UserType,

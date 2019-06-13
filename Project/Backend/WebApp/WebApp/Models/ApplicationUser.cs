@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WebApp.Models.DomainModels;
 using WebApp.Models.DomainModels.Benefits;
+using WebApp.Models.Enumerations;
 
 namespace WebApp.Models
 {
@@ -30,8 +31,7 @@ namespace WebApp.Models
 		[Required]
 		[StringLength(60, MinimumLength = 2)]
 		public string Address { get; set; }
-        public bool IsSuccessfullyRegistered { get; set; }
-        public bool ProfileInProcessing { get; set; }
+        public RegistrationStatus RegistrationStatus { get; set; }
         public string DocumentImage { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
 		public int? UserTypeId { get; set; }

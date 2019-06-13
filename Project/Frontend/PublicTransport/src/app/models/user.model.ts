@@ -6,8 +6,7 @@ export class User{
     birthday: Date;
     address: string;
     email: string;
-    isSuccessfullyRegistered: boolean;
-    profileInProcessing: boolean;
+    registrationStatus: RegistrationStatus;
     userType: UserType;
     documentImage: File;
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using WebApp.Models.Dtos;
+using WebApp.Models.Enumerations;
 
 namespace WebApp.Models.DomainModels
 {
@@ -16,8 +17,8 @@ namespace WebApp.Models.DomainModels
         public DateTime Birthday { get; set; }
         [JsonProperty("address")]
         public string Address { get; set; }
-        [JsonProperty("isSuccessfullyRegistered")]
-        public bool IsSuccessfullyRegistered { get; set; }
+        [JsonProperty("registrationStatus")]
+        public RegistrationStatus RegistrationStatus { get; set; }
         [JsonProperty("documentImage")]
         public string DocumentImage { get; set; }
         [JsonProperty("userType")]
