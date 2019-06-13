@@ -44,6 +44,11 @@ namespace WebApp.Persistence.UnitOfWork
         public ITransportationLineRouteRepository TransportationLineRouteRepository { get; set; }
 
 
+        public List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> GetAllRoles()
+        {
+            return (_context as ApplicationDbContext).Roles.ToList();
+        }
+
         public int Complete()
         {
             return _context.SaveChanges();

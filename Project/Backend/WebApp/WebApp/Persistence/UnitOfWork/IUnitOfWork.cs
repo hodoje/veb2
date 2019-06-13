@@ -23,6 +23,8 @@ namespace WebApp.Persistence.UnitOfWork
 		ITransportationLineTypeRepository TransportationLineTypeRepository { get; }
         ITransportationLineRouteRepository TransportationLineRouteRepository { get; }
 
+        List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> GetAllRolesIncludeUsers();
+
         int Complete();
     }
 }
