@@ -47,6 +47,7 @@ import { UserConfirmationService } from './services/user-confirmation.service';
 import { UserHttpService } from './services/user-http.service';
 import { UserComponent } from './components/user/user.component';
 import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
+import { SimulationService } from './services/simulator.service';
 
 @NgModule({
   declarations:[
@@ -101,7 +102,8 @@ import { EmailExistsValidatorDirective } from './common/directives/email-exists-
     PricelistHttpService,
     ImageHttpService,
     UserConfirmationService,
-    UserHttpService
+    UserHttpService,
+    SimulationService
   ],
   bootstrap: [AppComponent]
 })

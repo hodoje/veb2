@@ -37,6 +37,7 @@ export class LinesGridComponent implements OnInit {
     let tempPolyline = this.shownRoutes.find(route => route.lineNumber === lineNumber);
     if (tempPolyline) {
       this.shownRoutes = this.shownRoutes.filter(route => route.lineNumber !== lineNumber);
+      
       this.colors.push(tempPolyline.color);
     }
     else {

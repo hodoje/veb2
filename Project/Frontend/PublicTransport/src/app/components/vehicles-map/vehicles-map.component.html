@@ -1,3 +1,22 @@
-<p>
-  vehicles-map works!
-</p>
+<div class="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="page-header" style="text-align: center">
+                    <h2>Bus positions</h2>
+                </div>
+                <hr/>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row" style="align-items: center">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14">
+                </agm-map>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>
