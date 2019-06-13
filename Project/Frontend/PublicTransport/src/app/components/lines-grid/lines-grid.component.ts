@@ -19,6 +19,9 @@ export class LinesGridComponent implements OnInit {
 
   shownRoutes: Polyline[] = [];
 
+  colors: string[] = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF', '#C0C0C0', '#808080', '#800000', '#808000', '	#008000', '#800080', '#008080', '#000080',
+                      '#FF4500', '#F0E68C', '	#00CED1'];
+
   constructor(private transportationLineHttp: TransportationLinesHttpService) { }
 
   ngOnInit() {
@@ -31,36 +34,32 @@ export class LinesGridComponent implements OnInit {
   }
 
   onLineBtnClick(lineNumber: number) {
-    if (this.shownRoutes.find(route => route.lineNumber === lineNumber)) {
-      // delete polyline
-
+    let tempPolyline = this.shownRoutes.find(route => route.lineNumber === lineNumber);
+    if (tempPolyline) {
       this.shownRoutes = this.shownRoutes.filter(route => route.lineNumber !== lineNumber);
-      console.log("DELETE: " + lineNumber);
+      this.colors.push(tempPolyline.color);
     }
     else {
       this.transportationLineHttp.getTransporationLinePlan(lineNumber).subscribe(
         (plan) => this.addPlanToMap(plan)
       );
-      
-      this.shownRoutes.push(new Polyline(null, 'red', 'any', lineNumber));
-      console.log("ADD: " + lineNumber);
     }
   }
 
   addPlanToMap(plan: TransporationLinePlan){
-    this.shownRoutes.push(this.createPolyline(plan));
+    let color = this.colors.length > 1 ? this.colors.pop() : this.colors[0];
+
+    this.shownRoutes.push(this.createPolyline(plan, color));
   }
 
-  createPolyline(plan: TransporationLinePlan): Polyline {
+  createPolyline(plan: TransporationLinePlan, color: string): Polyline {
     let geoLocations: GeoLocation[] = [];
 
     plan.routes.forEach(route => {
         geoLocations.push(new GeoLocation(route.station.latitude, route.station.longitude));
     });
 
-    console.log(geoLocations);
-
-    return new Polyline(geoLocations, 'red', '', plan.lineNumber);
+    return new Polyline(geoLocations, color, '', plan.lineNumber);
   }
 
   placeMarker($event){

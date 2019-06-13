@@ -1,7 +1,7 @@
 <script>
     // Add active class to the current button (highlight it)
     var header = document.getElementById("myDIV");
-    var btns = header.getElementsByClassName("btn");
+    var btns = header.getElementsByClassName("button");
     for (var i = 0; i < btns.length; i++) {
         btns[i].addEventListener("click", function() {
         var current = document.getElementsByClassName("active");
@@ -9,7 +9,7 @@
         this.className += " active";
         });
     }
-        </script>
+</script>
 <div class="wrapper">
     <div class="container-fluid">
         <div class="row">
@@ -25,13 +25,15 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <table class="table table-borderless">
-                    <td>
-                        <tr>
-                            <button #but=ngModel ngModel class="button button1" *ngFor="let lineNumber of lineNumbers" (click)="onLineBtnClick(lineNumber, but)">{{lineNumber}}</button>
-                        </tr>
-                    </td>
-                </table>
+                <div>
+                    <table class="table table-borderless">
+                        <td>
+                            <tr>
+                                <button class="button button1" *ngFor="let lineNumber of lineNumbers" (click)="onLineBtnClick(lineNumber)">{{lineNumber}}</button>
+                            </tr>
+                        </td>
+                    </table>
+                </div>
             </div>
             <div class="col-md-3"></div>
         </div>
