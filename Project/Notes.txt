@@ -21,3 +21,5 @@ TODO:
 	-dodati guardove svuda gde treba
 
 srediti atribute na back-u
+
+[PriceList]

@@ -91,6 +91,10 @@ export class UserConfirmationService {
         });
     }
 
+    public AwaitRegistration(){
+        this.proxy.invoke("AwaitRegistration");
+    }
+    
     public registerForUserBan(): void {
         let eventName = 'banUser';
         this.events.push(eventName);

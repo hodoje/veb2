@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col col-md-4">
-        <div class="main-content account-overlay">
+        <div class="main-content" [ngClass]="{'account-overlay': !isRegistrationCompleted}">
           <div class="page-header">
             <h2>Personal Data</h2>
           </div>
@@ -51,7 +51,7 @@
             <div class="form-group">
               <label for="requestedUserType">User type</label>
               <select formControlName="userType" name="requestedUserType" class="form-control form-control-sm">
-                <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType.name }}</option>
+                <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType?.name }}</option>
               </select>
               <div class="alert alert-danger" *ngIf="pdForm.userType?.touched && !pdForm.userType.valid">
                 <div *ngIf="pdForm.userType.errors.required">User type is required.</div>
@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="col col-md-4">
-        <div [ngClass]="{'account-overlay': myData.userType.name === 'Regular'}" class="main-content">
+        <div [ngClass]="{'account-overlay': myData.userType?.name === 'Regular' || !isRegistrationCompleted}" class="main-content">
           <div class="page-header">
             <h2>Document</h2>
           </div>
@@ -82,14 +82,25 @@
           </form>
         </div>
         <br/>
-        <div *ngIf="userRegistrationStatus === RegistrationStatuses.Processing" class="alert alert-warning">
+        <div *ngIf="myData.registrationStatus === RegistrationStatuses.Processing" class="alert alert-warning">
           <h3>You're account is awaiting verification.</h3>
           <h4>Only basic functionalities are available.</h4>
-          <p *ngIf="myData.userType.name !== 'Regular'">If you're a student or a retiree, please upload an image of your document.</p>
+          <p *ngIf="myData.userType?.name !== 'Regular'">If you're a student or a retiree, please upload an image of your document.</p>
+        </div>
+        <div *ngIf="isRegistrationCompleted && userRegistrationStatus === RegistrationStatuses.Rejected" class="alert alert-danger">
+          <h3>You're account has been rejected.</h3>
+          <h4>You will be logged out automatically in {{logoutCounter}} seconds.</h4>
+          <button class="btn btn-primary" (click)="logoutUserAfterRegistration()">Logout</button>
+        </div>
+        <div *ngIf="isRegistrationCompleted && userRegistrationStatus === RegistrationStatuses.Accepted" class="alert alert-success">
+          <h3>You're account has been successfully verified.</h3>
+          <h4>Please log out and log in again so changes could apply.</h4>
+          <h4>You will be logged out automatically in {{logoutCounter}} seconds.</h4>
+          <button class="btn btn-primary" (click)="logoutUserAfterRegistration()">Logout</button>
         </div>
       </div>
       <div class="col col-md-4">
-        <div class="main-content account-overlay">
+        <div class="main-content" [ngClass]="{'account-overlay': !isRegistrationCompleted}">
           <div class="page-header">
             <h2>Change Password</h2>
           </div>

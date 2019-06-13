@@ -44,12 +44,6 @@ namespace WebApp.Persistence.UnitOfWork
         [Dependency]
         public ITransportationLineRouteRepository TransportationLineRouteRepository { get; set; }
 
-
-        public List<IdentityRole> GetAllRoles()
-        {
-            return (_context as ApplicationDbContext).Roles.ToList();
-        }
-
         public int Complete()
         {
             return _context.SaveChanges();

@@ -187,7 +187,7 @@ namespace WebApp.Controllers
 			UserType requestedUserType = unitOfWork.UserTypeRepository.Find(ut => ut.Name == model.RequestedUserType).FirstOrDefault();
 			if(requestedUserType != null)
 			{
-				user.UserType = requestedUserType;
+				user.UserTypeId = requestedUserType.Id;
 			}
 
 			try
@@ -234,12 +234,12 @@ namespace WebApp.Controllers
 					user.DocumentImage = documentImageFileName;
 					UserManager.Update(user);
 
-					return Ok();
+					return Ok(true);
 				}
 				else
 				{
-					return BadRequest();
-				}
+					return Ok(false);
+                }
 			}
 			catch (Exception ex)
 			{

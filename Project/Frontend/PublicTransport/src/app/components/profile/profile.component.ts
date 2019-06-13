@@ -1,6 +1,6 @@
 import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLeastOneLowerCaseLetterValidator, checkIfContainsAtLeastOneNumberValidator, checkIfContainsAtLeastOnePunctuationMarkValidator, checkIfPasswordsEqualValidator, checkOldNewPasswordValidator } from '../../common/reactiveFormsValidators/password-validators.directive';
 import { ChangePasswordModel } from './../../models/change-password.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { UserType } from 'src/app/models/user-type.model';
 import { RegistrationHttpService } from 'src/app/services/registration-http.service';
 import { UserTypeHttpService } from 'src/app/services/user-type-http.service';
@@ -8,13 +8,16 @@ import { User } from 'src/app/models/user.model';
 import { AccountHttpService } from 'src/app/services/account-http.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ImageHttpService } from 'src/app/services/image-http.service';
+import { UserConfirmationService } from 'src/app/services/user-confirmation.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   RegistrationStatuses = {
     Processing: "Processing",
     Rejected: "Rejected",
@@ -29,6 +32,19 @@ export class ProfileComponent implements OnInit {
   isImageLoaded: boolean;
   fileLabelText = "Choose file";
   userRegistrationStatus: string;
+  isConnected: Boolean;
+  subscriptions: Subscription[] = [];
+  // Used in registration process
+  isRegistrationCompleted: Boolean;
+  registrationStatus: string;
+  logoutCounter: number;
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.length = 0;
+
+    this.userConfirmationService.disconnect();
+  }
 
   //#region Forms
   personalDataForm = new FormGroup({
@@ -109,7 +125,9 @@ export class ProfileComponent implements OnInit {
   constructor(
     private accountService: AccountHttpService, 
     private userTypeService: UserTypeHttpService,
-    private imageService: ImageHttpService) {
+    private imageService: ImageHttpService,
+    private userConfirmationService: UserConfirmationService,
+    private router: Router) {
     this.uploadedFile = null;
     this.registrationSuccessful = false;
     this.currentUserType = null;
@@ -132,6 +150,60 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  initConnectionToRegistrationService(){
+    if(this.myData.registrationStatus === this.RegistrationStatuses.Processing){
+      this.checkConnection();
+      this.userConfirmationService.resetEmitters();
+      this.subscribeForConfirmedRegistration();
+      this.subscribeForDeclinedRegistration();
+
+      this.userConfirmationService.registerForUserConfirmation();
+      this.userConfirmationService.registerForUserDeclining();
+      this.isRegistrationCompleted = false;
+    }
+  }
+
+  private checkConnection(){
+    this.userConfirmationService.startConnection().subscribe(
+      (connectionStatus) => {
+        this.isConnected = connectionStatus;
+        if(this.isConnected){
+          this.userConfirmationService.AwaitRegistration();
+        }
+      });
+  }
+
+  private subscribeForConfirmedRegistration(){
+    this.subscriptions.push(this.userConfirmationService.userConfirmedNotification.subscribe(
+      (e) => {
+        this.isRegistrationCompleted = true;
+        this.registrationStatus = this.RegistrationStatuses.Accepted;
+        console.log("confirmed user");
+        this.startLogoutTimer();
+        // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
+        // var successfulRegistrationAnimation = setInterval(() => {
+        //   this.userSuccessfullyRegistered = true;
+        //   clearInterval(successfulRegistrationAnimation);
+        // }, 3000);
+    },
+    (err) => console.log(err)));
+  }
+
+  private subscribeForDeclinedRegistration(){
+    this.subscriptions.push(this.userConfirmationService.userDeclinedNotification.subscribe((e) => {
+      this.isRegistrationCompleted = true;
+      this.registrationStatus = this.RegistrationStatuses.Rejected;
+      console.log("rejected user");
+      this.startLogoutTimer();
+      // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
+      // var successfulRegistrationAnimation = setInterval(() => {
+      //   this.userSuccessfullyRegistered = true;
+      //   clearInterval(successfulRegistrationAnimation);
+      // }, 3000);  
+    },
+    (err) => console.log(err)));
+  }
+
   getMyData(){
     this.accountService.getUserPersonalData().subscribe(
       (data: User) => {
@@ -145,12 +217,22 @@ export class ProfileComponent implements OnInit {
           birthday: this.myData.birthday,
           userType: this.currentUserType
         });
-        this.userRegistrationStatus = data.registrationStatus;
+        //this.userRegistrationStatus = data.registrationStatus;
+        if(data.registrationStatus !== this.RegistrationStatuses.Accepted){
+          this.isRegistrationCompleted = false;
+        }
+        else{
+          this.isRegistrationCompleted = true;
+        }
+        console.log(this.isRegistrationCompleted);
         this.personalDataForm.markAsPristine();
         this.getUserImage();
       },
       (err) => {
         console.log(err);
+      },
+      () => {
+        this.initConnectionToRegistrationService();
       }
     );
   }
@@ -196,6 +278,7 @@ export class ProfileComponent implements OnInit {
     personalDataFormValue.requestedUserType = this.currentUserType.name;
     this.accountService.changeUserData(personalDataFormValue).subscribe(
       (data) => {
+        this.getMyData();
         this.personalDataForm.markAsPristine();
       },
       (err) => {
@@ -209,8 +292,10 @@ export class ProfileComponent implements OnInit {
     formData.append("documentImage", this.uploadedFile);
     this.accountService.changeUserDocument(formData).subscribe(
       (data) => {
-        this.getUserImage();
-        this.documentForm.markAsPristine();
+        if(data){
+          this.getUserImage();
+          this.documentForm.markAsPristine();
+        }
       },
       (err) => {
         console.log(err);
@@ -221,12 +306,30 @@ export class ProfileComponent implements OnInit {
   changePassword(passwordFormValue: ChangePasswordModel){
     this.accountService.changePassword(passwordFormValue).subscribe(
       (confirm) => {
-        console.log(confirm);
         this.changePasswordForm.reset();
       },
       (err) => {
         console.log(err);
       }
     );
+  }
+
+  startLogoutTimer(){
+    this.logoutCounter = 30;
+    let logoutInterval = setInterval(() => {
+      if(this.logoutCounter !== 0){
+        this.logoutCounter--;
+      }
+      else{
+        this.logoutUserAfterRegistration();
+        clearInterval(logoutInterval);
+      }
+    }, 1000);
+  }
+
+  logoutUserAfterRegistration(){
+    this.accountService.logOut(() => {
+      this.router.navigate(['/login']);
+    });
   }
 }
