@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace WebApp.BusinessComponents.NotificationHubs
 {
@@ -110,7 +111,9 @@ namespace WebApp.BusinessComponents.NotificationHubs
             if (!UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
             {
                 UnregisteredUsers.Add(Context.User.Identity.Name, Context.ConnectionId);
-            }            
+            }
+        }
+
         public bool BanUser(string userEmail)
         {
             try
