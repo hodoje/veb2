@@ -26,6 +26,7 @@ using WebApp.Models.Dtos;
 using System.Threading;
 using System.Data.Entity;
 using WebApp.BusinessComponents;
+using System.Text;
 
 namespace WebApp.Controllers
 {
@@ -552,7 +553,9 @@ namespace WebApp.Controllers
                 Task t = new Task(() =>
                 {
                     int tries = 6;
-                    while (emailSender.SendMail("Registration confirmation", "<a href=\"http://localhost:4200/login\">Confirm registration</a>", user.Email))
+                    var body = new StringBuilder();
+                    body.Append("<html><head><body><a href=\"http://localhost:4200/confirmRegistration\">Confirm registration</a></body></head></html>");
+                    while (!emailSender.SendMail("Registration confirmation", body.ToString(), user.Email))
                     {
                         tries--;
                         if (tries != 0)
