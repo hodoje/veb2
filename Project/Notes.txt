@@ -16,6 +16,7 @@ TODO:
 	-Manipulacija nad linijama
 	-Line Grid
 	-Vehicles Map
+	-dodati guardove svuda gde treba
 
 srediti atribute na back-u
 
