@@ -56,12 +56,13 @@ export class UserConfirmationService {
     }
 
     public resetEmitters() {
-        this.proxy = this.connection.createHubProxy(this.proxyName);
+        this.proxy.off('newUser');
+        this.proxy.off('confirmUser');
+        this.proxy.off('declineUser');
     }
 
     public registerForNewUsers(): void {
         this.proxy.on('newUser', (data: User) => {
-            
             this.addUserNotification.emit(data);
         }); 
     }
