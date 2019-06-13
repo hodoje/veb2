@@ -79,6 +79,10 @@ export class UserConfirmationService {
         });
     }
 
+    public AwaitRegistration(){
+        this.proxy.invoke("AwaitRegistration");
+    }
+
     public closeConnection() {
         this.connection.stop();
     }
