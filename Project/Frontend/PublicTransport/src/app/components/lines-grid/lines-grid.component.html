@@ -1,3 +1,54 @@
-<p>
-  lines-grid works!
-</p>
+<script>
+    // Add active class to the current button (highlight it)
+    var header = document.getElementById("myDIV");
+    var btns = header.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        });
+    }
+        </script>
+<div class="wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="page-header" style="text-align: center">
+                    <h2>Line numbers</h2>
+                </div>
+                <hr/>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <td>
+                        <tr>
+                            <button #but=ngModel ngModel class="button button1" *ngFor="let lineNumber of lineNumbers" (click)="onLineBtnClick(lineNumber, but)">{{lineNumber}}</button>
+                        </tr>
+                    </td>
+                </table>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="row" style="align-items: center">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14" (mapClick)="placeMarker($event)">
+                    <div *ngFor="let polyline of shownRoutes">
+                            <agm-polyline [strokeColor]="polyline.color">
+                                <agm-polyline-point *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude">
+                                </agm-polyline-point>
+                            </agm-polyline>
+                        <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude"></agm-marker>
+                    </div>
+                </agm-map>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+</div>

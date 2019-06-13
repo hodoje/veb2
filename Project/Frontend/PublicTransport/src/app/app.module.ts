@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -81,7 +82,8 @@ import { EmailExistsValidatorDirective } from './common/directives/email-exists-
     FormsModule,
     ReactiveFormsModule,
     MDBBootstrapModule.forRoot(),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    AgmCoreModule.forRoot({apiKey: 'AIzaSyDnihJyw_34z5S1KZXp90pfTGAqhFszNJk'})
   ],
   providers: 
   [

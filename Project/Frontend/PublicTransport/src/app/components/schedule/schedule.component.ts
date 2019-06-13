@@ -67,7 +67,7 @@ export class ScheduleComponent implements OnInit {
 
   getTransportationLineTypesData(){
     this.transportationLineTypesService.getAll().subscribe(
-      (data: TransportationLineType[]) => {
+      (data) => {
         this.allLineTypes = data;
         this.currentLineType = this.allLineTypes[0];
       },
@@ -82,7 +82,7 @@ export class ScheduleComponent implements OnInit {
 
   getTransportationLinesData(){
     this.transportationLinesService.getAll().subscribe(
-      (data: TransportationLine[]) => {
+      (data) => {
         this.allLines = data;
         this.currentLines = this.allLines.filter(l => l.transportationLineType.name === this.currentLineType.name);
         this.currentLine = this.currentLines[0];
