@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       null,
       Validators.required
     ),
-    userType: new FormControl(
+    requestedUserType: new FormControl(
       null, 
       [Validators.required]
     )
@@ -169,7 +169,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.subscribeForDeclinedRegistration();
         }
       },
-      (error) => (error));
+      (error) => console.log(error));
   }
 
   private subscribeForConfirmedRegistration(){
@@ -178,7 +178,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (e) => {
         this.isRegistrationCompleted = true;
         this.registrationStatus = this.RegistrationStatuses.Accepted;
-        console.log("confirmed user " + e);
         this.startLogoutTimer();
         // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
         // var successfulRegistrationAnimation = setInterval(() => {
@@ -194,7 +193,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.userConfirmationService.userDeclinedNotification.subscribe((e) => {
       this.isRegistrationCompleted = true;
       this.registrationStatus = this.RegistrationStatuses.Rejected;
-      console.log("rejected user");
       this.startLogoutTimer();
       // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
       // var successfulRegistrationAnimation = setInterval(() => {
@@ -216,7 +214,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           lastname: this.myData.lastname,
           address: this.myData.address,
           birthday: this.myData.birthday,
-          userType: this.currentUserType
+          requestedUserType: this.currentUserType
         });
         //this.userRegistrationStatus = data.registrationStatus;
         if(data.registrationStatus !== this.RegistrationStatuses.Accepted){
@@ -225,7 +223,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         else{
           this.isRegistrationCompleted = true;
         }
-        console.log(this.isRegistrationCompleted);
         this.personalDataForm.markAsPristine();
         this.getUserImage();
       },
@@ -276,7 +273,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   changeData(personalDataFormValue){
-    personalDataFormValue.requestedUserType = this.currentUserType.name;
+    console.log(personalDataFormValue);
+    personalDataFormValue.requestedUserType = personalDataFormValue.requestedUserType.name;
     this.accountService.changeUserData(personalDataFormValue).subscribe(
       (data) => {
         this.getMyData();
