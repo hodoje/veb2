@@ -18,6 +18,8 @@ export class PricelistModificationComponent implements OnInit {
   monthly: number
   yearly: number
 
+  allPriceLists: Pricelist[];
+
   constructor(private pricelistService: PricelistHttpService) {
     this.activePricelist = new Pricelist();
   }
@@ -36,6 +38,13 @@ export class PricelistModificationComponent implements OnInit {
         console.log(err);
       }
     );
+
+    this.pricelistService.getAll().subscribe(
+      (data: Pricelist[]) => {
+        console.log(data);
+        this.allPriceLists = data;
+      }
+    )
   }
 
   updatePricelist(newPricelist: Pricelist, form: NgForm){

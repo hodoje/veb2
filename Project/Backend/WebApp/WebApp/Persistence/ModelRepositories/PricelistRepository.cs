@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Linq;
 using WebApp.Models.DomainModels;
 using WebApp.Persistence.ModelRepositoryInterfaces;
 using WebApp.Persistence.Repository;
@@ -18,6 +19,11 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public PricelistRepository(DbContext context) : base(context)
 		{
+		}
+
+		public override IEnumerable<Pricelist> GetAll()
+		{
+			return context.Set<Pricelist>().Include(x => x.TicketTypePricelists).ToList();
 		}
 
 		public Pricelist GetActivePricelist()

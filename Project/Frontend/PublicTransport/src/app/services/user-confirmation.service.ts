@@ -30,7 +30,7 @@ export class UserConfirmationService {
         this.connectionExists = false;
         // create a hub connection  
         this.connection = $.hubConnection("http://localhost:52296/");
-        console.log(localStorage.getItem("jwt"));
+        //console.log(localStorage.getItem("jwt"));
         this.connection.qs = { "token" : "Bearer " + localStorage.getItem("jwt") };
         // create new proxy with the given name 
         this.proxy = this.connection.createHubProxy(this.proxyName); 
@@ -62,6 +62,7 @@ export class UserConfirmationService {
 
     public resetEmitters() {
         this.events.forEach(event => this.proxy.off(event));
+        this.events = [];
     }
 
     public registerForNewUsers(): void {
@@ -82,7 +83,7 @@ export class UserConfirmationService {
         // });
 
         return Observable.create((observer) => {
-
+            
             this.proxy.on('confirmUser', (data: string) => {  
                 console.log('received time: ' + data);  
                 observer.next(data);
@@ -93,7 +94,7 @@ export class UserConfirmationService {
     public registerForUserDeclining(): void {
         let eventName = 'declineUser';
         this.events.push(eventName);
-
+        
         this.proxy.on(eventName, (data: string) => {
             this.userDeclinedNotification.emit(data);
         });

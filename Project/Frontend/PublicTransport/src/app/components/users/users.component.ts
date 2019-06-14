@@ -60,7 +60,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   private subscribeForUserConfirmation() {
-    this.subscriptions.push(    this.userConfirmationService.registerForUserConfirmation().subscribe(e => this.confirmUser(e)));
+    this.subscriptions.push(this.userConfirmationService.registerForUserConfirmation().subscribe(e => this.confirmUser(e)));
   }
 
   private subscribeForUserDeclined() {

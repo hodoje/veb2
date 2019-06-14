@@ -31,68 +31,68 @@ namespace WebApp.BusinessComponents.NotificationHub
             timer.Start();
         }
 
-		public SimulatorHub(IUnitOfWork unitOfWork, ITransporationLineComponent transporationLineComponent)
+		//public SimulatorHub(IUnitOfWork unitOfWork, ITransporationLineComponent transporationLineComponent)
+		//{
+		//	this.unitOfWork = unitOfWork;
+		//	this.transporationLineComponent = transporationLineComponent;
+		//}
+
+		//public void CreateEvent()
+		//{
+		//    lock (lockObject)
+		//    {
+		//        if (!eventSet)
+		//        {
+		//            timer.Elapsed += OnTimedEvent;
+		//            eventSet = true;
+		//        }
+		//    }
+		//}
+
+		public override Task OnConnected()
 		{
-			this.unitOfWork = unitOfWork;
-			this.transporationLineComponent = transporationLineComponent;
+			Groups.Add(Context.ConnectionId, "Listeners");
+
+			return base.OnConnected();
 		}
 
-        public void CreateEvent()
-        {
-            lock (lockObject)
-            {
-                if (!eventSet)
-                {
-                    timer.Elapsed += OnTimedEvent;
-                    eventSet = true;
-                }
-            }
-        }
+		public override Task OnDisconnected(bool stopCalled)
+		{
+			Groups.Remove(Context.ConnectionId, "Listeners");
 
-        public override Task OnConnected()
-        {
-            Groups.Add(Context.ConnectionId, "Listeners");
-
-            return base.OnConnected();
-        }
-
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            Groups.Remove(Context.ConnectionId, "Listeners");
-
-            return base.OnDisconnected(stopCalled);
-        }
+			return base.OnDisconnected(stopCalled);
+		}
 
 		public void SendMessage()
 		{
-			Clients.Group("Listeners").vehicleChangePositionLOL();
+			Clients.Group("Listeners").vehicleChangePosition();
 		}
 
-        public void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-			CreateEvent();
-            List<VehicleModel> currentVehicleState = new List<VehicleModel>();
+		//      public void OnTimedEvent(object source, ElapsedEventArgs e)
+		//      {
+		//	CreateEvent();
+		//          List<VehicleModel> currentVehicleState = new List<VehicleModel>();
 
-			List<VehicleModel> vehicles = CreateNotificationModel();
+		//	List<VehicleModel> vehicles = CreateNotificationModel();
 
-			Clients.Group("Listeners").vehicleChangePosition(vehicles);
-		}
+		//	Clients.Group("Listeners").vehicleChangePosition(vehicles);
+		//}
 
-		private List<VehicleModel> CreateNotificationModel()
-		{
-			Random random = new Random();
-			List<int> existingLines = unitOfWork.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
-			List<VehicleModel> vehicles = new List<VehicleModel>(existingLines.Count);
+		//private List<VehicleModel> CreateNotificationModel()
+		//{
+		//	Random random = new Random();
+		//	List<int> existingLines = unitOfWork.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
+		//	List<VehicleModel> vehicles = new List<VehicleModel>(existingLines.Count);
 
-			foreach (var line in existingLines)
-			{
-				TransportationLinePlanDto lineDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, line);
+		//	foreach (var line in existingLines)
+		//	{
+		//		TransportationLinePlanDto lineDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, line);
 
-				Station currStation = lineDto.Routes[random.Next(1, lineDto.Routes.Count)].Station;
-				vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
-			}
+		//		Station currStation = lineDto.Routes[random.Next(1, lineDto.Routes.Count)].Station;
+		//		vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
+		//	}
 
-			return vehicles;
-		}
-    }
+		//	return vehicles;
+		//}
+	}
 }
