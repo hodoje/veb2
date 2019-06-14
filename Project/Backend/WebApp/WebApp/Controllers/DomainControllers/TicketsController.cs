@@ -162,11 +162,8 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         [Route("api/Tickets/ValidateTicket")]
-        //USE
-        //[Authorize(Roles = "Controller")]
-        //TEST
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
+		[Authorize(Roles = "Controller")]
+		[HttpPost]
         public IHttpActionResult ValidateTicket(TicketDto ticketDto)
         {
             if (!ModelState.IsValid)

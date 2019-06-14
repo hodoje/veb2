@@ -39,11 +39,6 @@ export class AccountHttpService{
 
           let role = decodedJwtData.role
 
-          console.log('jwtData: ' + jwtData)
-          console.log('decodedJwtJsonData: ' + decodedJwtJsonData)
-          console.log('decodedJwtData: ' + JSON.stringify(decodedJwtData))
-          console.log('Role ' + role)
-
           localStorage.setItem('jwt', jwt)
           localStorage.setItem('role', role);
           callback(true);
