@@ -371,6 +371,7 @@
     <Compile Include="Models\Dtos\RoutePointDto.cs" />
     <Compile Include="Models\Dtos\ScheduleDto.cs" />
     <Compile Include="Models\Dtos\StationDto.cs" />
+    <Compile Include="Models\Dtos\StationToPlanDto.cs" />
     <Compile Include="Models\Dtos\TicketDto.cs" />
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
