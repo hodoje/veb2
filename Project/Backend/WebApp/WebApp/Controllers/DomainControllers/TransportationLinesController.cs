@@ -100,10 +100,10 @@ namespace WebApp.Controllers.DomainControllers
 				List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.GetAll().Where(x => x.TransporationLine.LineNum == dto.LineNumber).ToList();
 
 				TransportationLineRoute route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
-				int id = unitOfWork.TransportationLineRepository.GetAll().Where(x => x.LineNum == dto.LineNumber);
+				TransportationLine tl = unitOfWork.TransportationLineRepository.GetAll().Where(x => x.LineNum == dto.LineNumber).FirstOrDefault();
 				if (route == null)
 				{
-					route = new TransportationLineRoute() { RoutePoint = routes.Max(x => x.RoutePoint) + 1, StationId = dto.StationId, TransporationLineId = id };
+					route = new TransportationLineRoute() { RoutePoint = routes.Max(x => x.RoutePoint) + 1, StationId = dto.StationId, TransporationLineId = tl.Id };
 					unitOfWork.TransportationLineRouteRepository.Add(route);
 					unitOfWork.Complete();
 
