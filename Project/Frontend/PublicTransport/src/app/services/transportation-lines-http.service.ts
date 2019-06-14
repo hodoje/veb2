@@ -11,4 +11,16 @@ export class TransportationLinesHttpService extends BaseHttpService<Transportati
     let params = new HttpParams().set('lineNumber', lineNumber.toString());
     return this.httpClient.get<any>(this.base_url + this.specifiedUrl + `/Plan`, {params: params});
   }
+
+  getAllTransportationLinePlans(): Observable<TransporationLinePlan[]> {
+    return this.httpClient.get<any>(this.base_url + this.specifiedUrl + "/Plans");
+  }
+
+  addStationToPlan(lineNum: number, sId: number){
+    return this.httpClient.post(this.base_url + this.specifiedUrl + '/addStationToPlan', { lineNumber: lineNum, stationId: sId});
+  }
+
+  removeStationFromPlan(lineNum: number, sId: number){
+    return this.httpClient.post(this.base_url + this.specifiedUrl + '/removeStationFromPlan', { lineNumber: lineNum, stationId: sId});
+  }
 }
