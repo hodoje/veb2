@@ -13,7 +13,7 @@ export class UserConfirmationService {
     private events: string[] = [];
 
     public connectionExists: Boolean; 
-    
+     
     public addUserNotification: EventEmitter<User>;
     public userConfirmedNotification: EventEmitter<string>;
     public userDeclinedNotification: EventEmitter<string>;
@@ -74,8 +74,8 @@ export class UserConfirmationService {
     }
 
     public registerForUserConfirmation(): Observable<string> {
-        // let eventName = 'confirmUser';
-        // this.events.push(eventName);
+        let eventName = 'confirmUser';
+        this.events.push(eventName);
 
         // this.proxy.on(eventName, (data: string) => {
         //     this.userConfirmedNotification.emit(data);
