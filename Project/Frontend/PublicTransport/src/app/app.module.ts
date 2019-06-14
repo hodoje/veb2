@@ -45,7 +45,6 @@ import { PasswordPatternValidatorDirective } from './common/directives/password-
 import { ImageHttpService } from './services/image-http.service';
 import { UserConfirmationService } from './services/user-confirmation.service';
 import { UserHttpService } from './services/user-http.service';
-import { UserComponent } from './components/user/user.component';
 import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
 import { SimulationService } from './services/simulator.service';
 import { StationHttpService } from './services/station-http.service';
@@ -74,7 +73,6 @@ import { StationHttpService } from './services/station-http.service';
     UsersComponent,
     PasswordEqualValidatorDirective,
     PasswordPatternValidatorDirective,
-    UserComponent,
     EmailExistsValidatorDirective
   ],
   imports: [

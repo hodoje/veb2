@@ -11,13 +11,46 @@
                     <table class="table table-hover">
                         <tr *ngFor="let user of unregisteredUsers">
                             <td>
-                                <app-user [userDetails]="user"></app-user>
-                                <button type="button" (click)="onDecline(user.email)" class="btn btn-danger btn-sm float-right">
-                                        Decline
-                                </button>
-                                <button type="button" (click)="onAccept(user.email)" class="btn btn-success btn-sm float-right">
-                                        Accept
-                                </button>
+                                <!--Card-->
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-header-tabs">
+                                            <button type="button" (click)="onDecline(user.email)" class="btn btn-danger btn-sm float-right">
+                                                    Decline
+                                            </button>
+                                            <button type="button" (click)="onAccept(user.email)" class="btn btn-success btn-sm float-right">
+                                                    Accept
+                                            </button>              
+                                    </div>
+                                </div>
+                                <!--Card content-->
+                                <div class="card-block">
+                                    <div class="card-body">
+                                    <!--Title-->
+                                    <h4 class="card-title">{{user.name}} {{user.lastname}}</h4>
+                                    <!--Text-->
+                                    <span class="card-text">Email: </span>
+                                    <span class="card-text">{{user.email}}</span>
+                                    <br/>
+                                    <span class="card-text">Name: </span>
+                                    <span class="card-text">{{user.name}}</span>
+                                    <br/>
+                                    <span class="card-text">Lastname: </span>
+                                    <span class="card-text">{{user.lastname}}</span>
+                                    <br/>
+                                    <span class="card-text">Address: </span>
+                                    <span class="card-text">{{user.address}}</span>
+                                    <br/>
+                                    <span class="card-text">Birthday: </span>
+                                    <span class="card-text">{{user.birthday}}</span>
+                                    <br/>
+                                    <span class="card-text">User Type: </span>
+                                    <span class="card-text">{{user.userType.name}}</span>
+                                    </div>
+                                </div>
+                                <!--/.Card content-->
+                                </div>
+                                <!--/.Card-->
                             </td>
                         </tr>
                     </table>
@@ -33,14 +66,47 @@
                     <table class="table table-hover">
                         <tr *ngFor="let user of registeredUsers">
                             <td>
-                                <app-user [userDetails]="user"></app-user>
-                                <button type="button" (click)="onBan(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
-                                    Ban
-                                </button>
-                                <button type="button" (click)="onUnban(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
-                                    Unban
-                                </button>
-                            </td>
+                                    <!--Card-->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-header-tabs">
+                                            <button type="button" (click)="onBan(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
+                                                Ban
+                                            </button>
+                                            <button type="button" (click)="onUnban(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
+                                                Unban
+                                            </button>            
+                                        </div>
+                                    </div>
+                                    <!--Card content-->
+                                    <div class="card-block">
+                                        <div class="card-body">
+                                        <!--Title-->
+                                        <h4 class="card-title">{{user.name}} {{user.lastname}}</h4>
+                                        <!--Text-->
+                                        <span class="card-text">Email: </span>
+                                        <span class="card-text">{{user.email}}</span>
+                                        <br/>
+                                        <span class="card-text">Name: </span>
+                                        <span class="card-text">{{user.name}}</span>
+                                        <br/>
+                                        <span class="card-text">Lastname: </span>
+                                        <span class="card-text">{{user.lastname}}</span>
+                                        <br/>
+                                        <span class="card-text">Address: </span>
+                                        <span class="card-text">{{user.address}}</span>
+                                        <br/>
+                                        <span class="card-text">Birthday: </span>
+                                        <span class="card-text">{{user.birthday}}</span>
+                                        <br/>
+                                        <span class="card-text">User Type: </span>
+                                        <span class="card-text">{{user.userType.name}}</span>
+                                        </div>
+                                    </div>
+                                    <!--/.Card content-->
+                                    </div>
+                                    <!--/.Card-->
+                                </td>
                         </tr>
                     </table>
                 </div>
