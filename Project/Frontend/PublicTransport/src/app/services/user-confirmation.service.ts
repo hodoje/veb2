@@ -13,7 +13,7 @@ export class UserConfirmationService {
     private events: string[] = [];
 
     public connectionExists: Boolean; 
-    
+     
     public addUserNotification: EventEmitter<User>;
     public userConfirmedNotification: EventEmitter<string>;
     public userDeclinedNotification: EventEmitter<string>;

@@ -1,3 +1,82 @@
-<p>
-  stations-modification works!
-</p>
+<div class="wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col col-md-3"></div>
+      <div class="col col-md-6">
+        <div>
+          <div class="page-header stations-header">
+            <h2>Stations</h2>
+          </div>
+          <!-- <button class="loc-btn btn btn-sm btn-primary">Get my location</button> -->
+        </div>
+        <label for="currentStation">Pick a station:</label>
+        <select name="currentStation" [(ngModel)]="currentSelectedStation" (change)="currentStationChanged()" class="form-control form-control-sm">
+          <option *ngFor="let station of stations" [ngValue]="station?.name">{{ station?.name }}</option>
+        </select>
+        <br/>
+        <form [formGroup]="stationDataForm">
+          <div>
+            <p>
+              <agm-map [latitude]="mapInfo.location.latitude" [longitude]="mapInfo.location.longitude" [zoom]="14" (mapClick)="sdFormPlaceMarker($event, stationDataForm)">
+                <agm-marker [latitude]="mapInfo.location.latitude" [longitude]="mapInfo.location.longitude">                  
+                </agm-marker>
+              </agm-map>
+            </p>
+          </div>
+          <table class="table table-sm table-hover">
+            <tbody>
+              <tr>
+                <td class="required">Station name:</td>
+                <td>
+                  <div class="form-group">
+                    <input formControlName="name" class="form-control form-control-sm">
+                    <div class="alert alert-danger" *ngIf="sdForm.name?.touched && !sdForm.name.valid">
+                      <div *ngIf="sdForm.name.errors.required">Street name is required.</div>
+                      <div *ngIf="sdForm.name.errors.minlength">Street name needs to be at least {{sdForm.name.errors.minlength.requiredLength}} characters long.</div>
+                      <div *ngIf="sdForm.name.errors.maxlength">Street name needs to be maximum of {{sdForm.name.errors.maxlength.requiredLength}} characters long.</div>
+                      <div *ngIf="sdForm.name.errors.pattern">Street name needs to contain only alphanumeric characters.</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tr>
+              <td>Longitude:</td>
+              <td>
+                <div class="form-group">
+                  <input formControlName="longitude" class="form-control form-control-sm">
+                  <div class="alert alert-danger" *ngIf="sdForm.longitude.touched && !sdForm.longitude.valid">
+                    <div *ngIf="sdForm.longitude.errors.required">Longitude is required.</div>
+                    <div *ngIf="sdForm.longitude.errors.isNotInLongitudeInterval">
+                      Longitude needs to be in [{{sdForm.longitude.errors.isNotInLongitudeInterval.minLongitude}}, {{sdFormsdForm.longitude.errors.isNotInLongitudeInterval.maxLongitude}}] interval.
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Latitude:</td>
+              <td>
+                <div class="form-group">
+                  <input formControlName="latitude" class="form-control form-control-sm">
+                  <div class="alert alert-danger" *ngIf="sdForm.latitude.touched && !sdForm.latitude.valid">
+                    <div *ngIf="sdForm.latitude.errors.required">Latitude is required.</div>
+                    <div *ngIf="sdForm.latitude.errors.isNotInLatitudeInterval">
+                        Latitude needs to be in [{{sdForm.latitude.errors.isNotInLatitudeInterval.minLatitude}}, {{sdForm.latitude.errors.isNotInLatitudeInterval.maxLatitude}}] interval.
+                      </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <p>
+            <button id="removeStationBtn" type="button" class="btn btn-primary btn-sm" (click)="removeStation()">Remove</button>
+            <button id="updateStationBtn" class="btn btn-primary btn-sm" (click)="updateStation()" [disabled]="!stationDataForm.valid" type="button">Update</button>
+            <button id="addStationBtn" type="button" class="btn btn-primary btn-sm" (click)="addStation()" [disabled]="!stationDataForm.valid">Add</button>
+          </p>          
+        </form>
+      </div>
+      <div class="col col-md-3"></div>
+    </div>
+  </div>
+</div>
