@@ -17,7 +17,7 @@
         <form [formGroup]="stationDataForm">
           <div>
             <p>
-              <agm-map [latitude]="mapInfo.location.latitude" [longitude]="mapInfo.location.longitude" [zoom]="14" (mapClick)="sdFormPlaceMarker($event, stationDataForm)">
+              <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14" (mapClick)="sdFormPlaceMarker($event, stationDataForm)">
                 <agm-marker [latitude]="mapInfo.location.latitude" [longitude]="mapInfo.location.longitude">                  
                 </agm-marker>
               </agm-map>
@@ -71,8 +71,8 @@
           </table>
           <p>
             <button id="removeStationBtn" type="button" class="btn btn-primary btn-sm" (click)="removeStation()">Remove</button>
-            <button id="updateStationBtn" class="btn btn-primary btn-sm" (click)="updateStation()" [disabled]="!stationDataForm.valid" type="button">Update</button>
-            <button id="addStationBtn" type="button" class="btn btn-primary btn-sm" (click)="addStation()" [disabled]="!stationDataForm.valid">Add</button>
+            <button id="updateStationBtn" class="btn btn-primary btn-sm" (click)="updateStation()" [disabled]="stationDataForm.touched && !stationDataForm.valid" type="button">Update</button>
+            <button id="addStationBtn" type="button" class="btn btn-primary btn-sm" (click)="addStation()" [disabled]="stationDataForm.touched && !stationDataForm.valid">Add</button>
           </p>          
         </form>
       </div>
