@@ -50,8 +50,8 @@
             </div>
             <div class="form-group">
               <label for="requestedUserType">User type</label>
-              <select formControlName="userType" name="requestedUserType" class="form-control form-control-sm">
-                <option *ngFor="let userType of userTypes" [ngValue]="userType">{{ userType?.name }}</option>
+              <select formControlName="requestedUserType" name="requestedUserType" class="form-control form-control-sm">
+                <option *ngFor="let requestedUserType of userTypes" [ngValue]="requestedUserType">{{ requestedUserType?.name }}</option>
               </select>
               <div class="alert alert-danger" *ngIf="pdForm.userType?.touched && !pdForm.userType.valid">
                 <div *ngIf="pdForm.userType.errors.required">User type is required.</div>
@@ -82,7 +82,7 @@
           </form>
         </div>
         <br/>
-        <div *ngIf="myData.registrationStatus === RegistrationStatuses.Processing" class="alert alert-warning">
+        <div *ngIf="!isRegistrationCompleted && myData.registrationStatus === RegistrationStatuses.Processing" class="alert alert-warning">
           <h3>You're account is awaiting verification.</h3>
           <h4>Only basic functionalities are available.</h4>
           <p *ngIf="myData.userType?.name !== 'Regular'">If you're a student or a retiree, please upload an image of your document.</p>

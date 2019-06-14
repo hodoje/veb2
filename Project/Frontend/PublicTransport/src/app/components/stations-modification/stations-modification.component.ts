@@ -67,7 +67,7 @@ export class StationsModificationComponent implements OnInit {
         this.mapInfo.title = this.currentStation.name;
         this.mapInfo.location.latitude = this.currentStation.latitude;
         this.mapInfo.location.longitude = this.currentStation.longitude;
-        this.stationDataForm.markAsPristine();
+        this.stationDataForm.markAsUntouched();
       },
       (err) => {
         console.log(err);
