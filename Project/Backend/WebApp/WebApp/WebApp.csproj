@@ -225,6 +225,7 @@
     <Compile Include="App_Start\MappingProfiles\DayOfTheWeekMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\PricelistMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\StationMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineTypeMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\UserTypeMappingProfile.cs" />

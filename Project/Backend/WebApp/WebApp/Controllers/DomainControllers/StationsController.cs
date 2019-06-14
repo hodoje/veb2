@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.Models.DomainModels;
+using WebApp.Models.Dtos;
 using WebApp.Persistence;
 using WebApp.Persistence.UnitOfWork;
 
@@ -17,16 +19,18 @@ namespace WebApp.Controllers.DomainControllers
     public class StationsController : ApiController
     {
 		private IUnitOfWork unitOfWork;
+		private IMapper mapper;
 
-		public StationsController(IUnitOfWork uow)
+		public StationsController(IUnitOfWork uow, IMapper imapper)
 		{
 			unitOfWork = uow;
+			mapper = imapper;
 		}
 
 		// GET: api/Stations
-		public IEnumerable<Station> GetStations()
+		public IEnumerable<StationDto> GetStations()
         {
-			return unitOfWork.StationRepository.GetAll();
+			return mapper.Map<List<Station>, List<StationDto>>(unitOfWork.StationRepository.GetAll().ToList());
         }
 
         // GET: api/Stations/5
@@ -44,18 +48,23 @@ namespace WebApp.Controllers.DomainControllers
 
         // PUT: api/Stations/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutStation(int id, Station station)
+        public IHttpActionResult PutStation(int id, StationDto stationDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != station.Id)
+            if (id != stationDto.Id)
             {
                 return BadRequest();
             }
 
+			Station station = unitOfWork.StationRepository.Get(id);
+			station.Name = stationDto.Name;
+			station.Longitude = stationDto.Longitude;
+			station.Latitude = stationDto.Latitude;
+			
             try
             {
 				unitOfWork.StationRepository.Update(station);
@@ -78,13 +87,14 @@ namespace WebApp.Controllers.DomainControllers
 
         // POST: api/Stations
         [ResponseType(typeof(Station))]
-        public IHttpActionResult PostStation(Station station)
+        public IHttpActionResult PostStation(StationDto stationDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+			Station station = mapper.Map<StationDto, Station>(stationDto);
 			unitOfWork.StationRepository.Add(station);
 			unitOfWork.Complete();
 

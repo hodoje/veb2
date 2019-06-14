@@ -108,6 +108,7 @@ namespace WebApp.App_Start
                 c.AddProfile<UserTypeMappingProfile>();
 				c.AddProfile<PricelistMappingProfile>();
                 c.AddProfile<ApplicationUserMappingProfile>();
+				c.AddProfile<StationMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
