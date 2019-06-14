@@ -329,7 +329,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   logoutUserAfterRegistration(){
     this.accountService.logOut(() => {
-      this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
+      // window.location.href = `${window.location.hostname}/login`;
+      window.location.replace('/login');
     });
   }
 }
