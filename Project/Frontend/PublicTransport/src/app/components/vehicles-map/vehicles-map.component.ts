@@ -40,10 +40,10 @@ export class VehiclesMapComponent implements OnInit, OnDestroy {
   private checkConnection() {
     this.simulatorService.startConnection().subscribe(
       (connectionStatus) =>{
-        if (connectionStatus) {
-          this.simulatorService.createEvent();
+        // if (connectionStatus) {
+        //   this.simulatorService.createEvent();
           console.log("CONNECTED");
-        }
+        // }
       }
     );
   }

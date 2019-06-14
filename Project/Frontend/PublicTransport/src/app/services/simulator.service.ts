@@ -15,10 +15,10 @@ export class SimulationService {
 
     public connectionExists: Boolean; 
     
-    public vehicleNotification: EventEmitter<MarkerInfo[]>;
+    public vehicleNotification: EventEmitter<any>;
 
     constructor() {
-        this.vehicleNotification = new EventEmitter<MarkerInfo[]>();
+        this.vehicleNotification = new EventEmitter<any>();
 
         this.connectionExists = false;
         // create a hub connection  
@@ -61,7 +61,7 @@ export class SimulationService {
         let eventName = 'vehicleChangePosition';
         this.events.push(eventName);
         
-        this.proxy.on(eventName, (data: any[]) => {
+        this.proxy.on(eventName, (data) => {
             this.vehicleNotification.emit(data);
         }); 
     }
@@ -69,7 +69,7 @@ export class SimulationService {
     public createEvent(): void {
         this.proxy.invoke('CreateEvent');
     }
-
+    
     public closeConnection() {
         this.connection.stop();
     }

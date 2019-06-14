@@ -1,8 +1,7 @@
 <div class="wrapper">
   <div class="container-fluid">
     <div class="row">
-      <div class="col col-md-4"></div>
-      <div class="col col-md-4">
+      <div class="col col-md-6">
         <div class="page-header">
           <h2>Pricelist</h2>
         </div>
@@ -51,7 +50,44 @@
           </div>
         </form>
       </div>
-      <div class="col col-md-4"></div>
+      <div class="col col-md-6">
+        <div class="page-header">
+          <h2>All pricelist</h2>
+        </div>
+        <div class="side-list">
+          <table mdbTable class="blue white-text" small="true" *ngFor="let priceList of allPriceLists">
+            <thead class="white black-text">
+              <tr>
+                <th class="th-sm">Ticket type</th>
+                <th class="th-sm">Ticket price</th>
+                <th class="th-sm">From date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr mdbTableCol>
+                <td>Hourly</td>
+                <td>{{priceList.hourly}} RSD</td>
+                <td>{{priceList.fromDate}}</td>
+              </tr>
+              <tr mdbTableCol>
+                <td>Daily</td>
+                <td>{{priceList.daily}} RSD</td>
+                <td>{{priceList.fromDate}}</td>
+              </tr>
+              <tr mdbTableCol>
+                <td>Monthly</td>
+                <td>{{priceList.monthly}} RSD</td>
+                <td>{{priceList.fromDate}}</td>
+              </tr>
+              <tr mdbTableCol>
+                <td>Yearly</td>
+                <td>{{priceList.yearly}} RSD</td>
+                <td>{{priceList.fromDate}}</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+      </div>
     </div>
   </div>
 </div>

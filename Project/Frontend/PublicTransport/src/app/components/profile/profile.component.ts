@@ -153,11 +153,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   initConnectionToRegistrationService(){
     if(this.myData.registrationStatus === this.RegistrationStatuses.Processing){
       this.checkConnection();
-      this.userConfirmationService.resetEmitters();
-      this.subscribeForConfirmedRegistration();
-      this.subscribeForDeclinedRegistration();
-
-      
       this.userConfirmationService.registerForUserDeclining();
       this.isRegistrationCompleted = false;
     }
@@ -168,12 +163,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (connectionStatus) => {
         this.isConnected = connectionStatus;
         if(this.isConnected){
+          this.userConfirmationService.resetEmitters();
           this.userConfirmationService.AwaitRegistration();
+          this.subscribeForConfirmedRegistration();
+          this.subscribeForDeclinedRegistration();
         }
-      });
+      },
+      (error) => (error));
   }
 
   private subscribeForConfirmedRegistration(){
+    // console.log("subscribe to UserConfirmationEvent(1)");
     this.subscriptions.push(this.userConfirmationService.registerForUserConfirmation().subscribe(
       (e) => {
         this.isRegistrationCompleted = true;
@@ -187,6 +187,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         // }, 3000);
     },
     (err) => console.log(err)));
+    // console.log("subscribe to UserConfirmationEvent(2)");
   }
 
   private subscribeForDeclinedRegistration(){
