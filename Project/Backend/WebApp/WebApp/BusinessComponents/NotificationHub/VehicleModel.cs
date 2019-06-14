@@ -7,19 +7,12 @@ namespace WebApp.BusinessComponents.NotificationHub
 {
     public class VehicleModel
     {
-        public VehicleModel(List<CurrentPosition> positions)
+        public VehicleModel(int lineNumber, CurrentPosition positions)
         {
-            RoutePoints = new Queue<CurrentPosition>(positions);
+			CurrentPosition = positions;
+			LineNumber = lineNumber;
         }
         public int LineNumber { get; set; }
-        public Queue<CurrentPosition> RoutePoints { get; private set; }
-
-        public CurrentPosition GetNextStop()
-        {
-            CurrentPosition nextStop = RoutePoints.Dequeue();
-            RoutePoints.Enqueue(nextStop);
-
-            return nextStop;
-        }
+        public CurrentPosition CurrentPosition { get; set; }
     }
 }

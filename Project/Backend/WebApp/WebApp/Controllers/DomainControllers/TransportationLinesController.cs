@@ -50,7 +50,7 @@ namespace WebApp.Controllers.DomainControllers
         {
             try
             {
-                TransporationLinePlanDto planDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, lineNumber);
+                TransportationLinePlanDto planDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, lineNumber);
 
                 if (planDto == null)
                 {
@@ -72,7 +72,7 @@ namespace WebApp.Controllers.DomainControllers
             try
             {
                 List<int> transporationLines = unitOfWork.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
-                List<TransporationLinePlanDto> plans = new List<TransporationLinePlanDto>(transporationLines.Count);
+                List<TransportationLinePlanDto> plans = new List<TransportationLinePlanDto>(transporationLines.Count);
 
                 foreach (int lineNumber in transporationLines)
                 {

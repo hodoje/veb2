@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApp.Models.Dtos
 {
-    public class TransporationLinePlanDto
+    public class TransportationLinePlanDto
     {
         public int LineNumber { get; set; }
         public List<RoutePointDto> Routes { get; set; }

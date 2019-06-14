@@ -157,7 +157,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.subscribeForConfirmedRegistration();
       this.subscribeForDeclinedRegistration();
 
-      this.userConfirmationService.registerForUserConfirmation();
+      
       this.userConfirmationService.registerForUserDeclining();
       this.isRegistrationCompleted = false;
     }
@@ -174,11 +174,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private subscribeForConfirmedRegistration(){
-    this.subscriptions.push(this.userConfirmationService.userConfirmedNotification.subscribe(
+    this.subscriptions.push(this.userConfirmationService.registerForUserConfirmation().subscribe(
       (e) => {
         this.isRegistrationCompleted = true;
         this.registrationStatus = this.RegistrationStatuses.Accepted;
-        console.log("confirmed user");
+        console.log("confirmed user " + e);
         this.startLogoutTimer();
         // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
         // var successfulRegistrationAnimation = setInterval(() => {

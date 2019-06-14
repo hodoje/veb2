@@ -67,18 +67,26 @@ export class UserConfirmationService {
     public registerForNewUsers(): void {
         let eventName = 'newUser';
         this.events.push(eventName);
-
+        
         this.proxy.on(eventName, (data: User) => {
             this.addUserNotification.emit(data);
         }); 
     }
 
-    public registerForUserConfirmation(): void {
-        let eventName = 'confirmUser';
-        this.events.push(eventName);
+    public registerForUserConfirmation(): Observable<string> {
+        // let eventName = 'confirmUser';
+        // this.events.push(eventName);
 
-        this.proxy.on(eventName, (data: string) => {
-            this.userConfirmedNotification.emit(data);
+        // this.proxy.on(eventName, (data: string) => {
+        //     this.userConfirmedNotification.emit(data);
+        // });
+
+        return Observable.create((observer) => {
+
+            this.proxy.on('confirmUser', (data: string) => {  
+                console.log('received time: ' + data);  
+                observer.next(data);
+            });  
         });
     }
 

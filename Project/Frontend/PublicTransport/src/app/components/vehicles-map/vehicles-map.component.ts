@@ -10,6 +10,7 @@ import { SimulationService } from 'src/app/services/simulator.service';
 })
 export class VehiclesMapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
+    this.simulatorService.resetEmitters();
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.subscriptions = [];
 
@@ -27,7 +28,6 @@ export class VehiclesMapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.checkConnection();
-    this.simulatorService.resetEmitters();
     this.subscribeForVehiclePositions();
 
     this.simulatorService.registerForVehiclePositions();
@@ -38,11 +38,21 @@ export class VehiclesMapComponent implements OnInit, OnDestroy {
   }
 
   private checkConnection() {
-    this.simulatorService.startConnection().subscribe();
+    this.simulatorService.startConnection().subscribe(
+      (connectionStatus) =>{
+        if (connectionStatus) {
+          this.simulatorService.createEvent();
+          console.log("CONNECTED");
+        }
+      }
+    );
   }
+
+
 
   moveVehicles(newMarkers: MarkerInfo[]) {
     this.ngZone.run(() => {
+      console.log(JSON.stringify(newMarkers));
       this.currentPositions = newMarkers;
     });
   }

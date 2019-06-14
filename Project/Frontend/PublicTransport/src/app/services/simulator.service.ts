@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { MarkerInfo } from '../models/map-models/marker-info.model';
 
 declare var $;
 
@@ -14,10 +15,10 @@ export class SimulationService {
 
     public connectionExists: Boolean; 
     
-    public vehicleNotification: EventEmitter<User>;
+    public vehicleNotification: EventEmitter<MarkerInfo[]>;
 
     constructor() {
-        this.vehicleNotification = new EventEmitter<User>();
+        this.vehicleNotification = new EventEmitter<MarkerInfo[]>();
 
         this.connectionExists = false;
         // create a hub connection  
@@ -59,10 +60,14 @@ export class SimulationService {
     public registerForVehiclePositions(): void {
         let eventName = 'vehicleChangePosition';
         this.events.push(eventName);
-
-        this.proxy.on(eventName, (data: User) => {
+        
+        this.proxy.on(eventName, (data: any[]) => {
             this.vehicleNotification.emit(data);
         }); 
+    }
+    
+    public createEvent(): void {
+        this.proxy.invoke('CreateEvent');
     }
 
     public closeConnection() {

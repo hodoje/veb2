@@ -7,7 +7,7 @@ namespace WebApp.BusinessComponents.NotificationHub
 {
     public class CurrentPosition
     {
-        public int Longitude { get; set; }
-        public int Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
     }
 }

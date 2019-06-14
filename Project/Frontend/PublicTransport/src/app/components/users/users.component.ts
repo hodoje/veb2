@@ -46,7 +46,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     })
 
     this.userConfirmationService.registerForNewUsers();
-    this.userConfirmationService.registerForUserConfirmation();
     this.userConfirmationService.registerForUserDeclining();
     this.userConfirmationService.registerForUserBan();
     this.userConfirmationService.registerForUserUnban();
@@ -61,7 +60,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   private subscribeForUserConfirmation() {
-    this.subscriptions.push(this.userConfirmationService.userConfirmedNotification.subscribe(e => this.confirmUser(e)));
+    this.subscriptions.push(    this.userConfirmationService.registerForUserConfirmation().subscribe(e => this.confirmUser(e)));
   }
 
   private subscribeForUserDeclined() {

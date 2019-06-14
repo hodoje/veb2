@@ -373,7 +373,7 @@
     <Compile Include="Models\Dtos\TicketDto.cs" />
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
-    <Compile Include="Models\Dtos\TransporationLinePlanDto.cs" />
+    <Compile Include="Models\Dtos\TransportationLinePlanDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
     <Compile Include="Models\Dtos\UserTypeDto.cs" />

@@ -10,7 +10,7 @@ namespace WebApp.BusinessComponents
 {
     public class TransporationLineComponent : ITransporationLineComponent
     {
-        public TransporationLinePlanDto GetTransporationLinePlan(IUnitOfWork unitOfWork, int linueNumber)
+        public TransportationLinePlanDto GetTransporationLinePlan(IUnitOfWork unitOfWork, int linueNumber)
         {
             TransportationLine transportationLine = unitOfWork.TransportationLineRepository.Find(x => x.LineNum == linueNumber).FirstOrDefault();
 
@@ -19,7 +19,7 @@ namespace WebApp.BusinessComponents
                 return null;
             }
 
-            TransporationLinePlanDto planDto = new TransporationLinePlanDto() { LineNumber = transportationLine.LineNum, Routes = new List<RoutePointDto>() };
+            TransportationLinePlanDto planDto = new TransportationLinePlanDto() { LineNumber = transportationLine.LineNum, Routes = new List<RoutePointDto>() };
 
             List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.Find(x => x.TransporationLineId == transportationLine.Id).ToList();
             routes.Sort(TransportationLineRoute.CompareByRoutePoint);
