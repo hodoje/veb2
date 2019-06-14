@@ -100,14 +100,11 @@ namespace WebApp.Controllers.DomainControllers
 				List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.GetAll().Where(x => x.TransporationLine.LineNum == dto.LineNumber).ToList();
 
 				TransportationLineRoute route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
-
+				int id = unitOfWork.TransportationLineRepository.GetAll().Where(x => x.LineNum == dto.LineNumber);
 				if (route == null)
 				{
-					route = new TransportationLineRoute() { RoutePoint = routes.Max(x => x.RoutePoint) + 1 };
-					unitOfWork.Complete();
-
-					route.StationId = dto.StationId;
-					route.TransporationLineId = dto.LineNumber;
+					route = new TransportationLineRoute() { RoutePoint = routes.Max(x => x.RoutePoint) + 1, StationId = dto.StationId, TransporationLineId = id };
+					unitOfWork.TransportationLineRouteRepository.Add(route);
 					unitOfWork.Complete();
 
 					return Ok();
@@ -118,6 +115,7 @@ namespace WebApp.Controllers.DomainControllers
 				}
 			}
 			catch (Exception e)
+
 			{
 				return InternalServerError();
 			}
