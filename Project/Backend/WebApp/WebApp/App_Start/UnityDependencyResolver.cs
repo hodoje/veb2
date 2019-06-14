@@ -112,6 +112,7 @@ namespace WebApp.App_Start
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
+
 		}
 
         public void Dispose()

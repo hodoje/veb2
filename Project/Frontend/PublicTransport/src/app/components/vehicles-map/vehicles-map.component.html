@@ -14,6 +14,8 @@
             <div class="col-md-1"></div>
             <div class="col-md-10">
                 <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14">
+                    <agm-marker *ngFor="let point of currentPositions" [latitude]="point.CurrentPosition.Latitude" [longitude]="point.CurrentPosition.Longitude"
+                                [label]="point.LineNumber.toString()"></agm-marker>
                 </agm-map>
             </div>
             <div class="col-md-1"></div>
