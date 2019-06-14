@@ -28,13 +28,53 @@ namespace WebApp.Controllers.DomainControllers
 		}
 
 		// GET: api/Pricelists
-		public IEnumerable<Pricelist> GetPricelists()
-        {
-			return unitOfWork.PricelistRepository.GetAll();
-        }
+		public IHttpActionResult GetPricelists()
+		{
+			try
+			{
+				List<Pricelist> pricelists = unitOfWork.PricelistRepository.GetAll().ToList();
+				List<PricelistDto> plDto = new List<PricelistDto>(pricelists.Count);
+				foreach (var pricelist in pricelists)
+				{
+					List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+					PricelistDto pricelistDto = new PricelistDto() { FromDate = pricelist.FromDate };
+					foreach (TicketTypePricelist pltt in pltts)
+					{
+						if (pltt.TicketType.Name == "Hourly")
+						{
+							pricelistDto.Hourly = pltt.BasePrice;
+						}
+						else if (pltt.TicketType.Name == "Daily")
+						{
+							pricelistDto.Daily = pltt.BasePrice;
+						}
+						else if (pltt.TicketType.Name == "Monthly")
+						{
+							pricelistDto.Monthly = pltt.BasePrice;
+						}
+						else if (pltt.TicketType.Name == "Yearly")
+						{
+							pricelistDto.Yearly = pltt.BasePrice;
+						}
 
-        // GET: api/Pricelists/5
-        [ResponseType(typeof(Pricelist))]
+					}
+					plDto.Add(pricelistDto);
+				}
+				if (plDto.Count > 0)
+				{
+					return Ok(plDto);
+				}
+
+				return NotFound();
+			}
+			catch (Exception e)
+			{
+				return InternalServerError();
+			}
+		}
+
+		// GET: api/Pricelists/5
+		[ResponseType(typeof(Pricelist))]
         public IHttpActionResult GetPricelist(int id)
         {
 			Pricelist pricelist = unitOfWork.PricelistRepository.Get(id);
