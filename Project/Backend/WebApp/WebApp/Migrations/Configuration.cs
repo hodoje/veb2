@@ -235,30 +235,51 @@ namespace WebApp.Migrations
 		}
 
 		private void PopulateUsers(ApplicationDbContext context)
-        {
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
+		{
+			var userStore = new UserStore<ApplicationUser>(context);
+			var userManager = new UserManager<ApplicationUser>(userStore);
 
-            if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
-            {
-                UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Regular"));
-                var user = new ApplicationUser()
-                {
-                    Id = "admin",
-                    UserName = "admin@yahoo.com",
-                    Email = "admin@yahoo.com",
-                    PasswordHash = ApplicationUser.HashPassword("Admin123!"),
-                    UserType = userType,
-                    Name = "joki",
-                    LastName = "ziz",
-                    Birthday = DateTime.Now,
-                    Address = "zizova gajba",
-                    RegistrationStatus = RegistrationStatus.Accepted
-                };
-                userManager.Create(user);
-                userManager.AddToRole(user.Id, "Admin");
-            }
-        }
+			if (!context.Users.Any(u => u.UserName == "admin@yahoo.com"))
+			{
+				UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Regular"));
+				var user = new ApplicationUser()
+				{
+					Id = "admin",
+					UserName = "admin@yahoo.com",
+					Email = "admin@yahoo.com",
+					PasswordHash = ApplicationUser.HashPassword("Admin123!"),
+					UserType = userType,
+					Name = "joki",
+					LastName = "ziz",
+					Birthday = DateTime.Now,
+					Address = "zizova gajba",
+					RegistrationStatus = RegistrationStatus.Accepted
+				};
+				userManager.Create(user);
+				userManager.AddToRole(user.Id, "Admin");
+
+			}
+			if (!context.Users.Any(u => u.UserName == "controller@yahoo.com"))
+			{
+				UserType userType = context.UserTypes.FirstOrDefault(x => x.Name.Equals("Regular"));
+				var user = new ApplicationUser()
+				{
+					Id = "controller",
+					UserName = "controller@yahoo.com",
+					Email = "controller@yahoo.com",
+					PasswordHash = ApplicationUser.HashPassword("Admin123!"),
+					UserType = userType,
+					Name = "Controller",
+					LastName = "Pera",
+					Birthday = DateTime.Now,
+					Address = "perina gajba",
+					RegistrationStatus = RegistrationStatus.Accepted
+				};
+				userManager.Create(user);
+				userManager.AddToRole(user.Id, "Controller");
+			}
+			
+		}
 
         private void PopulateAllTicketTables(ApplicationDbContext context)
         {

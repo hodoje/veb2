@@ -16,6 +16,11 @@ import { SchedulesModificationComponent } from './components/schedules-modificat
 import { PricelistModificationComponent } from './components/pricelist-modification/pricelist-modification.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UsersComponent } from './components/users/users.component';
+import { LoginGuard } from './guards/login.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { ControllerGuard } from './guards/controller.guard';
+import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
+import { LoggedInGuard } from './guards/loggedin.guard';
 
 const routes: Routes = [
   {
@@ -24,11 +29,13 @@ const routes: Routes = [
   },
   {
     path: "login",
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: "register",
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [LoggedInGuard]
   },
   {
     path: "tickets",
@@ -49,6 +56,7 @@ const routes: Routes = [
   {
     path: "passenger",
     component: PassengerComponent,
+    canActivate: [LoginGuard],
     children: [
       {
         path: "profile",
@@ -59,16 +67,22 @@ const routes: Routes = [
   {
     path: "controller",
     component: ControllerComponent,
+    canActivate: [ControllerGuard],
     children: [
       {
         path: "profile",
         component: ProfileComponent
+      },
+      {
+        path: "ticketValidation",
+        component: TicketValidationComponent
       }
     ]
   },
   {
     path: "admin",
     component: AdminComponent,
+    canActivate: [AdminGuard],
     children: [
       {
         path: "lines",
@@ -88,7 +102,7 @@ const routes: Routes = [
       },
       {
         path: "profile",
-        component: ProfileComponent
+        component: ProfileComponent,
       },
       {
         path: "users",

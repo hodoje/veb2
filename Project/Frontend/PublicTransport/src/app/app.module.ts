@@ -49,6 +49,7 @@ import { UserComponent } from './components/user/user.component';
 import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
 import { SimulationService } from './services/simulator.service';
 import { StationHttpService } from './services/station-http.service';
+import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
 
 @NgModule({
   declarations:[
@@ -75,7 +76,8 @@ import { StationHttpService } from './services/station-http.service';
     PasswordEqualValidatorDirective,
     PasswordPatternValidatorDirective,
     UserComponent,
-    EmailExistsValidatorDirective
+    EmailExistsValidatorDirective,
+    TicketValidationComponent
   ],
   imports: [
     BrowserModule,
