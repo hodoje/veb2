@@ -41,11 +41,11 @@ A user is able to buy some of the following types of tickets:
   - Monthly - bought ticket lasts until the end of the current month
   - Yearly - bought ticket lasts until the end of the current year
   
-// In this part of the text, there is a mistake, instead of *Controller* it should be **Admin**
+// In this part of the text, there is a mistake, instead of *Controller* it should be **Admin**<br/>
 User whos profile is not verified by **controller** or didn't deliver the corresponding document has no options of buying a ticket.
 
 *2.5 Process of verifying passenger profile*<br/>
-// In this part of the text, there is a mistake, instead of *Controller* it should be **Admin**
+// In this part of the text, there is a mistake, instead of *Controller* it should be **Admin**<br/>
 **Controller** has the possibility to check user data and documents and accept or reject a registration request. After accepting, user profile is activated and he can buy tickets normally.
 
 Passenger on his profile has an indicator of profile verification status (Request processing, request accepted, request rejected). Send a mail as a notification.
@@ -55,7 +55,7 @@ There is a separate page for ticket validation. Controller inputs an ID of a tic
   - For hourly ticket, based on check-in time and current time
   - For others, by defined rules
   
-*2.7 Managing lines and stations (lines grid)*
+*2.7 Managing lines and stations (lines grid)*<br/>
 Admin can manage lines that contain:
   - Line number
   - Stations
@@ -66,19 +66,19 @@ Admin can manage stations that contain:
   - Geo coordinates
   - Line numbers
   
-*2.8 Managing the schedule*
+*2.8 Managing the schedule*<br/>
 Admin can manage the schedule that contains:
   - Day of the week
   - Dispatches
   - Line number
   
-*2.9 Managing the pricelist*
+*2.9 Managing the pricelist*<br/>
 Admin can manage the pricelist
 
-**3. Implementation of the system**
+**3. Implementation of the system**<br/>
 Application should be realize as a client-server application. Server part of the application has to be realized using C# programming language (.NET WebApi). Client application has to be realized using Angular framework.
 
-**4. Grading**
+**4. Grading**<br/>
 In the following text there are some mandatory requirements that need to be implemented for each grade. Each higher grade requires implementation of all the previous requirements covered under lower grades.
   - All grades: usage of Git is mandatory (loose translation (the rest is irrelevant)).
   - 6 - CRUD operations for unregistered user (can buy only hourly ticket) which includes the admin view. Usage of css styles (bootstrap or material design).
