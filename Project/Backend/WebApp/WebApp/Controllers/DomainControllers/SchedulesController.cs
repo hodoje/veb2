@@ -77,6 +77,7 @@ namespace WebApp.Controllers.DomainControllers
             {
                 return BadRequest();
             }
+
 			Schedule schedule = new Schedule();
 			schedule.Id = scheduleDto.Id;
 			schedule.Timetable = scheduleDto.Timetable;

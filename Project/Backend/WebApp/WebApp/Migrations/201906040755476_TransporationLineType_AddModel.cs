@@ -3,14 +3,14 @@ namespace WebApp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class TransporationLineType_AddModel : DbMigration
+    public partial class TransportationLineType_AddModel : DbMigration
     {
         public override void Up()
         {
             RenameTable(name: "dbo.BenefitUserTypes", newName: "UserTypeBenefits");
             DropPrimaryKey("dbo.UserTypeBenefits");
             CreateTable(
-                "dbo.TransporationLineTypes",
+                "dbo.TransportationLineTypes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -18,21 +18,21 @@ namespace WebApp.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            AddColumn("dbo.TransportationLines", "TransporationLineTypeId", c => c.Int(nullable: false));
+            AddColumn("dbo.TransportationLines", "TransportationLineTypeId", c => c.Int(nullable: false));
             AddPrimaryKey("dbo.UserTypeBenefits", new[] { "UserType_Id", "Benefit_Id" });
-            CreateIndex("dbo.TransportationLines", "TransporationLineTypeId");
-            AddForeignKey("dbo.TransportationLines", "TransporationLineTypeId", "dbo.TransporationLineTypes", "Id", cascadeDelete: true);
+            CreateIndex("dbo.TransportationLines", "TransportationLineTypeId");
+            AddForeignKey("dbo.TransportationLines", "TransportationLineTypeId", "dbo.TransportationLineTypes", "Id", cascadeDelete: true);
             DropColumn("dbo.Benefits", "Discriminator");
         }
         
         public override void Down()
         {
             AddColumn("dbo.Benefits", "Discriminator", c => c.String(nullable: false, maxLength: 128));
-            DropForeignKey("dbo.TransportationLines", "TransporationLineTypeId", "dbo.TransporationLineTypes");
-            DropIndex("dbo.TransportationLines", new[] { "TransporationLineTypeId" });
+            DropForeignKey("dbo.TransportationLines", "TransportationLineTypeId", "dbo.TransportationLineTypes");
+            DropIndex("dbo.TransportationLines", new[] { "TransportationLineTypeId" });
             DropPrimaryKey("dbo.UserTypeBenefits");
-            DropColumn("dbo.TransportationLines", "TransporationLineTypeId");
-            DropTable("dbo.TransporationLineTypes");
+            DropColumn("dbo.TransportationLines", "TransportationLineTypeId");
+            DropTable("dbo.TransportationLineTypes");
             AddPrimaryKey("dbo.UserTypeBenefits", new[] { "Benefit_Id", "UserType_Id" });
             RenameTable(name: "dbo.UserTypeBenefits", newName: "BenefitUserTypes");
         }

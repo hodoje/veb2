@@ -7,12 +7,12 @@ namespace WebApp.Migrations
     {
         public override void Up()
         {
-            RenameTable(name: "dbo.TransporationLineTypes", newName: "TransportationLineTypes");
+            RenameTable(name: "dbo.TransportationLineTypes", newName: "TransportationLineTypes");
         }
         
         public override void Down()
         {
-            RenameTable(name: "dbo.TransportationLineTypes", newName: "TransporationLineTypes");
+            RenameTable(name: "dbo.TransportationLineTypes", newName: "TransportationLineTypes");
         }
     }
 }

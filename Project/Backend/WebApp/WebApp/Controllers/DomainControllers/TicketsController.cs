@@ -121,39 +121,18 @@ namespace WebApp.Controllers.DomainControllers
             }
             try
             {
-                string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
-                ApplicationUser user = await UserManager.FindByNameAsync(userName);
-                int boughtTicketId;
-
-                if ((boughtTicketId = ticketBusinessComponent.BuyTicket(unitOfWork, user, ticketDto.TicketTypeId)) > 0)
-                {
-                    if (!String.IsNullOrEmpty(ticketDto.Email))
-                    {
-                        TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
-                        string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
-                        string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
-                        if (emailSender.SendMail(subject, body, ticketDto.Email))
-                        {
-                            return Ok();
-                        }
-                        else
-                        {
-                            unitOfWork.TicketRepository.Remove(unitOfWork.TicketRepository.Get(boughtTicketId));
-                            unitOfWork.Complete();
-
-                            return InternalServerError();
-                        }
-                    }
-                }
-
-                if (user == null)
-                {
-                    return BadRequest();
-                }
-                else
-                {
-                    return Ok();
-                }
+				HttpStatusCode purchaseStatus = await ticketBusinessComponent.TicketPurchase(UserManager, unitOfWork, ticketDto, emailSender);
+				switch (purchaseStatus)
+				{
+					case HttpStatusCode.OK:
+						return Ok();
+					case HttpStatusCode.InternalServerError:
+						return InternalServerError();
+					case HttpStatusCode.BadRequest:
+						return BadRequest();
+					default:
+						return Ok();
+				}
             }
             catch (Exception e)
             {

@@ -69,15 +69,9 @@ namespace WebApp.Controllers.DomainControllers
         {
             try
             {
-                string userName = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
-                ApplicationUser user = await UserManager.FindByNameAsync(userName);
+				IEnumerable<TicketTypePricelistDto> tickets = await ticketBusiness.GetTicketPriceForUser(UserManager, unitOfWork);
 
-                double discountCoefficient = user == null ? 1 : user.GetDiscountCoefficient();
-                bool userConfirmed = user != null && user.RegistrationStatus == RegistrationStatus.Accepted;
-
-                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListTicketPricesForUser(unitOfWork, discountCoefficient, userConfirmed);
-
-                return Ok(tickets);
+				return Ok(tickets);
             }
             catch (NullReferenceException nre)
             {

@@ -7,13 +7,13 @@ namespace WebApp.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class TransporationLineType_AddModel : IMigrationMetadata
+    public sealed partial class TransportationLineType_AddModel : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TransporationLineType_AddModel));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TransportationLineType_AddModel));
         
         string IMigrationMetadata.Id
         {
-            get { return "201906040755476_TransporationLineType_AddModel"; }
+            get { return "201906040755476_TransportationLineType_AddModel"; }
         }
         
         string IMigrationMetadata.Source

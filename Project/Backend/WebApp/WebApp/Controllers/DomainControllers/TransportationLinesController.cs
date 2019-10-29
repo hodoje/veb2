@@ -17,9 +17,9 @@ namespace WebApp.Controllers.DomainControllers
     {
 		private IUnitOfWork unitOfWork;
 		private IMapper mapper;
-        private ITransporationLineComponent transporationLineComponent;
+        private ITransportationLineComponent transporationLineComponent;
 
-		public TransportationLinesController(IUnitOfWork uow, IMapper imapper, ITransporationLineComponent transporationLineComponent)
+		public TransportationLinesController(IUnitOfWork uow, IMapper imapper, ITransportationLineComponent transporationLineComponent)
 		{
 			unitOfWork = uow;
 			mapper = imapper;

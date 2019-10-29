@@ -102,8 +102,8 @@ namespace WebApp.Migrations
 
         private void PopulateTransporationLines(ApplicationDbContext context)
         {
-			TransportationLineType tlType = context.TransporationLineTypes.First(tlt => tlt.Name == "Urban");
-			TransportationLineType tlType2 = context.TransporationLineTypes.First(tlt => tlt.Name == "Suburban");
+			TransportationLineType tlType = context.TransportationLineTypes.First(tlt => tlt.Name == "Urban");
+			TransportationLineType tlType2 = context.TransportationLineTypes.First(tlt => tlt.Name == "Suburban");
             Station station1 = context.Stations.First();
             Station station2 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station2"));
             Station station3 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station3"));
@@ -156,13 +156,13 @@ namespace WebApp.Migrations
 
         private void PopulateTransporationTypes(ApplicationDbContext context)
 		{
-			List<string> transporationLineTypes = new List<string>(2) { "Urban", "Suburban" };
+			List<string> TransportationLineTypes = new List<string>(2) { "Urban", "Suburban" };
 
-			foreach (string type in transporationLineTypes)
+			foreach (string type in TransportationLineTypes)
 			{
-				if (!context.TransporationLineTypes.Any(x => x.Name.Equals(type)))
+				if (!context.TransportationLineTypes.Any(x => x.Name.Equals(type)))
 				{
-					context.TransporationLineTypes.Add(new TransportationLineType() { Name = type });
+					context.TransportationLineTypes.Add(new TransportationLineType() { Name = type });
 				}
 			}
 

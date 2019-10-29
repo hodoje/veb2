@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using WebApp.BusinessComponents;
 using WebApp.Models.DomainModels;
 using WebApp.Models.Dtos;
 using WebApp.Persistence;
@@ -20,11 +21,13 @@ namespace WebApp.Controllers.DomainControllers
     {
 		private IUnitOfWork unitOfWork;
 		private IMapper mapper;
+		private IPricelistComponent pricelistComponent;
 
-		public PricelistsController(IUnitOfWork uow, IMapper imapper)
+		public PricelistsController(IUnitOfWork uow, IMapper imapper, IPricelistComponent plComponent)
 		{
 			unitOfWork = uow;
 			mapper = imapper;
+			pricelistComponent = plComponent;
 		}
 
 		// GET: api/Pricelists
@@ -33,36 +36,20 @@ namespace WebApp.Controllers.DomainControllers
 			try
 			{
 				List<Pricelist> pricelists = unitOfWork.PricelistRepository.GetAll().ToList();
-				List<PricelistDto> plDto = new List<PricelistDto>(pricelists.Count);
+				List<PricelistDto> plDtos = new List<PricelistDto>(pricelists.Count);
 				foreach (var pricelist in pricelists)
 				{
-					List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+					List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(ttpl => ttpl.PricelistId == pricelist.Id).ToList();
 					PricelistDto pricelistDto = new PricelistDto() { FromDate = pricelist.FromDate };
-					foreach (TicketTypePricelist pltt in pltts)
+					foreach (TicketTypePricelist ttpl in ttpls)
 					{
-						if (pltt.TicketType.Name == "Hourly")
-						{
-							pricelistDto.Hourly = pltt.BasePrice;
-						}
-						else if (pltt.TicketType.Name == "Daily")
-						{
-							pricelistDto.Daily = pltt.BasePrice;
-						}
-						else if (pltt.TicketType.Name == "Monthly")
-						{
-							pricelistDto.Monthly = pltt.BasePrice;
-						}
-						else if (pltt.TicketType.Name == "Yearly")
-						{
-							pricelistDto.Yearly = pltt.BasePrice;
-						}
-
+						pricelistComponent.SetPricelistPriceFromTicketType(ref pricelistDto, ttpl);
 					}
-					plDto.Add(pricelistDto);
+					plDtos.Add(pricelistDto);
 				}
-				if (plDto.Count > 0)
+				if (plDtos.Count > 0)
 				{
-					return Ok(plDto);
+					return Ok(plDtos);
 				}
 
 				return NotFound();
@@ -92,25 +79,10 @@ namespace WebApp.Controllers.DomainControllers
 		{
 			Pricelist pricelist = unitOfWork.PricelistRepository.GetActivePricelist();
 			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
-			List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
-			foreach(TicketTypePricelist pltt in pltts)
+			List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+			foreach(TicketTypePricelist ttpl in ttpls)
 			{
-				if (pltt.TicketType.Name == "Hourly")
-				{
-					pricelistDto.Hourly = pltt.BasePrice;
-				}
-				else if (pltt.TicketType.Name == "Daily")
-				{
-					pricelistDto.Daily = pltt.BasePrice;
-				}
-				else if (pltt.TicketType.Name == "Monthly")
-				{
-					pricelistDto.Monthly = pltt.BasePrice;
-				}
-				else if (pltt.TicketType.Name == "Yearly")
-				{
-					pricelistDto.Yearly = pltt.BasePrice;
-				}
+				pricelistComponent.SetPricelistPriceFromTicketType(ref pricelistDto, ttpl);
 			}
 			if (pricelist == null)
 			{
@@ -168,24 +140,25 @@ namespace WebApp.Controllers.DomainControllers
 
 			foreach(TicketType tt in unitOfWork.TicketTypeRepository.GetAll())
 			{
-				TicketTypePricelist pltt = new TicketTypePricelist(tt.Id, pricelist.Id);
-				if(tt.Name == "Hourly")
-				{
-					pltt.BasePrice = pricelistDto.Hourly;
-				}
-				else if(tt.Name == "Daily")
-				{
-					pltt.BasePrice = pricelistDto.Daily;
-				}
-				else if(tt.Name == "Monthly")
-				{
-					pltt.BasePrice = pricelistDto.Monthly;
-				}
-				else if(tt.Name == "Yearly")
-				{
-					pltt.BasePrice = pricelistDto.Yearly;
-				}
-				unitOfWork.TicketTypePricelistRepository.Add(pltt);
+				TicketTypePricelist ttpl = new TicketTypePricelist(tt.Id, pricelist.Id);
+				pricelistComponent.SetTicketTypeBasePriceFromPricelist(tt, ref ttpl, pricelistDto);
+				//if(tt.Name == "Hourly")
+				//{
+				//	ttpl.BasePrice = pricelistDto.Hourly;
+				//}
+				//else if(tt.Name == "Daily")
+				//{
+				//	ttpl.BasePrice = pricelistDto.Daily;
+				//}
+				//else if(tt.Name == "Monthly")
+				//{
+				//	ttpl.BasePrice = pricelistDto.Monthly;
+				//}
+				//else if(tt.Name == "Yearly")
+				//{
+				//	ttpl.BasePrice = pricelistDto.Yearly;
+				//}
+				unitOfWork.TicketTypePricelistRepository.Add(ttpl);
 			}
 			unitOfWork.Complete();
 

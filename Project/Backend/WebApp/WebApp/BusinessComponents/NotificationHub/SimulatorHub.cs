@@ -23,7 +23,7 @@ namespace WebApp.BusinessComponents.NotificationHub
         private static object lockObject = new object();
 
 		private static IUnitOfWork unitOfWork;
-		private static ITransporationLineComponent transporationLineComponent;
+		private static ITransportationLineComponent transporationLineComponent;
 
 		static SimulatorHub()
         {
@@ -31,7 +31,7 @@ namespace WebApp.BusinessComponents.NotificationHub
             timer.Start();
 
 			unitOfWork = (IUnitOfWork)GlobalHost.DependencyResolver.GetService(typeof(IUnitOfWork));
-			transporationLineComponent = (ITransporationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransporationLineComponent));
+			transporationLineComponent = (ITransportationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransportationLineComponent));
 		}
 
 		//public SimulatorHub(IUnitOfWork unitOfWork, ITransporationLineComponent transporationLineComponent)

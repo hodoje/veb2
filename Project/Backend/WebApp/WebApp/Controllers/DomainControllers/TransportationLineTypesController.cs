@@ -32,40 +32,40 @@ namespace WebApp.Controllers.DomainControllers
 			mapper = immaper;
 		}
 
-        // GET: api/TransporationLineTypes
-        public IEnumerable<TransportationLineTypeDto> GetTransporationLineTypes()
+        // GET: api/TransportationLineTypes
+        public IEnumerable<TransportationLineTypeDto> GetTransportationLineTypes()
         {
 			return mapper.Map<List<TransportationLineType>, List<TransportationLineTypeDto>>(unitOfWork.TransportationLineTypeRepository.GetAll().ToList());
         }
 
-        // GET: api/TransporationLineTypes/5
+        // GET: api/TransportationLineTypes/5
         [ResponseType(typeof(TransportationLineType))]
-        public IHttpActionResult GetTransporationLineType(int id)
+        public IHttpActionResult GetTransportationLineType(int id)
         {
-            TransportationLineType transporationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
-            if (transporationLineType == null)
+            TransportationLineType TransportationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
+            if (TransportationLineType == null)
             {
                 return NotFound();
             }
 
-            return Ok(transporationLineType);
+            return Ok(TransportationLineType);
         }
 
-        // PUT: api/TransporationLineTypes/5
+        // PUT: api/TransportationLineTypes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutTransporationLineType(int id, TransportationLineType transporationLineType)
+        public IHttpActionResult PutTransportationLineType(int id, TransportationLineType TransportationLineType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != transporationLineType.Id)
+            if (id != TransportationLineType.Id)
             {
                 return BadRequest();
             }
 
-			unitOfWork.TransportationLineTypeRepository.Update(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Update(TransportationLineType);
 
 			try
             {
@@ -73,7 +73,7 @@ namespace WebApp.Controllers.DomainControllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TransporationLineTypeExists(id))
+                if (!TransportationLineTypeExists(id))
                 {
                     return NotFound();
                 }
@@ -86,16 +86,16 @@ namespace WebApp.Controllers.DomainControllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/TransporationLineTypes
+        // POST: api/TransportationLineTypes
         [ResponseType(typeof(TransportationLineType))]
-        public IHttpActionResult PostTransporationLineType(TransportationLineType transporationLineType)
+        public IHttpActionResult PostTransportationLineType(TransportationLineType TransportationLineType)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-			unitOfWork.TransportationLineTypeRepository.Add(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Add(TransportationLineType);
 
             try
             {
@@ -103,7 +103,7 @@ namespace WebApp.Controllers.DomainControllers
             }
             catch (DbUpdateException)
             {
-                if (TransporationLineTypeExists(transporationLineType.Id))
+                if (TransportationLineTypeExists(TransportationLineType.Id))
                 {
                     return Conflict();
                 }
@@ -113,23 +113,23 @@ namespace WebApp.Controllers.DomainControllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = transporationLineType.Id }, transporationLineType);
+            return CreatedAtRoute("DefaultApi", new { id = TransportationLineType.Id }, TransportationLineType);
         }
 
-        // DELETE: api/TransporationLineTypes/5
+        // DELETE: api/TransportationLineTypes/5
         [ResponseType(typeof(TransportationLineType))]
-        public IHttpActionResult DeleteTransporationLineType(int id)
+        public IHttpActionResult DeleteTransportationLineType(int id)
         {
-            TransportationLineType transporationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
-            if (transporationLineType == null)
+            TransportationLineType TransportationLineType = unitOfWork.TransportationLineTypeRepository.Get(id);
+            if (TransportationLineType == null)
             {
                 return NotFound();
             }
 
-			unitOfWork.TransportationLineTypeRepository.Remove(transporationLineType);
+			unitOfWork.TransportationLineTypeRepository.Remove(TransportationLineType);
 			unitOfWork.Complete();
 
-            return Ok(transporationLineType);
+            return Ok(TransportationLineType);
         }
 
         protected override void Dispose(bool disposing)
@@ -141,7 +141,7 @@ namespace WebApp.Controllers.DomainControllers
             base.Dispose(disposing);
         }
 
-        private bool TransporationLineTypeExists(int id)
+        private bool TransportationLineTypeExists(int id)
         {
 			return unitOfWork.TransportationLineTypeRepository.Get(id) != null;
         }

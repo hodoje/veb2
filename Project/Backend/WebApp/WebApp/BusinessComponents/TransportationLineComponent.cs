@@ -8,7 +8,7 @@ using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.BusinessComponents
 {
-    public class TransporationLineComponent : ITransporationLineComponent
+    public class TransportationLineComponent : ITransportationLineComponent
     {
         public TransportationLinePlanDto GetTransporationLinePlan(IUnitOfWork unitOfWork, int linueNumber)
         {

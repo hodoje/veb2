@@ -9,14 +9,14 @@ using WebApp.Persistence.Repository;
 
 namespace WebApp.Persistence.ModelRepositories
 {
-	public class TransporationLineTypeRepository : Repository<TransportationLineType, int>, ITransportationLineTypeRepository
+	public class TransportationLineTypeRepository : Repository<TransportationLineType, int>, ITransportationLineTypeRepository
 	{
 		protected ApplicationDbContext ApplicationDbContext
 		{
 			get { return context as ApplicationDbContext; }
 		}
 
-		public TransporationLineTypeRepository(DbContext context) : base(context)
+		public TransportationLineTypeRepository(DbContext context) : base(context)
 		{
 		}
 	}
