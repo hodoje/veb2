@@ -45,17 +45,17 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <div *ngIf="buttonPressed">
-            <ng-container *ngIf="isTicketBought; then ticketBought; else ticketNotBought"></ng-container>
-            <ng-template #ticketBought>
-              <div class="alert alert-success" >
-                <p>Ticket was successfully bought!</p>
-              </div>
-            </ng-template>
-            <ng-template #ticketNotBought>
-              <div class="alert alert-danger">
-                <p>Service encountered internal error, please try later.</p>
-              </div>
-            </ng-template>
+          <ng-container *ngIf="isTicketBought; then ticketBought; else ticketNotBought"></ng-container>
+          <ng-template #ticketBought>
+            <div class="alert alert-success" >
+              <p>Ticket was successfully bought! Check your email.</p>
+            </div>
+          </ng-template>
+          <ng-template #ticketNotBought>
+            <div class="alert alert-danger">
+              <p>Service encountered internal error, please try later.</p>
+            </div>
+          </ng-template>
         </div>
       </div>
       <div class="col-md-2"></div>

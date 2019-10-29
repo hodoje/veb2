@@ -78,8 +78,7 @@ namespace WebApp.Controllers.DomainControllers
                 return BadRequest();
             }
 
-			Schedule schedule = new Schedule();
-			schedule.Id = scheduleDto.Id;
+			Schedule schedule = unitOfWork.ScheduleRepository.Get(scheduleDto.Id);
 			schedule.Timetable = scheduleDto.Timetable;
 			schedule.DayOfTheWeekId = unitOfWork.DayOfTheWeekRepository.Find(d => d.Name == scheduleDto.DayOfTheWeek).FirstOrDefault().Id;
 			int lineNum = scheduleDto.LineNum;
