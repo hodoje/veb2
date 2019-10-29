@@ -15,7 +15,7 @@ export class LinesGridComponent implements OnInit {
   currentLatitude: number = 45.2520547;
   currentLongitude: number = 19.8326543;
 
-  lineNumbers: number[] = [];
+  lineNumbers: number[] = [];  
 
   shownRoutes: Polyline[] = [];
 

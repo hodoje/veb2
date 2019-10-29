@@ -11,19 +11,16 @@
             <div class="col-md-3"></div>
         </div>
         <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <div>
-                    <table class="table table-borderless">
-                        <td>
-                            <tr>
-                                <button class="button button1" *ngFor="let lineNumber of lineNumbers" (click)="onLineBtnClick(lineNumber)">{{lineNumber}}</button>
-                            </tr>
-                        </td>
-                    </table>
-                </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <ul>
+                    <li *ngFor="let lineNumber of lineNumbers">
+                        <button class="lineGridButton btn btn-success btn-sm" (click)="onLineBtnClick(lineNumber)">{{lineNumber}}</button>
+                    </li>
+                </ul>
+                <hr/>
             </div>
-            <div class="col-md-3"></div>
+            <div class="col-md-1"></div>
         </div>
         <div class="row" style="align-items: center">
             <div class="col-md-1"></div>
@@ -40,5 +37,6 @@
             </div>
             <div class="col-md-1"></div>
         </div>
+        <hr/>
     </div>
 </div>
