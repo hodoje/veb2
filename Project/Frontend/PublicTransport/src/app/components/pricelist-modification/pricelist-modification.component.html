@@ -5,6 +5,7 @@
         <div class="page-header">
           <h2>Pricelist</h2>
         </div>
+        <hr/>
         <form #f="ngForm" (ngSubmit)="updatePricelist(f.value, f)">
           <div class="form-group required">
             <h4>Base Prices</h4>
@@ -54,6 +55,7 @@
         <div class="page-header">
           <h2>All pricelist</h2>
         </div>
+        <hr/>
         <div class="side-list">
           <table mdbTable class="blue white-text" small="true" *ngFor="let priceList of allPriceLists">
             <thead class="white black-text">

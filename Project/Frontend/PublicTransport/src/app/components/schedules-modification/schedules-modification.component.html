@@ -3,9 +3,10 @@
     <div class="row">
       <div class="col-md-4"></div>
       <div class="col-md-4">
-        <div class="page-header">
-          <h2>Schedule Modification</h2>
+        <div class="page-header schedule-header">
+          <h2>Schedule</h2>
         </div>
+        <hr/>
         <form #f="ngForm">
           <label for="currentLineType">Line Type</label>
           <select name="currentLineType" [(ngModel)]="currentLineType" (change)="currentLineTypeChanged()" class="form-control form-control-sm">
@@ -47,6 +48,7 @@
             <button id="addTimeBtn" type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#addTimeCollapse" aria-expanded="false" aria-controls="addTimeCollapse">Add</button>
           </p>
         </form>
+        <hr/>
       </div>
       <div class="col-md-4"></div>
     </div>
