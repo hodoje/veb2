@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Polyline } from 'src/app/models/map-models/polyline.model';
 import { TransportationLinesHttpService } from 'src/app/services/transportation-lines-http.service';
-import { TransporationLinePlan } from 'src/app/models/transporation-route-plan.model';
+import { TransportationLinePlan } from 'src/app/models/transporation-route-plan.model';
 import { GeoLocation } from 'src/app/models/map-models/geolocation';
 import { StationHttpService } from 'src/app/services/station-http.service';
 
@@ -15,12 +15,12 @@ export class LinesModificationComponent implements OnInit {
   currentLatitude: number = 45.2520547;
   currentLongitude: number = 19.8326543;
 
-  plans: TransporationLinePlan[] = [];
-  currentPlan: TransporationLinePlan;
+  plans: TransportationLinePlan[] = [];
+  currentPlan: TransportationLinePlan;
   currentStations = [];
   allStations = [];  
 
-  constructor(private transportationLineHttp: TransportationLinesHttpService,
+  constructor(private transportationLineService: TransportationLinesHttpService,
     private stationsService: StationHttpService) { }
 
   ngOnInit() { 
@@ -28,7 +28,7 @@ export class LinesModificationComponent implements OnInit {
   }
 
   getAllPlans(){
-    this.transportationLineHttp.getAllTransportationLinePlans().subscribe(
+    this.transportationLineService.getAllTransportationLinePlans().subscribe(
       (data) => {
         this.plans = data;
         console.log(data);
@@ -58,7 +58,7 @@ export class LinesModificationComponent implements OnInit {
   }
 
   addStationToPlan(sId: number){
-    this.transportationLineHttp.addStationToPlan(this.currentPlan.lineNumber, sId).subscribe(
+    this.transportationLineService.addStationToPlan(this.currentPlan.lineNumber, sId).subscribe(
       (data) => {
         this.getAllPlans();
       },
@@ -69,7 +69,7 @@ export class LinesModificationComponent implements OnInit {
   }
 
   removeStationFromPlan(sId: number){
-    this.transportationLineHttp.removeStationFromPlan(this.currentPlan.lineNumber, sId).subscribe(
+    this.transportationLineService.removeStationFromPlan(this.currentPlan.lineNumber, sId).subscribe(
       (data) => {
         this.getAllPlans();
       },
@@ -90,7 +90,7 @@ export class LinesModificationComponent implements OnInit {
     return this.currentStations.find(s => s.name === stationName);
   }
 
-  createPolyline(plan: TransporationLinePlan, color: string): Polyline {
+  createPolyline(plan: TransportationLinePlan, color: string): Polyline {
     let geoLocations: GeoLocation[] = [];
 
     plan.routes.forEach(route => {

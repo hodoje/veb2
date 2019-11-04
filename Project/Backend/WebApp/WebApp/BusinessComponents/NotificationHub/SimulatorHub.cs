@@ -23,7 +23,7 @@ namespace WebApp.BusinessComponents.NotificationHub
         private static object lockObject = new object();
 
 		private static IUnitOfWork unitOfWork;
-		private static ITransportationLineComponent transporationLineComponent;
+		private static ITransportationLineComponent transportationLineComponent;
 
 		static SimulatorHub()
         {
@@ -31,14 +31,8 @@ namespace WebApp.BusinessComponents.NotificationHub
             timer.Start();
 
 			unitOfWork = (IUnitOfWork)GlobalHost.DependencyResolver.GetService(typeof(IUnitOfWork));
-			transporationLineComponent = (ITransportationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransportationLineComponent));
+			transportationLineComponent = (ITransportationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransportationLineComponent));
 		}
-
-		//public SimulatorHub(IUnitOfWork unitOfWork, ITransporationLineComponent transporationLineComponent)
-		//{
-		//	this.unitOfWork = unitOfWork;
-		//	this.transporationLineComponent = transporationLineComponent;
-		//}
 
 		public void CreateEvent()
 		{
@@ -88,8 +82,9 @@ namespace WebApp.BusinessComponents.NotificationHub
 
 			foreach (var line in existingLines)
 			{
-				TransportationLinePlanDto lineDto = transporationLineComponent.GetTransporationLinePlan(unitOfWork, line);
+				TransportationLinePlanDto lineDto = transportationLineComponent.GetTransportationLinePlan(unitOfWork, line);
 
+				// Puca ukoliko nema stanica za definisanu liniju	
 				Station currStation = lineDto.Routes[random.Next(0, lineDto.Routes.Count)].Station;
 				vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
 			}

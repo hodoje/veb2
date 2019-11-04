@@ -35,11 +35,11 @@ namespace WebApp.Migrations
 
 				PopulateDaysOfTheWeek(context);
 
-				PopulateTransporationTypes(context);
+				PopulateTransportationTypes(context);
 
 				PopulateStations(context);
 
-				PopulateTransporationLines(context);
+				PopulateTransportationLines(context);
 
 				PopulateSchedules(context);
 
@@ -100,7 +100,7 @@ namespace WebApp.Migrations
             }
         }
 
-        private void PopulateTransporationLines(ApplicationDbContext context)
+        private void PopulateTransportationLines(ApplicationDbContext context)
         {
 			TransportationLineType tlType = context.TransportationLineTypes.First(tlt => tlt.Name == "Urban");
 			TransportationLineType tlType2 = context.TransportationLineTypes.First(tlt => tlt.Name == "Suburban");
@@ -113,18 +113,18 @@ namespace WebApp.Migrations
 
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
             {
-                TransportationLine transporationLine = new TransportationLine()
+                TransportationLine transportationLine = new TransportationLine()
                 {
                     LineNum = 4,
                     TransportationLineType = tlType,
                 };
 
-                context.TransportationLines.Add(transporationLine);
+                context.TransportationLines.Add(transportationLine);
 
                 context.SaveChanges();
 
-                lineRoute.TransporationLine = transporationLine;
-                lineRoute2.TransporationLine = transporationLine;
+                lineRoute.TransportationLine = transportationLine;
+                lineRoute2.TransportationLine = transportationLine;
                 context.TransportationLineRoutes.Add(lineRoute);
                 context.TransportationLineRoutes.Add(lineRoute2);
             }
@@ -135,18 +135,18 @@ namespace WebApp.Migrations
                 lineRoute = new TransportationLineRoute() { Station = station1, RoutePoint = 1 };
                 lineRoute2 = new TransportationLineRoute() { Station = station3, RoutePoint = 2 };
 
-                TransportationLine transporationLine = new TransportationLine()
+                TransportationLine transportationLine = new TransportationLine()
 				{
 					LineNum = 70,
 					TransportationLineType = tlType2,
 				};
 
-				context.TransportationLines.Add(transporationLine);
+				context.TransportationLines.Add(transportationLine);
 
                 context.SaveChanges();
 
-                lineRoute.TransporationLine = transporationLine;
-                lineRoute2.TransporationLine = transporationLine;
+                lineRoute.TransportationLine = transportationLine;
+                lineRoute2.TransportationLine = transportationLine;
                 context.TransportationLineRoutes.Add(lineRoute);
                 context.TransportationLineRoutes.Add(lineRoute2);
             }
@@ -154,7 +154,7 @@ namespace WebApp.Migrations
 			context.SaveChanges();
         }
 
-        private void PopulateTransporationTypes(ApplicationDbContext context)
+        private void PopulateTransportationTypes(ApplicationDbContext context)
 		{
 			List<string> TransportationLineTypes = new List<string>(2) { "Urban", "Suburban" };
 

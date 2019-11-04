@@ -10,8 +10,8 @@ namespace WebApp.Models.DomainModels
     {
         public int Id { get; set; }
         public int RoutePoint { get; set; }
-        public int TransporationLineId { get; set; }
-        public virtual TransportationLine TransporationLine { get; set; }
+        public int TransportationLineId { get; set; }
+        public virtual TransportationLine TransportationLine { get; set; }
         public int StationId { get; set; }
         public virtual Station Station { get; set; }
         [Timestamp]

@@ -133,7 +133,7 @@ namespace WebApp.BusinessComponents
                 }
                 else
                 {
-                    TicketTypePricelist plttHourly = pltts.First(x => x.TicketType.Name.Equals("Hourly"));
+                    TicketTypePricelist plttHourly = ttpls.First(x => x.TicketType.Name.Equals("Hourly"));
 
                     tickets.Add(new TicketTypePricelistDto()
                     {
@@ -191,11 +191,6 @@ namespace WebApp.BusinessComponents
 					}
 				}
 				else
-				{
-					return HttpStatusCode.BadRequest;
-				}
-
-				if (user == null)
 				{
 					return HttpStatusCode.BadRequest;
 				}

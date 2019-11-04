@@ -5,6 +5,6 @@ namespace WebApp.BusinessComponents
 {
     public interface ITransportationLineComponent
     {
-        TransportationLinePlanDto GetTransporationLinePlan(IUnitOfWork unitOfWork, int lineNumber);
+        TransportationLinePlanDto GetTransportationLinePlan(IUnitOfWork unitOfWork, int lineNumber);
     }
 }

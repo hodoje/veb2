@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TransportationLinesHttpService } from 'src/app/services/transportation-lines-http.service';
 import { Polyline } from 'src/app/models/map-models/polyline.model';
 import { GeoLocation } from 'src/app/models/map-models/geolocation';
-import { TransporationLinePlan } from 'src/app/models/transporation-route-plan.model';
+import { TransportationLinePlan } from 'src/app/models/transporation-route-plan.model';
 
 
 @Component({
@@ -41,19 +41,19 @@ export class LinesGridComponent implements OnInit {
       this.colors.push(tempPolyline.color);
     }
     else {
-      this.transportationLineHttp.getTransporationLinePlan(lineNumber).subscribe(
+      this.transportationLineHttp.getTransportationLinePlan(lineNumber).subscribe(
         (plan) => this.addPlanToMap(plan)
       );
     }
   }
 
-  addPlanToMap(plan: TransporationLinePlan){
+  addPlanToMap(plan: TransportationLinePlan){
     let color = this.colors.length > 1 ? this.colors.pop() : this.colors[0];
 
     this.shownRoutes.push(this.createPolyline(plan, color));
   }
 
-  createPolyline(plan: TransporationLinePlan, color: string): Polyline {
+  createPolyline(plan: TransportationLinePlan, color: string): Polyline {
     let geoLocations: GeoLocation[] = [];
 
     plan.routes.forEach(route => {

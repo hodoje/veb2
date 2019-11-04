@@ -1,7 +1,7 @@
 import { RoutePoint } from './route-plan.model';
 
 
-export class TransporationLinePlan {
+export class TransportationLinePlan {
     lineNumber: number;
     routes: RoutePoint[];
 }

@@ -304,9 +304,9 @@
     <Compile Include="Migrations\201905311039331_Benefit_UserType.Designer.cs">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201906040755476_TransporationLineType_AddModel.cs" />
-    <Compile Include="Migrations\201906040755476_TransporationLineType_AddModel.Designer.cs">
-      <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
+    <Compile Include="Migrations\201906040755476_TransportationLineType_AddModel.cs" />
+    <Compile Include="Migrations\201906040755476_TransportationLineType_AddModel.Designer.cs">
+      <DependentUpon>201906040755476_TransportationLineType_AddModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201906042331148_UpdatedApplicationUserModel.cs" />
     <Compile Include="Migrations\201906042331148_UpdatedApplicationUserModel.Designer.cs">
@@ -355,6 +355,10 @@
     <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.cs" />
     <Compile Include="Migrations\201906131238050_ApplicationUser-Bannable.Designer.cs">
       <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911040942020_FixedTranspoRAtionError.cs" />
+    <Compile Include="Migrations\201911040942020_FixedTranspoRAtionError.Designer.cs">
+      <DependentUpon>201911040942020_FixedTranspoRAtionError.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -529,8 +533,8 @@
     <EmbeddedResource Include="Migrations\201905311039331_Benefit_UserType.resx">
       <DependentUpon>201905311039331_Benefit_UserType.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201906040755476_TransporationLineType_AddModel.resx">
-      <DependentUpon>201906040755476_TransporationLineType_AddModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201906040755476_TransportationLineType_AddModel.resx">
+      <DependentUpon>201906040755476_TransportationLineType_AddModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906042331148_UpdatedApplicationUserModel.resx">
       <DependentUpon>201906042331148_UpdatedApplicationUserModel.cs</DependentUpon>
@@ -567,6 +571,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906131238050_ApplicationUser-Bannable.resx">
       <DependentUpon>201906131238050_ApplicationUser-Bannable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911040942020_FixedTranspoRAtionError.resx">
+      <DependentUpon>201911040942020_FixedTranspoRAtionError.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

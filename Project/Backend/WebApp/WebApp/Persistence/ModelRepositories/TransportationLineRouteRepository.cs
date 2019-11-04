@@ -14,7 +14,7 @@ namespace WebApp.Persistence.ModelRepositories
 		{
 			return context.Set<TransportationLineRoute>()
 				.Include(x => x.Station)
-				.Include(x => x.TransporationLine)
+				.Include(x => x.TransportationLine)
 				.ToList();
 		}
 
