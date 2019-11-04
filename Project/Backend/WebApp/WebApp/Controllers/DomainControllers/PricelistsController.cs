@@ -79,7 +79,7 @@ namespace WebApp.Controllers.DomainControllers
 		{
 			Pricelist pricelist = unitOfWork.PricelistRepository.GetActivePricelist();
 			PricelistDto pricelistDto = mapper.Map<Pricelist, PricelistDto>(pricelist);
-			List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(pltt => pltt.PricelistId == pricelist.Id).ToList();
+			List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.FindIncludeTicketType(ttpl => ttpl.PricelistId == pricelist.Id).ToList();
 			foreach(TicketTypePricelist ttpl in ttpls)
 			{
 				pricelistComponent.SetPricelistPriceFromTicketType(ref pricelistDto, ttpl);

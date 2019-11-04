@@ -28,7 +28,7 @@ namespace WebApp.BusinessComponents
             }
 
             int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
-            TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(pltt => pltt.PricelistId == plIndex).FirstOrDefault();
+            TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(ttpl => ttpl.PricelistId == plIndex).FirstOrDefault();
             Ticket boughtTicket = new Ticket(ticketType.Name) { PurchaseDate = DateTime.Now };
 
             List<Ticket> tickets = unitOfWork.TicketRepository.GetAll().ToList();
@@ -76,7 +76,7 @@ namespace WebApp.BusinessComponents
             {
                 Pricelist currentPriceList = unitOfWork.PricelistRepository.GetActivePricelist();
 
-                List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
+                List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
 
                 List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
 
@@ -85,13 +85,13 @@ namespace WebApp.BusinessComponents
                 foreach (UserType userType in userTypes)
                 {
                     TransportDiscountBenefit benefit = userType.Benefits.First(x => x.GetType() == typeof(TransportDiscountBenefit)) as TransportDiscountBenefit;
-                    pltts.ForEach(pltt =>
+					ttpls.ForEach(ttpl =>
                     {
                         TicketTypePricelistDto ticket = new TicketTypePricelistDto()
                         {
-                            Price = pltt.BasePrice * (benefit != null ? benefit.CoefficientDiscount : 1),
-                            Name = pltt.TicketType.Name,
-                            TicketId = pltt.TicketType.Id,
+                            Price = ttpl.BasePrice * (benefit != null ? benefit.CoefficientDiscount : 1),
+                            Name = ttpl.TicketType.Name,
+                            TicketId = ttpl.TicketType.Id,
                             UserType = userType.Name
                         };
 
@@ -113,19 +113,19 @@ namespace WebApp.BusinessComponents
             {
                 Pricelist currentPriceList = unitOfWork.PricelistRepository.GetActivePricelist();
 
-                List<TicketTypePricelist> pltts = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
+                List<TicketTypePricelist> ttpls = unitOfWork.TicketTypePricelistRepository.GetAll().Where(x => x.PricelistId == currentPriceList.Id).ToList();
 
                 List<TicketTypePricelistDto> tickets = new List<TicketTypePricelistDto>();
 
                 if (userConfirmed)
                 {
-                    pltts.ForEach(pltt =>
+					ttpls.ForEach(ttpl =>
                     {
                         TicketTypePricelistDto ticket = new TicketTypePricelistDto()
                         {
-                            Price = pltt.BasePrice * discountCoefficient,
-                            Name = pltt.TicketType.Name,
-                            TicketId = pltt.TicketType.Id
+                            Price = ttpl.BasePrice * discountCoefficient,
+                            Name = ttpl.TicketType.Name,
+                            TicketId = ttpl.TicketType.Id
                         };
 
                         tickets.Add(ticket);

@@ -23,12 +23,12 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public IEnumerable<TicketTypePricelist> GetAllIncludeTicketType()
 		{
-			return context.Set<TicketTypePricelist>().Include(pltt => pltt.TicketType);
+			return context.Set<TicketTypePricelist>().Include(ttpl => ttpl.TicketType);
 		}
 
 		public IEnumerable<TicketTypePricelist> FindIncludeTicketType(Expression<Func<TicketTypePricelist, bool>> predicate)
 		{
-			return context.Set<TicketTypePricelist>().Include(pltt => pltt.TicketType).Where(predicate);
+			return context.Set<TicketTypePricelist>().Include(ttpl => ttpl.TicketType).Where(predicate);
 		}
 	}
 }
