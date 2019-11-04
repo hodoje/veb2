@@ -1,5 +1,5 @@
 import { BaseHttpService } from './base-http.service';
-import { TransportationLinePlan } from '../models/transporation-route-plan.model';
+import { TransportationLinePlan } from '../models/transportation-route-plan.model';
 import { Observable } from 'rxjs';
 import { TransportationLine } from '../models/transportationline.model';
 import { HttpParams } from '@angular/common/http';

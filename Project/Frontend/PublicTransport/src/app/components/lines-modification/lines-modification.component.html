@@ -3,7 +3,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="page-header" style="text-align: center">
-              <h2>Line numbers</h2>
+              <h2>Lines</h2>
           </div>
           <hr/>
         </div>
@@ -20,13 +20,35 @@
               <option *ngFor="let currentPlan of plans" [ngValue]="currentPlan">{{ currentPlan.lineNumber }}</option>
             </select>
             <label for="currentStation">Stations</label>
-            <select name="currentStation" [(ngModel)]="currentStation"  (ngModelChange)="onClick($event)" class="form-control form-control-sm">
+            <!--https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular-->
+            <div class="card">
+              <div class="card-block">
+                <div class="card-body">
+                  <form [formGroup]="updateLineStationsForm" (ngSubmit)="updateLineStations()">
+                    <div class="stations-checkbox-container">
+                      <p *ngFor="let station of updateLineStationsForm.controls.stations.controls; let i = index">
+
+                        <label formArrayName="stations">
+                          <input type="checkbox" [formControlName]="i"/>
+                          {{allStations[i].name}}
+                        </label>
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary float-right">Update</button>
+
+
+
+            <!-- <select name="currentStation" [(ngModel)]="currentStation"  (ngModelChange)="onClick($event)" class="form-control form-control-sm">
               <option *ngFor="let station of allStations" [ngValue]="station" >
                 <button class="btn btn-primary" style="color: 'red'">{{ checkIfExist(station?.name) ? '-' : '+'}}</button>{{ station?.name }}
               </option>
             </select>
             <button class="btn btn-primary" [hidden]="checkIfExist(currentStation?.name)" (click)="addStationToPlan(currentStation?.id)">Add</button>
-            <button class="btn btn-primary" [hidden]="!checkIfExist(currentStation?.name)" (click)="removeStationFromPlan(currentStation?.id)">Remove</button>
+            <button class="btn btn-primary" [hidden]="!checkIfExist(currentStation?.name)" (click)="removeStationFromPlan(currentStation?.id)">Remove</button> -->
           </div>
       </div>
       <hr/>

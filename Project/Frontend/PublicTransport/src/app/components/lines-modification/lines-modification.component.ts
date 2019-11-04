@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Polyline } from 'src/app/models/map-models/polyline.model';
 import { TransportationLinesHttpService } from 'src/app/services/transportation-lines-http.service';
-import { TransportationLinePlan } from 'src/app/models/transporation-route-plan.model';
+import { TransportationLinePlan } from 'src/app/models/transportation-route-plan.model';
 import { GeoLocation } from 'src/app/models/map-models/geolocation';
 import { StationHttpService } from 'src/app/services/station-http.service';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-lines-modification',
@@ -19,9 +20,24 @@ export class LinesModificationComponent implements OnInit {
   currentPlan: TransportationLinePlan;
   currentStations = [];
   allStations = [];  
+  // https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular
+  updateLineStationsForm: FormGroup;
 
   constructor(private transportationLineService: TransportationLinesHttpService,
-    private stationsService: StationHttpService) { }
+    private stationsService: StationHttpService,
+    private formBuilder: FormBuilder) {
+      this.updateLineStationsForm = this.formBuilder.group({
+        stations: new FormArray([])
+      });
+  }
+
+  addStationCheckboxes(){
+    this.allStations.forEach((station, i) => {
+      var determineIfItNeedsToBeCheckedByCheckingInCurrentLinesStations = true;
+      const control = new FormControl(determineIfItNeedsToBeCheckedByCheckingInCurrentLinesStations);
+      (this.updateLineStationsForm.controls.stations as FormArray).push(control);
+    })
+  }
 
   ngOnInit() { 
     this.getAllStations();
@@ -47,6 +63,8 @@ export class LinesModificationComponent implements OnInit {
     this.stationsService.getAll().subscribe(
       (data) => {
         this.allStations = data;
+        this.addStationCheckboxes(); // Can add checkboxes only after data arrives
+        console.log(this.allStations);
       },
       (err) => {
         console.log(err);
@@ -55,6 +73,13 @@ export class LinesModificationComponent implements OnInit {
         this.getAllPlans();
       }
     );
+  }
+
+  updateLineStations(){
+    const selectedOrderIds = this.updateLineStationsForm.value.orders
+    .map((v, i) => v ? this.allStations[i].id : null)
+    .filter(v => v !== null);
+    console.log(selectedOrderIds);
   }
 
   addStationToPlan(sId: number){

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TransportationLinesHttpService } from 'src/app/services/transportation-lines-http.service';
 import { Polyline } from 'src/app/models/map-models/polyline.model';
 import { GeoLocation } from 'src/app/models/map-models/geolocation';
-import { TransportationLinePlan } from 'src/app/models/transporation-route-plan.model';
+import { TransportationLinePlan } from 'src/app/models/transportation-route-plan.model';
 
 
 @Component({
