@@ -28,7 +28,7 @@ namespace WebApp.BusinessComponents
             {
                 planDto.Routes.Add(new RoutePointDto()
                 {
-                    SequenceNumber = route.RoutePoint,
+                    SequenceNumber = route.SequenceNo,
                     Station = unitOfWork.StationRepository.Get(route.StationId)
                 });
             }

@@ -1,5 +1,4 @@
-import { RoutePoint } from './route-plan.model';
-
+import { RoutePoint } from './route-point.model';
 
 export class TransportationLinePlan {
     lineNumber: number;

@@ -103,7 +103,7 @@ namespace WebApp.Controllers.DomainControllers
 				TransportationLine tl = unitOfWork.TransportationLineRepository.GetAll().Where(x => x.LineNum == dto.LineNumber).FirstOrDefault();
 				if (route == null)
 				{
-					route = new TransportationLineRoute() { RoutePoint = routes.Max(x => x.RoutePoint) + 1, StationId = dto.StationId, TransportationLineId = tl.Id };
+					route = new TransportationLineRoute() { SequenceNo = routes.Max(x => x.SequenceNo) + 1, StationId = dto.StationId, TransportationLineId = tl.Id };
 					unitOfWork.TransportationLineRouteRepository.Add(route);
 					unitOfWork.Complete();
 

@@ -108,8 +108,8 @@ namespace WebApp.Migrations
             Station station2 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station2"));
             Station station3 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station3"));
 
-            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station1, RoutePoint = 1 };
-            TransportationLineRoute lineRoute2 = new TransportationLineRoute() { Station = station2, RoutePoint = 2 };
+            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station1, SequenceNo = 1 };
+            TransportationLineRoute lineRoute2 = new TransportationLineRoute() { Station = station2, SequenceNo = 2 };
 
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
             {
@@ -132,8 +132,8 @@ namespace WebApp.Migrations
 
 			if (!context.TransportationLines.Any(x => x.LineNum == 70))
 			{
-                lineRoute = new TransportationLineRoute() { Station = station1, RoutePoint = 1 };
-                lineRoute2 = new TransportationLineRoute() { Station = station3, RoutePoint = 2 };
+                lineRoute = new TransportationLineRoute() { Station = station1, SequenceNo = 1 };
+                lineRoute2 = new TransportationLineRoute() { Station = station3, SequenceNo = 2 };
 
                 TransportationLine transportationLine = new TransportationLine()
 				{

@@ -9,7 +9,7 @@ namespace WebApp.Models.DomainModels
     public class TransportationLineRoute
     {
         public int Id { get; set; }
-        public int RoutePoint { get; set; }
+        public int SequenceNo { get; set; }
         public int TransportationLineId { get; set; }
         public virtual TransportationLine TransportationLine { get; set; }
         public int StationId { get; set; }
@@ -44,7 +44,7 @@ namespace WebApp.Models.DomainModels
                     return 1;
                 }
 
-                return x.RoutePoint > y.RoutePoint ? 1 : -1;
+                return x.SequenceNo > y.SequenceNo ? 1 : -1;
             }
 
         }

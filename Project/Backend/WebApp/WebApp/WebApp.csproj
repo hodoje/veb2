@@ -360,6 +360,10 @@
     <Compile Include="Migrations\201911040942020_FixedTranspoRAtionError.Designer.cs">
       <DependentUpon>201911040942020_FixedTranspoRAtionError.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911050936128_UpdatedTransportationLineRoute.cs" />
+    <Compile Include="Migrations\201911050936128_UpdatedTransportationLineRoute.Designer.cs">
+      <DependentUpon>201911050936128_UpdatedTransportationLineRoute.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -574,6 +578,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911040942020_FixedTranspoRAtionError.resx">
       <DependentUpon>201911040942020_FixedTranspoRAtionError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911050936128_UpdatedTransportationLineRoute.resx">
+      <DependentUpon>201911050936128_UpdatedTransportationLineRoute.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
