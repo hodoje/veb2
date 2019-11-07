@@ -22,7 +22,17 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public IEnumerable<TransportationLine> GetAllIncludeTransportationLineType()
 		{
-			return context.Set<TransportationLine>().Include(tl => tl.TransportationLineType);
+			return ApplicationDbContext.TransportationLines.Include(tl => tl.TransportationLineType);
+		}
+
+		public TransportationLine FindByIdIncludeRoutePoints(int id)
+		{
+			return ApplicationDbContext.TransportationLines.Include(tl => tl.TransportationLineRoutePoints).FirstOrDefault(tl => tl.Id == id);
+		}
+
+		public TransportationLine FindByLineNumberIncludeRoutePoints(int lineNum)
+		{
+			return ApplicationDbContext.TransportationLines.Include(tl => tl.TransportationLineRoutePoints).FirstOrDefault(tl => tl.LineNum == lineNum);
 		}
 	}
 }

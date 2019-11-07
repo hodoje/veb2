@@ -21,7 +21,7 @@ namespace WebApp.Persistence.UnitOfWork
 		ITicketTypeRepository TicketTypeRepository { get; }
         ITransportationLineRepository TransportationLineRepository { get; }
 		ITransportationLineTypeRepository TransportationLineTypeRepository { get; }
-        ITransportationLineRouteRepository TransportationLineRouteRepository { get; }
+        ITransportationLineRoutePointsRepository TransportationLineRoutePointsRepository { get; }
 
         List<Microsoft.AspNet.Identity.EntityFramework.IdentityRole> GetAllRolesIncludeUsers();
 

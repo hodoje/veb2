@@ -8,6 +8,6 @@ namespace WebApp.Models.Dtos
     public class TransportationLinePlanDto
     {
         public int LineNumber { get; set; }
-        public List<RoutePointDto> Routes { get; set; }
+        public List<RoutePointDto> RoutePoints { get; set; }
     }
 }

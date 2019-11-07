@@ -23,12 +23,12 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public override IEnumerable<Pricelist> GetAll()
 		{
-			return context.Set<Pricelist>().Include(x => x.TicketTypePricelists).ToList();
+			return ApplicationDbContext.Pricelists.Include(x => x.TicketTypePricelists).ToList();
 		}
 
 		public Pricelist GetActivePricelist()
 		{
-			return context.Set<Pricelist>().OrderByDescending(pl => pl.Id).FirstOrDefault();
+			return ApplicationDbContext.Pricelists.OrderByDescending(pl => pl.Id).FirstOrDefault();
 		}
 	}
 }

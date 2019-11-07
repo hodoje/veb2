@@ -56,7 +56,7 @@ export class LinesGridComponent implements OnInit {
   createPolyline(plan: TransportationLinePlan, color: string): Polyline {
     let geoLocations: GeoLocation[] = [];
 
-    plan.routes.forEach(route => {
+    plan.routePoints.forEach(route => {
         geoLocations.push(new GeoLocation(route.station.latitude, route.station.longitude));
     });
 

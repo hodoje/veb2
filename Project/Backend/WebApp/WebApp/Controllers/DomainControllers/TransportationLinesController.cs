@@ -89,6 +89,47 @@ namespace WebApp.Controllers.DomainControllers
             }
         }
 
+		[HttpPost]
+		[Route("api/TransportationLines/UpdateTransportationLinePlan")]
+		[Authorize(Roles = "Admin")]
+		public IHttpActionResult UpdateTransportationLinePlan(TransportationLinePlanDto updatedLinePlan)
+		{
+			try
+			{
+				// Current idea to update Many-to-Many relationship is to delete all Many-to-Many table entries and add new ones
+				TransportationLine tLineToBeUpdated = unitOfWork.TransportationLineRepository.Find(tl => tl.LineNum == updatedLinePlan.LineNumber).FirstOrDefault();
+				if(tLineToBeUpdated != null)
+				{
+					List<TransportationLineRoutePoint> tLineToBeUpdatedRoutePoints = unitOfWork.TransportationLineRoutePointsRepository.
+						Find(rp => rp.TransportationLineId == tLineToBeUpdated.Id).ToList();
+					unitOfWork.TransportationLineRoutePointsRepository.RemoveRange(tLineToBeUpdatedRoutePoints);
+					unitOfWork.Complete();
+
+					List<TransportationLineRoutePoint> tLToBeUpdatedRoutePointsToAddList = new List<TransportationLineRoutePoint>(updatedLinePlan.RoutePoints.Count);
+					foreach(var rp in updatedLinePlan.RoutePoints)
+					{
+						TransportationLineRoutePoint tlrp = new TransportationLineRoutePoint();
+						tlrp.TransportationLineId = tLineToBeUpdated.Id;
+						tlrp.StationId = rp.Station.Id;
+						tLToBeUpdatedRoutePointsToAddList.Add(tlrp);
+					}
+
+					unitOfWork.TransportationLineRoutePointsRepository.AddRange(tLToBeUpdatedRoutePointsToAddList);
+					unitOfWork.Complete();
+					return Ok();
+				}
+				else
+				{
+					return BadRequest();
+				}
+			}
+			catch (Exception e)
+
+			{
+				return InternalServerError();
+			}
+		}
+
 		// POST api/TransportationLines/AddStationToPlan
 		[HttpPost]
 		[Route("api/TransportationLines/AddStationToPlan")]
@@ -97,14 +138,14 @@ namespace WebApp.Controllers.DomainControllers
 		{
 			try
 			{
-				List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.GetAll().Where(x => x.TransportationLine.LineNum == dto.LineNumber).ToList();
+				List<TransportationLineRoutePoint> routes = unitOfWork.TransportationLineRoutePointsRepository.GetAll().Where(x => x.TransportationLine.LineNum == dto.LineNumber).ToList();
 
-				TransportationLineRoute route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
+				TransportationLineRoutePoint route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
 				TransportationLine tl = unitOfWork.TransportationLineRepository.GetAll().Where(x => x.LineNum == dto.LineNumber).FirstOrDefault();
 				if (route == null)
 				{
-					route = new TransportationLineRoute() { SequenceNo = routes.Max(x => x.SequenceNo) + 1, StationId = dto.StationId, TransportationLineId = tl.Id };
-					unitOfWork.TransportationLineRouteRepository.Add(route);
+					route = new TransportationLineRoutePoint() { SequenceNo = routes.Max(x => x.SequenceNo) + 1, StationId = dto.StationId, TransportationLineId = tl.Id };
+					unitOfWork.TransportationLineRoutePointsRepository.Add(route);
 					unitOfWork.Complete();
 
 					return Ok();
@@ -129,13 +170,13 @@ namespace WebApp.Controllers.DomainControllers
 		{
 			try
 			{
-				List<TransportationLineRoute> routes = unitOfWork.TransportationLineRouteRepository.GetAll().Where(x => x.TransportationLine.LineNum == dto.LineNumber).ToList();
+				List<TransportationLineRoutePoint> routes = unitOfWork.TransportationLineRoutePointsRepository.GetAll().Where(x => x.TransportationLine.LineNum == dto.LineNumber).ToList();
 
-				TransportationLineRoute route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
+				TransportationLineRoutePoint route = routes.FirstOrDefault(x => x.StationId == dto.StationId);
 
 				if (route != null)
 				{
-					unitOfWork.TransportationLineRouteRepository.Remove(route);
+					unitOfWork.TransportationLineRoutePointsRepository.Remove(route);
 
 					unitOfWork.Complete();
 

@@ -16,6 +16,10 @@ export class TransportationLinesHttpService extends BaseHttpService<Transportati
     return this.httpClient.get<any>(this.base_url + this.specifiedUrl + "/Plans");
   }
 
+  updateTransportationLinePlan(routePlan: TransportationLinePlan){
+    return this.httpClient.post(this.base_url + this.specifiedUrl + "/UpdateTransportationLinePlan", routePlan);
+  }
+
   addStationToPlan(lineNum: number, sId: number){
     return this.httpClient.post(this.base_url + this.specifiedUrl + '/addStationToPlan', { lineNumber: lineNum, stationId: sId});
   }

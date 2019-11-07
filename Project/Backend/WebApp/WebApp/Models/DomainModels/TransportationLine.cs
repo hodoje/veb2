@@ -11,12 +11,12 @@ namespace WebApp.Models.DomainModels
 	{
 		public TransportationLine()
 		{
-            TransportationLineRoutes = new HashSet<TransportationLineRoute>();
+			TransportationLineRoutePoints = new HashSet<TransportationLineRoutePoint>();
 		}
 
 		public int Id { get; set; }
 		public int LineNum { get; set; }
-		public ICollection<TransportationLineRoute> TransportationLineRoutes { get; set; }
+		public ICollection<TransportationLineRoutePoint> TransportationLineRoutePoints { get; set; }
 		public ICollection<Schedule> Schedules { get; set; }
 		public int TransportationLineTypeId { get; set; }
 		public virtual TransportationLineType TransportationLineType { get; set; }

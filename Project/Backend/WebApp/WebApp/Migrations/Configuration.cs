@@ -108,8 +108,8 @@ namespace WebApp.Migrations
             Station station2 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station2"));
             Station station3 = context.Stations.FirstOrDefault(x => x.Name.Equals("Station3"));
 
-            TransportationLineRoute lineRoute = new TransportationLineRoute() { Station = station1, SequenceNo = 1 };
-            TransportationLineRoute lineRoute2 = new TransportationLineRoute() { Station = station2, SequenceNo = 2 };
+            TransportationLineRoutePoint lineRoute = new TransportationLineRoutePoint() { Station = station1, SequenceNo = 1 };
+			TransportationLineRoutePoint lineRoute2 = new TransportationLineRoutePoint() { Station = station2, SequenceNo = 2 };
 
             if (!context.TransportationLines.Any(x => x.LineNum == 4))
             {
@@ -125,15 +125,14 @@ namespace WebApp.Migrations
 
                 lineRoute.TransportationLine = transportationLine;
                 lineRoute2.TransportationLine = transportationLine;
-                context.TransportationLineRoutes.Add(lineRoute);
-                context.TransportationLineRoutes.Add(lineRoute2);
+                context.TransportationLineRoutePoints.Add(lineRoute);
+                context.TransportationLineRoutePoints.Add(lineRoute2);
             }
-
 
 			if (!context.TransportationLines.Any(x => x.LineNum == 70))
 			{
-                lineRoute = new TransportationLineRoute() { Station = station1, SequenceNo = 1 };
-                lineRoute2 = new TransportationLineRoute() { Station = station3, SequenceNo = 2 };
+                lineRoute = new TransportationLineRoutePoint() { Station = station1, SequenceNo = 1 };
+                lineRoute2 = new TransportationLineRoutePoint() { Station = station3, SequenceNo = 2 };
 
                 TransportationLine transportationLine = new TransportationLine()
 				{
@@ -147,8 +146,8 @@ namespace WebApp.Migrations
 
                 lineRoute.TransportationLine = transportationLine;
                 lineRoute2.TransportationLine = transportationLine;
-                context.TransportationLineRoutes.Add(lineRoute);
-                context.TransportationLineRoutes.Add(lineRoute2);
+                context.TransportationLineRoutePoints.Add(lineRoute);
+                context.TransportationLineRoutePoints.Add(lineRoute2);
             }
 
 			context.SaveChanges();

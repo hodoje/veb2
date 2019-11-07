@@ -37,6 +37,7 @@
               <div *ngIf="yearly.errors.min">Yearly Base Price cannot be less than 0.</div>
               <div *ngIf="yearly.errors.pattern">Yearly Base Price field must contain only digits.</div>
             </div>
+            
             <h4>Date</h4>
             <label for="currentDate">Valid From</label>
             <input 
@@ -55,9 +56,10 @@
         <div class="page-header">
           <h2>All pricelist</h2>
         </div>
-        <hr/>
-        <div class="side-list">
-          <table mdbTable class="blue white-text" small="true" *ngFor="let priceList of allPriceLists">
+      <hr/>
+      <div class="side-list">
+        <div *ngFor="let priceList of allPriceLists">
+          <table mdbTable class="blue white-text" small="true">
             <thead class="white black-text">
               <tr>
                 <th class="th-sm">Ticket type</th>
@@ -87,7 +89,9 @@
                 <td>{{priceList.fromDate}}</td>
               </tr>
             </tbody>
-        </table>
+          </table>
+          <hr/>
+        </div>
       </div>
       </div>
     </div>

@@ -91,7 +91,7 @@ namespace WebApp.App_Start
 			container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
             container.RegisterType<IEmailSender, SMTPClient>();
-            container.RegisterType<ITransportationLineRouteRepository, TransportationLineRouteRepository>();
+            container.RegisterType<ITransportationLineRoutePointsRepository, TransportationLineRoutePointsRepository>();
             container.RegisterType<ITransportationLineComponent, TransportationLineComponent>();
 			container.RegisterType<IPricelistComponent, PricelistComponent>();
             container.RegisterType<UserProfileConfirmationHub>();
@@ -103,6 +103,7 @@ namespace WebApp.App_Start
 			MapperConfiguration config = new MapperConfiguration(c =>
 			{
 				c.AddProfile<DayOfTheWeekMappingProfile>();
+				c.AddProfile<TransportationLineRouteMappingProfile>();
 				c.AddProfile<TransportationLineTypeMappingProfile>();
 				c.AddProfile<TransportationLineMappingProfile>();
 				c.AddProfile<ScheduleMappingProfile>();
@@ -113,7 +114,6 @@ namespace WebApp.App_Start
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
-
 		}
 
         public void Dispose()

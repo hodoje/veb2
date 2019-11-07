@@ -24,16 +24,16 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // GET: api/TransportationLineRoutes
-        public IEnumerable<TransportationLineRoute> GetTransportationLineRoutes()
+        public IEnumerable<TransportationLineRoutePoint> GetTransportationLineRoutes()
         {
-            return unitOfWork.TransportationLineRouteRepository.GetAll();
+            return unitOfWork.TransportationLineRoutePointsRepository.GetAll();
         }
 
         // GET: api/TransportationLineRoutes/5
-        [ResponseType(typeof(TransportationLineRoute))]
+        [ResponseType(typeof(TransportationLineRoutePoint))]
         public IHttpActionResult GetTransportationLineRoute(int id)
         {
-            TransportationLineRoute transportationLineRoute = unitOfWork.TransportationLineRouteRepository.Get(id);
+			TransportationLineRoutePoint transportationLineRoute = unitOfWork.TransportationLineRoutePointsRepository.Get(id);
             if (transportationLineRoute == null)
             {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace WebApp.Controllers.DomainControllers
 
         // PUT: api/TransportationLineRoutes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutTransportationLineRoute(int id, TransportationLineRoute transportationLineRoute)
+        public IHttpActionResult PutTransportationLineRoute(int id, TransportationLineRoutePoint transportationLineRoute)
         {
             if (!ModelState.IsValid)
             {
@@ -76,31 +76,31 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // POST: api/TransportationLineRoutes
-        [ResponseType(typeof(TransportationLineRoute))]
-        public IHttpActionResult PostTransportationLineRoute(TransportationLineRoute transportationLineRoute)
+        [ResponseType(typeof(TransportationLineRoutePoint))]
+        public IHttpActionResult PostTransportationLineRoute(TransportationLineRoutePoint transportationLineRoute)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            unitOfWork.TransportationLineRouteRepository.Add(transportationLineRoute);
+            unitOfWork.TransportationLineRoutePointsRepository.Add(transportationLineRoute);
             unitOfWork.Complete();
 
             return CreatedAtRoute("DefaultApi", new { id = transportationLineRoute.Id }, transportationLineRoute);
         }
 
         // DELETE: api/TransportationLineRoutes/5
-        [ResponseType(typeof(TransportationLineRoute))]
+        [ResponseType(typeof(TransportationLineRoutePoint))]
         public IHttpActionResult DeleteTransportationLineRoute(int id)
         {
-            TransportationLineRoute transportationLineRoute = unitOfWork.TransportationLineRouteRepository.Get(id);
+			TransportationLineRoutePoint transportationLineRoute = unitOfWork.TransportationLineRoutePointsRepository.Get(id);
             if (transportationLineRoute == null)
             {
                 return NotFound();
             }
 
-            unitOfWork.TransportationLineRouteRepository.Remove(transportationLineRoute);
+            unitOfWork.TransportationLineRoutePointsRepository.Remove(transportationLineRoute);
             unitOfWork.Complete();
 
             return Ok(transportationLineRoute);
@@ -117,7 +117,7 @@ namespace WebApp.Controllers.DomainControllers
 
         private bool TransportationLineRouteExists(int id)
         {
-            return unitOfWork.TransportationLineRouteRepository.Get(id) != null;
+            return unitOfWork.TransportationLineRoutePointsRepository.Get(id) != null;
         }
     }
 }

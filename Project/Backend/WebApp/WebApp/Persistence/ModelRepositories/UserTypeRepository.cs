@@ -18,8 +18,7 @@ namespace WebApp.Persistence.ModelRepositories
 
         public override IEnumerable<UserType> GetAll()
         {
-            return context.Set<UserType>().Include(x => x.Benefits)
-                .ToList();
+            return ApplicationDbContext.UserTypes.Include(x => x.Benefits).ToList();
         }
 
         public UserTypeRepository(DbContext context) : base(context)

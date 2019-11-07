@@ -9,47 +9,45 @@
         </div>
       </div>
       <div class="row">
-          <div class="col-md-8">
-              <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14">
-                  <agm-marker *ngFor="let station of allStations" [latitude]="station.latitude" [longitude]="station.longitude"></agm-marker>
-              </agm-map>
-          </div>
-          <div class="col-md-4">
-            <label for="currentPlan">Line</label>
-            <select name="currentPlan" [(ngModel)]="currentPlan" (change)="changePlan()" class="form-control form-control-sm">
-              <option *ngFor="let currentPlan of plans" [ngValue]="currentPlan">{{ currentPlan.lineNumber }}</option>
-            </select>
-            <label for="currentStation">Stations</label>
-            <!--https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular-->
+        <div class="col-md-8">
+            <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14">
+                <agm-marker *ngFor="let station of allStations" [label]="station.name" [latitude]="station.latitude" [longitude]="station.longitude"
+                [iconUrl]="
+                  {
+                    url: './../../assets/iconfinder_ic_directions_bus_48px_352314.svg',
+                    scaledSize: {
+                      width: 40,
+                      height: 50
+                    }
+                  }
+                "></agm-marker>
+            </agm-map>
+        </div>
+        <div class="col-md-4">
+          <label for="currentPlan">Line</label>
+          <select name="currentLine" [(ngModel)]="currentLine" (change)="changeLine()" class="form-control form-control-sm">
+            <option *ngFor="let currentLine of allLines" [ngValue]="currentLine">{{ currentLine.lineNum }}</option>
+          </select>
+          <label for="currentStation">Stations</label>
+          <!--https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular-->            
+          <form [formGroup]="updateLineStationsForm" (ngSubmit)="updateLinePlan()">
             <div class="card">
               <div class="card-block">
                 <div class="card-body">
-                  <form [formGroup]="updateLineStationsForm" (ngSubmit)="updateLineStations()">
-                    <div class="stations-checkbox-container">
-                      <p *ngFor="let station of updateLineStationsForm.controls.stations.controls; let i = index">
-
-                        <label formArrayName="stations">
-                          <input type="checkbox" [formControlName]="i"/>
-                          {{allStations[i].name}}
-                        </label>
-                      </p>
-                    </div>
-                  </form>
+                  <div class="stations-checkbox-container">
+                    <p *ngFor="let station of updateLineStationsForm.controls.stations.controls; let i = index">
+                      <label formArrayName="stations">
+                        <input type="checkbox" [formControlName]="i" (change)="updatePlanPathForCurrentPlan(allStations[i].id, $event.target.checked)"/>
+                        {{allStations[i].name}}
+                      </label>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-            <button class="btn btn-primary float-right">Update</button>
-
-
-
-            <!-- <select name="currentStation" [(ngModel)]="currentStation"  (ngModelChange)="onClick($event)" class="form-control form-control-sm">
-              <option *ngFor="let station of allStations" [ngValue]="station" >
-                <button class="btn btn-primary" style="color: 'red'">{{ checkIfExist(station?.name) ? '-' : '+'}}</button>{{ station?.name }}
-              </option>
-            </select>
-            <button class="btn btn-primary" [hidden]="checkIfExist(currentStation?.name)" (click)="addStationToPlan(currentStation?.id)">Add</button>
-            <button class="btn btn-primary" [hidden]="!checkIfExist(currentStation?.name)" (click)="removeStationFromPlan(currentStation?.id)">Remove</button> -->
-          </div>
+            <button class="btn btn-primary float-right" [disabled]="isUpdateButtonDisabled">Update</button>
+          </form>
+        </div>
       </div>
       <hr/>
       <br/>

@@ -85,7 +85,7 @@ namespace WebApp.BusinessComponents.NotificationHub
 				TransportationLinePlanDto lineDto = transportationLineComponent.GetTransportationLinePlan(unitOfWork, line);
 
 				// Puca ukoliko nema stanica za definisanu liniju	
-				Station currStation = lineDto.Routes[random.Next(0, lineDto.Routes.Count)].Station;
+				Station currStation = lineDto.RoutePoints[random.Next(0, lineDto.RoutePoints.Count)].Station;
 				vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
 			}
 

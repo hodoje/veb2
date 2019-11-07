@@ -227,6 +227,7 @@
     <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\StationMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\TransportationLineRouteMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\TransportationLineTypeMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\UserTypeMappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -364,6 +365,10 @@
     <Compile Include="Migrations\201911050936128_UpdatedTransportationLineRoute.Designer.cs">
       <DependentUpon>201911050936128_UpdatedTransportationLineRoute.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911071006306_ChangedTransportationRouteToTransportationRoutePoint.cs" />
+    <Compile Include="Migrations\201911071006306_ChangedTransportationRouteToTransportationRoutePoint.Designer.cs">
+      <DependentUpon>201911071006306_ChangedTransportationRouteToTransportationRoutePoint.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -371,7 +376,7 @@
     <Compile Include="Models\Dtos\ApplicationUserDto.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
-    <Compile Include="Models\DomainModels\TransportationLineRoute.cs" />
+    <Compile Include="Models\DomainModels\TransportationLineRoutePoint.cs" />
     <Compile Include="Models\DomainModels\TransportationLineType.cs" />
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
@@ -393,7 +398,7 @@
     <Compile Include="Models\Enumerations\RegistrationStatus.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
-    <Compile Include="Persistence\ModelRepositories\TransportationLineRouteRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TransportationLineRoutePointsRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransporationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\UserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\DayOfTheWeekRepository.cs" />
@@ -402,7 +407,7 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
-    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineRouteRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineRoutePointsRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IScheduleRepository.cs" />
@@ -581,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911050936128_UpdatedTransportationLineRoute.resx">
       <DependentUpon>201911050936128_UpdatedTransportationLineRoute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911071006306_ChangedTransportationRouteToTransportationRoutePoint.resx">
+      <DependentUpon>201911071006306_ChangedTransportationRouteToTransportationRoutePoint.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

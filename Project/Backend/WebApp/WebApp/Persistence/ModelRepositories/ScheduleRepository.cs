@@ -22,7 +22,7 @@ namespace WebApp.Persistence.ModelRepositories
 
 		public IEnumerable<Schedule> GetAllIncludeDayOfTheWeek()
 		{
-			return context.Set<Schedule>().Include(s => s.DayOfTheWeek);
+			return ApplicationDbContext.Schedules.Include(s => s.DayOfTheWeek);
 		}
 	}
 }

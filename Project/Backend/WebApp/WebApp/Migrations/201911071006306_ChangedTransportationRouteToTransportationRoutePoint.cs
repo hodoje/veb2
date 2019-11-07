@@ -1,0 +1,18 @@
+namespace WebApp.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class ChangedTransportationRouteToTransportationRoutePoint : DbMigration
+    {
+        public override void Up()
+        {
+            RenameTable(name: "dbo.TransportationLineRoutes", newName: "TransportationLineRoutePoints");
+        }
+        
+        public override void Down()
+        {
+            RenameTable(name: "dbo.TransportationLineRoutePoints", newName: "TransportationLineRoutes");
+        }
+    }
+}

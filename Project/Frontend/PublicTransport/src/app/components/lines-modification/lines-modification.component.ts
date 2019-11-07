@@ -5,6 +5,8 @@ import { TransportationLinePlan } from 'src/app/models/transportation-route-plan
 import { GeoLocation } from 'src/app/models/map-models/geolocation';
 import { StationHttpService } from 'src/app/services/station-http.service';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { TransportationLine } from 'src/app/models/transportationline.model';
+import { RoutePoint } from 'src/app/models/route-point.model';
 
 @Component({
   selector: 'app-lines-modification',
@@ -15,13 +17,21 @@ export class LinesModificationComponent implements OnInit {
 
   currentLatitude: number = 45.2520547;
   currentLongitude: number = 19.8326543;
+  markerIcon: {
+    url: './../../assets/iconfinder_ic_directions_bus_48px_352314.svg',
+    scaledSize: {
+      width: 40,
+      height: 50
+    }
+  }
 
-  plans: TransportationLinePlan[] = [];
+  allLines: TransportationLine[];
+  currentLine: TransportationLine;
   currentPlan: TransportationLinePlan;
-  currentStations = [];
   allStations = [];  
   // https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular
   updateLineStationsForm: FormGroup;
+  isUpdateButtonDisabled = true;
 
   constructor(private transportationLineService: TransportationLinesHttpService,
     private stationsService: StationHttpService,
@@ -31,61 +41,31 @@ export class LinesModificationComponent implements OnInit {
       });
   }
 
-  addStationCheckboxes(){
-    this.allStations.forEach((station, i) => {
-      var determineIfItNeedsToBeCheckedByCheckingInCurrentLinesStations = true;
-      const control = new FormControl(determineIfItNeedsToBeCheckedByCheckingInCurrentLinesStations);
-      (this.updateLineStationsForm.controls.stations as FormArray).push(control);
-    })
-  }
-
   ngOnInit() { 
+    this.getAllLines();
     this.getAllStations();
   }
-
-  getAllPlans(){
-    this.transportationLineService.getAllTransportationLinePlans().subscribe(
-      (data) => {
-        this.plans = data;
-        console.log(data);
-        this.currentPlan = this.plans[0];
-        this.currentStations = this.currentPlan.routes.map(r => {
-          return r.station;
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
-
-  getAllStations(){
-    this.stationsService.getAll().subscribe(
-      (data) => {
-        this.allStations = data;
-        this.addStationCheckboxes(); // Can add checkboxes only after data arrives
-        console.log(this.allStations);
+  
+  getAllLines() {
+    this.transportationLineService.getAll().subscribe(
+      (data: TransportationLine[]) => {
+        this.allLines = data;
+        this.currentLine = this.allLines[0];
       },
       (err) => {
         console.log(err);
       },
       () => {
-        this.getAllPlans();
+        this.getPlanForCurrentLine();
       }
     );
   }
-
-  updateLineStations(){
-    const selectedOrderIds = this.updateLineStationsForm.value.orders
-    .map((v, i) => v ? this.allStations[i].id : null)
-    .filter(v => v !== null);
-    console.log(selectedOrderIds);
-  }
-
-  addStationToPlan(sId: number){
-    this.transportationLineService.addStationToPlan(this.currentPlan.lineNumber, sId).subscribe(
+    
+  getAllStations() {
+    this.stationsService.getAll().subscribe(
       (data) => {
-        this.getAllPlans();
+        this.allStations = data;
+        this.addStationCheckboxes();        
       },
       (err) => {
         console.log(err);
@@ -93,43 +73,79 @@ export class LinesModificationComponent implements OnInit {
     );
   }
 
-  removeStationFromPlan(sId: number){
-    this.transportationLineService.removeStationFromPlan(this.currentPlan.lineNumber, sId).subscribe(
-      (data) => {
-        this.getAllPlans();
+  getPlanForCurrentLine(){
+    this.transportationLineService.getTransportationLinePlan(this.currentLine.lineNum).subscribe(
+      (data: TransportationLinePlan) => {
+        this.currentPlan = data;
+        this.determineCheckboxStates();
       },
-      (err) => {
+      (err) =>{
         console.log(err);
       }
     );
   }
-  
-  changePlan(){
-    console.log(this.currentPlan.lineNumber);
-    this.currentStations = this.currentPlan.routes.map(r => {
-      return r.station;
+
+  addStationCheckboxes() {
+    this.allStations.forEach((station, i) => {
+      const control = new FormControl();
+      (this.updateLineStationsForm.controls.stations as FormArray).push(control);
     });
   }
 
-  checkIfExist(stationName){
-    return this.currentStations.find(s => s.name === stationName);
+  determineCheckboxStates(){
+    let updateLineStationsFormValue = [];
+    this.allStations.forEach(station => {
+      let isStationChecked = this.currentPlan.routePoints.find(rp => rp.station.id == station.id) ? true : false;
+      updateLineStationsFormValue.push(isStationChecked);
+    });
+    (this.updateLineStationsForm.controls.stations as FormArray).setValue(updateLineStationsFormValue);
+  }
+
+  changeLine(){
+    this.getPlanForCurrentLine();
+  }
+
+  updatePlanPathForCurrentPlan(stationId: number, isChecked: boolean) {
+    this.isUpdateButtonDisabled = false;
+    if(isChecked){
+      let newRoutePoint = new RoutePoint();
+      let nextSequenceNo = Math.max(...this.currentPlan.routePoints.map(r => r.sequenceNumber)) + 1;
+      newRoutePoint.sequenceNumber = nextSequenceNo;
+      newRoutePoint.station = this.allStations.find(s => s.id == stationId);
+      this.currentPlan.routePoints.push(newRoutePoint);
+    }
+    else{
+      let routePointToBeRemoved = this.currentPlan.routePoints.find(rp => rp.station.id == stationId) as RoutePoint;
+      let routePointToBeRemovedSequenceNo = routePointToBeRemoved.sequenceNumber;
+      this.currentPlan.routePoints = this.currentPlan.routePoints.filter(rp => rp.station.id != stationId);
+      let routePointsToBeUpdated = this.currentPlan.routePoints.filter(rp => rp.sequenceNumber > routePointToBeRemovedSequenceNo) as RoutePoint[];
+      this.currentPlan.routePoints.forEach(rp => {
+        if(routePointsToBeUpdated.indexOf(rp) > -1){
+          --rp.sequenceNumber;
+        }
+      });
+    }
+  }
+
+  updateLinePlan(){
+    console.log(this.currentPlan);
+    this.transportationLineService.updateTransportationLinePlan(this.currentPlan).subscribe(
+      () => {
+        this.isUpdateButtonDisabled = true;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   createPolyline(plan: TransportationLinePlan, color: string): Polyline {
     let geoLocations: GeoLocation[] = [];
 
-    plan.routes.forEach(route => {
+    plan.routePoints.forEach(route => {
         geoLocations.push(new GeoLocation(route.station.latitude, route.station.longitude));
     });
 
     return new Polyline(geoLocations, color, '', plan.lineNumber);
-  }
-
-  placeMarker($event){
-    console.log($event.coords.lat + " " + $event.coords.lng);
-  }
-
-  onClick(stationName) {
-    console.log(stationName);
   }
 }

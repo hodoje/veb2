@@ -34,6 +34,6 @@ namespace WebApp.Persistence
 		public virtual DbSet<TicketType> TicketTypes { get; set; }
         public virtual DbSet<TransportationLine> TransportationLines { get; set; }
 		public virtual DbSet<TransportationLineType> TransportationLineTypes { get; set; }
-        public virtual DbSet<TransportationLineRoute> TransportationLineRoutes { get; set; }
+        public virtual DbSet<TransportationLineRoutePoint> TransportationLineRoutePoints { get; set; }
 	}
 }
