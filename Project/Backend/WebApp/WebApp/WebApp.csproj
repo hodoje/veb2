@@ -267,9 +267,9 @@
     <Compile Include="BusinessComponents\IPricelistComponent.cs" />
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
     <Compile Include="BusinessComponents\ITransportationLineComponent.cs" />
-    <Compile Include="BusinessComponents\NotificationHub\SimulatorHub.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\SimulatorComponents\SimulatorHub.cs" />
     <Compile Include="BusinessComponents\NotificationHub\SimulatorComponents\CurrentPosition.cs" />
-    <Compile Include="BusinessComponents\NotificationHub\VehicleModel.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\SimulatorComponents\VehicleModel.cs" />
     <Compile Include="BusinessComponents\PricelistComponent.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />

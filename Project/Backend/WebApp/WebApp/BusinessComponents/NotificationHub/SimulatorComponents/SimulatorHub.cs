@@ -6,11 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
+using WebApp.BusinessComponents.NotificationHub.SimulatorComponents;
 using WebApp.Models.DomainModels;
 using WebApp.Models.Dtos;
 using WebApp.Persistence.UnitOfWork;
 
-namespace WebApp.BusinessComponents.NotificationHub
+namespace WebApp.BusinessComponents.NotificationHub.SimulatorComponents
 {
     [HubName("simulator")]
     public class SimulatorHub : Hub
