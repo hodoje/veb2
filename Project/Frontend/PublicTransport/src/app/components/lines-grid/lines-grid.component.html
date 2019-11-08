@@ -27,13 +27,20 @@
             <div class="col-md-10">
                 <agm-map [latitude]="currentLatitude" [longitude]="currentLongitude" [zoom]="14" (mapClick)="placeMarker($event)">
                     <div *ngFor="let polyline of shownRoutes">
-                            <agm-polyline [strokeColor]="polyline.color">
-                                <agm-polyline-point *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude">
-                                </agm-polyline-point>
-                            </agm-polyline>
-                        <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude"></agm-marker>
+                        <agm-polyline [strokeColor]="polyline.color">
+                            <agm-polyline-point *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude">
+                            </agm-polyline-point>
+                        </agm-polyline>
+                        <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude"[iconUrl]="{
+                            url: './../../assets/bus.svg',
+                            scaledSize: {
+                              width: 30,
+                              height: 30
+                            }
+                          }"></agm-marker>
                     </div>
                 </agm-map>
+                <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
             </div>
             <div class="col-md-1"></div>
         </div>

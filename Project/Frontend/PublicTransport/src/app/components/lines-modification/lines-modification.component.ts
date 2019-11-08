@@ -17,13 +17,6 @@ export class LinesModificationComponent implements OnInit {
 
   currentLatitude: number = 45.2520547;
   currentLongitude: number = 19.8326543;
-  markerIcon: {
-    url: './../../assets/iconfinder_ic_directions_bus_48px_352314.svg',
-    scaledSize: {
-      width: 40,
-      height: 50
-    }
-  }
 
   allLines: TransportationLine[];
   currentLine: TransportationLine;
@@ -128,7 +121,6 @@ export class LinesModificationComponent implements OnInit {
   }
 
   updateLinePlan(){
-    console.log(this.currentPlan);
     this.transportationLineService.updateTransportationLinePlan(this.currentPlan).subscribe(
       () => {
         this.isUpdateButtonDisabled = true;
