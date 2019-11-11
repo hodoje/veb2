@@ -3,7 +3,7 @@ using System;
 using WebApp.Models.Dtos;
 using WebApp.Models.Enumerations;
 
-namespace WebApp.Models.DomainModels
+namespace WebApp.Models.DomainModels.Dtos
 {
     public class ApplicationUserDto
     {
@@ -25,5 +25,7 @@ namespace WebApp.Models.DomainModels
         public UserTypeDto UserType { get; set; }
         [JsonProperty("banned")]
         public bool Banned { get; set; }
+		[JsonProperty("role")]
+		public string Role { get; set; }
     }
 }

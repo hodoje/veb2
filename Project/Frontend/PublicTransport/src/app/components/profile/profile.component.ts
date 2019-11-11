@@ -2,15 +2,13 @@ import { checkIfContainsAtLeastOneUpperCaseLetterValidator, checkIfContainsAtLea
 import { ChangePasswordModel } from './../../models/change-password.model';
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { UserType } from 'src/app/models/user-type.model';
-import { RegistrationHttpService } from 'src/app/services/registration-http.service';
 import { UserTypeHttpService } from 'src/app/services/user-type-http.service';
 import { User } from 'src/app/models/user.model';
 import { AccountHttpService } from 'src/app/services/account-http.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ImageHttpService } from 'src/app/services/image-http.service';
-import { UserConfirmationService } from 'src/app/services/user-confirmation.service';
+import { UserHubService } from 'src/app/services/user-hub.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -31,19 +29,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   imageToShow: any;
   isImageLoaded: boolean;
   fileLabelText = "Choose file";
-  userRegistrationStatus: string;
-  isConnected: Boolean;
-  subscriptions: Subscription[] = [];
+  isConnected: Boolean;  
   // Used in registration process
   isRegistrationCompleted: Boolean;
   registrationStatus: string;
+  registrationMessageStatus: string;
   logoutCounter: number;
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions.length = 0;
-
-    this.userConfirmationService.disconnect();
+    this.stopUserHubServiceConnection();
   }
 
   //#region Forms
@@ -126,14 +120,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private accountService: AccountHttpService, 
     private userTypeService: UserTypeHttpService,
     private imageService: ImageHttpService,
-    private userConfirmationService: UserConfirmationService,
-    private router: Router) {
-    this.uploadedFile = null;
-    this.registrationSuccessful = false;
-    this.currentUserType = null;
-    this.userTypes = [];
-    this.myData = new User();
-    this.isImageLoaded = false;
+    private userHubService: UserHubService,
+    private ngZone: NgZone) {
+      this.uploadedFile = null;
+      this.registrationSuccessful = false;
+      this.currentUserType = null;
+      this.userTypes = [];
+      this.myData = new User();
+      this.isImageLoaded = false;
+      this.registrationStatus = this.RegistrationStatuses.Processing;
+      this.registrationMessageStatus = this.RegistrationStatuses.Processing;
   }
 
   ngOnInit() {
@@ -148,59 +144,62 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.getMyData();
       }
     );
+    // this.initConnectionToRegistrationService();
+  }
+
+  private startUserHubServiceConnection() {
+    console.log("started user hub connection");
+    this.userHubService.startConnection();
+  }
+
+  private stopUserHubServiceConnection() {
+    console.log("stopped user hub connection");
+    this.userHubService.stopConnection();
+  }
+  
+  private checkConnection() {
+    this.userHubService.connectionEstablishedEventEmmiter.subscribe(connestionStatus => this.isConnected = connestionStatus);
+  }
+
+  private subscribeForConfirmedRegistration() {
+    this.userHubService.userConfirmedNotificationEventEmitter.subscribe(
+      () => {
+        this.onUserConfirmed();
+      }
+    );
+  }
+
+  public onUserConfirmed() {
+    this.ngZone.run(() => {
+      this.isRegistrationCompleted = true;
+      this.registrationMessageStatus = this.RegistrationStatuses.Accepted;
+      this.startLogoutTimer();
+    });
+  }
+
+  private subscribeForDeclinedRegistration() {
+    this.userHubService.userDeclinedNotificationEventEmitter.subscribe(
+      () => {
+        this.onUserDeclined();
+      }
+    );
+  }
+
+  public onUserDeclined(){
+    this.ngZone.run(() => {
+      this.isRegistrationCompleted = true;
+      this.registrationMessageStatus = this.RegistrationStatuses.Rejected;
+      this.startLogoutTimer();
+    });
   }
 
   initConnectionToRegistrationService(){
     if(this.myData.registrationStatus === this.RegistrationStatuses.Processing){
+      this.startUserHubServiceConnection();
       this.checkConnection();
-      this.userConfirmationService.registerForUserDeclining();
-      this.isRegistrationCompleted = false;
+      this.subscribeForConfirmedRegistration();
+      this.subscribeForDeclinedRegistration();
     }
-  }
-
-  private checkConnection(){
-    this.userConfirmationService.startConnection().subscribe(
-      (connectionStatus) => {
-        this.isConnected = connectionStatus;
-        if(this.isConnected){
-          this.userConfirmationService.resetEmitters();
-          this.userConfirmationService.AwaitRegistration();
-          this.subscribeForConfirmedRegistration();
-          this.subscribeForDeclinedRegistration();
-        }
-      },
-      (error) => console.log(error));
-  }
-
-  private subscribeForConfirmedRegistration(){
-    // console.log("subscribe to UserConfirmationEvent(1)");
-    this.subscriptions.push(this.userConfirmationService.registerForUserConfirmation().subscribe(
-      (e) => {
-        this.isRegistrationCompleted = true;
-        this.registrationStatus = this.RegistrationStatuses.Accepted;
-        this.startLogoutTimer();
-        // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
-        // var successfulRegistrationAnimation = setInterval(() => {
-        //   this.userSuccessfullyRegistered = true;
-        //   clearInterval(successfulRegistrationAnimation);
-        // }, 3000);
-    },
-    (err) => console.log(err)));
-    // console.log("subscribe to UserConfirmationEvent(2)");
-  }
-
-  private subscribeForDeclinedRegistration(){
-    this.subscriptions.push(this.userConfirmationService.userDeclinedNotification.subscribe((e) => {
-      this.isRegistrationCompleted = true;
-      this.registrationStatus = this.RegistrationStatuses.Rejected;
-      this.startLogoutTimer();
-      // this.userRegistrationStatus = this.RegistrationStatuses.Accepted;
-      // var successfulRegistrationAnimation = setInterval(() => {
-      //   this.userSuccessfullyRegistered = true;
-      //   clearInterval(successfulRegistrationAnimation);
-      // }, 3000);  
-    },
-    (err) => console.log(err)));
   }
 
   getMyData(){
@@ -216,12 +215,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
           birthday: this.myData.birthday,
           requestedUserType: this.currentUserType
         });
-        //this.userRegistrationStatus = data.registrationStatus;
-        if(data.registrationStatus !== this.RegistrationStatuses.Accepted){
+        if(data.registrationStatus === this.RegistrationStatuses.Processing){
           this.isRegistrationCompleted = false;
         }
         else{
           this.isRegistrationCompleted = true;
+          this.registrationStatus = null;
         }
         this.personalDataForm.markAsPristine();
         this.getUserImage();
@@ -328,8 +327,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   logoutUserAfterRegistration(){
     this.accountService.logOut(() => {
-      // this.router.navigate(['/login']);
-      // window.location.href = `${window.location.hostname}/login`;
       window.location.replace('/login');
     });
   }

@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using WebApp.Models;
+using WebApp.Models.Enumerations;
 
 namespace WebApp.Providers
 {
@@ -27,17 +28,23 @@ namespace WebApp.Providers
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect!");
+                context.SetError("invalid_grant", "Username or password is incorrect!");
                 return;
             }
 
-            //if (!user.IsSuccessfullyRegistered)
-            //{
-            //    context.SetError("invalid_grant", "AppUser did not confirm email!");
-            //    return;
-            //}
+			if (user.Banned)
+			{
+				context.SetError("invalid_grant", "This account has been banned.");
+				return;
+			}
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
+			if (user.RegistrationStatus == RegistrationStatus.Rejected)
+			{
+				context.SetError("invalid_grant", "This account registration has been rejected.");
+				return;
+			}
+
+			ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager, "JWT");
           
             var ticket = new AuthenticationTicket(oAuthIdentity, null);
 

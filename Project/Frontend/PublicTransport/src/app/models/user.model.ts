@@ -10,4 +10,5 @@ export class User{
     userType: UserType;
     documentImage: File;
     banned: boolean;
+    role: string;
 }

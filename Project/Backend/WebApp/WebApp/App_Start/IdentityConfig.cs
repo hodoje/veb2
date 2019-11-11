@@ -25,6 +25,7 @@ namespace WebApp
         {
             return Users.Include(user => user.UserType)
                 .Where(user => user.RegistrationStatus == RegistrationStatus.Accepted)
+				.Include(user => user.Roles)
                 .ToListAsync();
         }
 

@@ -1,11 +1,8 @@
-import { Component, OnInit, OnDestroy, NgZone, ChangeDetectionStrategy } from '@angular/core';
-import { UserConfirmationService } from 'src/app/services/user-confirmation.service';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { AdminHubService } from 'src/app/services/admin-hub.service';
 import { User } from 'src/app/models/user.model';
 import { UserHttpService } from 'src/app/services/user-http.service';
-import { jsonpCallbackContext } from '@angular/common/http/src/module';
-import { Observable, of, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators'
-import { forkJoin } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -14,124 +11,160 @@ import { forkJoin } from 'rxjs';
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
-  unregisteredUsers: User[];
-  registeredUsers: User[];
+  unconfirmedUsers: User[];
+  confirmedUsers: User[];
   isConnected: Boolean;
   subscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions.length = 0;
-
-    this.userConfirmationService.disconnect();
+    this.stopAdminHubServiceConnection();
   }
 
-  constructor(private userConfirmationService: UserConfirmationService, private userHttpService: UserHttpService, private ngZone: NgZone) { }
+  constructor(private adminHubService: AdminHubService, private userHttpService: UserHttpService, private ngZone: NgZone) { }
 
   ngOnInit() {
+    this.startAdminHubServiceConnection();
     this.checkConnection();
-    this.userConfirmationService.resetEmitters();
-    this.subscribeForAddNewUser();
-    this.subscribeForUserConfirmation();
-    this.subscribeForUserDeclined();
-    this.subscribeForUserBanned();
-    this.subscribeForUserUnban();
+    this.subscribeForRegisteredUsers();
+    this.subscribeForConfirmedUsers();
+    this.subscribeForDeclinedUsers();
+    this.subscribeForBannedUsers();
+    this.subscribeForUnbannedUsers();
 
     this.userHttpService.getAllUnConfirmedUsers().subscribe(users => {
-      this.unregisteredUsers = users;
+      this.unconfirmedUsers = users;
     });
 
     this.userHttpService.getAllRegisteredUsers().subscribe(users => {
-      this.registeredUsers = users;
+      this.confirmedUsers = users;
     })
+  }
 
-    this.userConfirmationService.registerForNewUsers();
-    this.userConfirmationService.registerForUserDeclining();
-    this.userConfirmationService.registerForUserBan();
-    this.userConfirmationService.registerForUserUnban();
+  private startAdminHubServiceConnection() {
+    this.adminHubService.startConnection();
+  }
+
+  private stopAdminHubServiceConnection() {
+    this.adminHubService.stopConnection();
   }
 
   private checkConnection() {
-    this.userConfirmationService.startConnection().subscribe(connestionStatus => this.isConnected = connestionStatus);
+    this.adminHubService.connectionEstablishedEventEmmiter.subscribe(connestionStatus => this.isConnected = connestionStatus);
   }
 
-  private subscribeForAddNewUser() {
-    this.subscriptions.push(this.userConfirmationService.addUserNotification.subscribe(e => this.addUser(e)));
+  // Subscribe for actions taken by other admins
+  private subscribeForRegisteredUsers() {
+    this.adminHubService.userRegisteredNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onUserRegistered(e);
+      }
+    );
   }
 
-  private subscribeForUserConfirmation() {
-    this.subscriptions.push(this.userConfirmationService.registerForUserConfirmation().subscribe(e => this.confirmUser(e)));
-  }
-
-  private subscribeForUserDeclined() {
-    this.subscriptions.push(this.userConfirmationService.userDeclinedNotification.subscribe(e => this.declineUser(e)));
-  }
-
-  private subscribeForUserBanned() {
-    this.subscriptions.push(this.userConfirmationService.userBannedNotification.subscribe(e => this.banUser(e)));
-  }
-
-  private subscribeForUserUnban() {
-    this.subscriptions.push(this.userConfirmationService.userUnbanNotification.subscribe(e => this.unbanUser(e)));
-  }
-
-  private declineUser(email: string) {
+  public onUserRegistered(user: User) {
     this.ngZone.run(() => {
-      let confirmedUser = this.unregisteredUsers.find(user => user.email === email);
-      // TODO ANIMACIJA ?
-      this.unregisteredUsers = this.unregisteredUsers.filter(user => user.email !== email);
+      this.unconfirmedUsers.push(user);
     });
   }
 
-  private confirmUser(email: string) {
+  private subscribeForConfirmedUsers() {
+    this.adminHubService.userConfirmedNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onUserConfirmed(e);
+      }
+    );
+  }
+
+  public onUserConfirmed(userEmail: string) {
     this.ngZone.run(() => {
-      let confirmedUser = this.unregisteredUsers.find(user => user.email === email);
-      // TODO ANIMACIJA ?
-      this.unregisteredUsers = this.unregisteredUsers.filter(user => user.email !== email);
-      this.registeredUsers.push(confirmedUser);
+      let confirmedUser = this.unconfirmedUsers.find(user => user.email === userEmail);
+      this.unconfirmedUsers = this.unconfirmedUsers.filter(user => user.email !== userEmail);
+      this.confirmedUsers.push(confirmedUser);
     });
   }
 
-  private addUser(user: any) {
-    this.ngZone.run(() => {
-      // TODO ANIMACIJA ?
-      this.unregisteredUsers.push(user);
-    }); 
+  private subscribeForDeclinedUsers() {
+    this.adminHubService.userDeclinedNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onUserDeclined(e);
+      }
+    );
   }
 
-  private banUser(email: string) {
+  public onUserDeclined(userEmail: string){
     this.ngZone.run(() => {
-      let bannedUser = this.registeredUsers.find(user => user.email === email);
-      bannedUser.banned = true;
+      this.unconfirmedUsers = this.unconfirmedUsers.filter(user => user.email !== userEmail);
     });
   }
 
-  private unbanUser(email: string) {
+  private subscribeForBannedUsers() {
+    this.adminHubService.userBannedNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onUserBanned(e);
+      }
+    );
+  }
+
+  public onUserBanned(userEmail: string) {
     this.ngZone.run(() => {
-      let unbannedUser = this.registeredUsers.find(user => user.email === email);
-      unbannedUser.banned = false;
+      let userToBan = this.confirmedUsers.find(user => user.email === userEmail);
+      userToBan.banned = true;
     });
   }
 
-  onAccept(email: string) {
+  private subscribeForUnbannedUsers() {
+    this.adminHubService.userBannedNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onUserUnbanned(e);
+      }
+    );
+  }
+
+  public onUserUnbanned(userEmail: string) {
+    this.ngZone.run(() => {
+      let userToUnban = this.confirmedUsers.find(user => user.email === userEmail);
+      userToUnban.banned = false;
+    });
+  }
+
+  // This admin's actions
+  public acceptUser(email: string) {
     this.userHttpService.confirmUser(email).subscribe(
-      (yay) => console.log("confirmed"),
-      (error) => console.log("error")
+      (confirm) => {
+        console.log("confirmed");
+      },
+      (error) => {
+        console.log("error");
+      }
     );
   }
 
-  onDecline(email: string) {
+  public declineUser(email: string) {
     this.userHttpService.declineUser(email).subscribe(
-      (naaay) => console.log("declined"),
-      (error) => console.log("error")
+      (decline) => {
+        console.log("declined");
+      },
+      (error) => {
+        console.log("error");
+      }
     );
   }
 
-  onBan(email: string) {
-    this.userHttpService.banUser(email).subscribe();
+  public banUser(email: string) {
+    this.userHttpService.banUser(email).subscribe(
+      () => {
+        let bannedUser = this.confirmedUsers.find(user => user.email === email);
+        bannedUser.banned = true;
+      }
+    );
   }
 
-  onUnban(email: string) {
-    this.userHttpService.unbanUser(email).subscribe();
+  public unbanUser(email: string) {
+    this.userHttpService.unbanUser(email).subscribe(
+      () => {
+        let unbannedUser = this.confirmedUsers.find(user => user.email === email);
+        unbannedUser.banned = false;
+      }
+    );
   }
 }

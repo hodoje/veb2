@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WebApp.Models.DomainModels;
 using WebApp.Models.DomainModels.Benefits;
+using WebApp.Models.DomainModels.Dtos;
 using WebApp.Models.Enumerations;
 
 namespace WebApp.Models
@@ -126,7 +127,7 @@ namespace WebApp.Models
                 buffer4 = bytes.GetBytes(0x20);
             }
             return StructuralComparisons.StructuralEqualityComparer.Equals(buffer3, buffer4);
-        }
+        }	
 		#endregion
 	}
 }

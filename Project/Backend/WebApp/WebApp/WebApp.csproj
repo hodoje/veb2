@@ -273,7 +273,7 @@
     <Compile Include="BusinessComponents\PricelistComponent.cs" />
     <Compile Include="BusinessComponents\SMTPClient.cs" />
     <Compile Include="BusinessComponents\TicketBusinessComponent.cs" />
-    <Compile Include="BusinessComponents\NotificationHub\UserProfileConfirmationHub.cs" />
+    <Compile Include="BusinessComponents\NotificationHub\AccessHub.cs" />
     <Compile Include="BusinessComponents\TransportationLineComponent.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DomainControllers\BenefitsController.cs" />

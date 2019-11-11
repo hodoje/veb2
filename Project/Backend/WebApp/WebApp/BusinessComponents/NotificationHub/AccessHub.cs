@@ -7,13 +7,14 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
+using WebApp.Models.DomainModels.Dtos;
 
 namespace WebApp.BusinessComponents.NotificationHubs
 {
-    [HubName("userConfirmation")]
-    public class UserProfileConfirmationHub : Hub
+    [HubName("accessHub")]
+    public class AccessHub : Hub
     {
-        private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<UserProfileConfirmationHub>();
+        private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<AccessHub>();
 
         private static object lockObject = new object();
 
@@ -32,7 +33,7 @@ namespace WebApp.BusinessComponents.NotificationHubs
         /// </summary>
         /// <param name="user">User that just registered.</param>
         /// <returns><b>True</b> if user is successfully added to the collection for not registered users, otherwise <b>false</b>.</returns>
-        public bool AddNewUser(ApplicationUser user)
+        public bool UserRegistered(ApplicationUserDto user)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace WebApp.BusinessComponents.NotificationHubs
                     var interimObject = JsonConvert.DeserializeObject<ApplicationUserDto>(JsonConvert.SerializeObject(userDto));
                     var myJsonOutput = JsonConvert.SerializeObject(interimObject, jsonSerializerSettings);
 
-                    hubContext.Clients.Group("Admins").newUser(userDto);
+                    hubContext.Clients.Group("Admins").userRegistered(userDto);
                 }
 
                 return true;
@@ -58,7 +59,7 @@ namespace WebApp.BusinessComponents.NotificationHubs
         }
 
         /// <summary>
-        /// Registeres user by removing him from collection which is for unregistered users and also it notifies all connected admins about the registration.
+        /// Registers user by removing him from collection which is for unregistered users and also it notifies all connected admins about the registration.
         /// </summary>
         /// <param name="userEmail">Email of the user that confirmation is sent.</param>
         /// <returns><b>True</b> if confirmation is successfull, otherwise <b>false</b>.</returns>
@@ -84,7 +85,12 @@ namespace WebApp.BusinessComponents.NotificationHubs
             }
         }
 
-        public bool DeclineRegistration(string userEmail)
+		/// <summary>
+		/// Notifies the user waiting for registration and all the admins that the registration is declined.
+		/// </summary>
+		/// <param name="userEmail">Email of the user that confirmation is sent.</param>
+		/// <returns><b>True</b> if declination is successfull, otherwise <b>false</b>.</returns>
+		public bool DeclineRegistration(string userEmail)
         {
             try
             {
@@ -106,13 +112,6 @@ namespace WebApp.BusinessComponents.NotificationHubs
             }
         }
 
-        public void AwaitRegistration()
-        {
-            if (!UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
-            {
-                UnregisteredUsers.Add(Context.User.Identity.Name, Context.ConnectionId);
-            }
-        }
 
         public bool BanUser(string userEmail)
         {
@@ -120,7 +119,7 @@ namespace WebApp.BusinessComponents.NotificationHubs
             {
                 lock (lockObject)
                 {
-                    hubContext.Clients.Group("Admins").banUser(userEmail);
+                    hubContext.Clients.Group("Admins").banUser(userEmail);					
                 }
 
                 return true;
@@ -150,26 +149,36 @@ namespace WebApp.BusinessComponents.NotificationHubs
 
         public override Task OnConnected()
         {
+			// Only admins and users that haven't been registered will connect to this hub.
             if (Context.User.IsInRole("Admin"))
             {
                 Groups.Add(Context.ConnectionId, "Admins");
             }
+			else if (Context.User.IsInRole("AppUser"))
+			{
+				Groups.Add(Context.ConnectionId, "AppUser");
+				if (!UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
+				{
+					UnregisteredUsers.Add(Context.User.Identity.Name, Context.ConnectionId);
+				}
+			}
 
             return base.OnConnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            if (Context.User.IsInRole("Admin"))
-            {
-                Groups.Remove(Context.ConnectionId, "Admins");
-            }
-            if(UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
-            {
-                UnregisteredUsers.Remove(Context.User.Identity.Name);
-            }
+			// We should not remove connections from Groups manually, framework deals with that
+			//if (Context.User.IsInRole("Admin"))
+			//{
+			//	Groups.Remove(Context.ConnectionId, "Admins");
+			//}
+			if (UnregisteredUsers.TryGetValue(Context.User.Identity.Name, out string connectionId))
+			{
+				UnregisteredUsers.Remove(Context.User.Identity.Name);
+			}
 
-            return base.OnDisconnected(stopCalled);
+			return base.OnDisconnected(stopCalled);
         }
     }
 }

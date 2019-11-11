@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isBadLoginParams: boolean;
   isOtherError: boolean;
+  errorDescription: string;
+  isError: boolean;
 
   constructor(
     private accountService: AccountHttpService, 
@@ -28,19 +30,16 @@ export class LoginComponent implements OnInit {
 
   login(user: LoginModel, form: NgForm){
     this.spinner.show();
-    this.accountService.logIn(user, (isLoggedIn, errorStatus) => {
+    this.accountService.logIn(user, (isLoggedIn, errorStatus, errorDescription) => {
       if(isLoggedIn){
+        this.isError = false;
         this.isLoggedIn = isLoggedIn;
         this.loginToNavbar.login();
         this.router.navigate(['/home']);
       }
       else{
-        if(errorStatus === 400){
-          this.isBadLoginParams = true;
-        }
-        else{
-          this.isOtherError = true;
-        }
+        this.isError = true;
+        this.errorDescription = errorDescription;
       }
       this.spinner.hide();
     });

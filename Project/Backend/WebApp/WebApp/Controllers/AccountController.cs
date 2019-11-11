@@ -28,6 +28,7 @@ using System.Data.Entity;
 using WebApp.BusinessComponents;
 using System.Text;
 using WebApp.Models.Enumerations;
+using WebApp.Models.DomainModels.Dtos;
 
 namespace WebApp.Controllers
 {
@@ -40,21 +41,21 @@ namespace WebApp.Controllers
 		private IUnitOfWork unitOfWork;
         private IMapper mapper;
         private IEmailSender emailSender;
-        private UserProfileConfirmationHub userProfileConfirmationHub;
+        private AccessHub accessHub;
 
         public AccountController(ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat,
 			IUnitOfWork uow,
             IMapper imapper,
             IEmailSender eSender,
-            UserProfileConfirmationHub hub)
+			AccessHub hub)
         {
             UserManager = userManager;
             AccessTokenFormat = accessTokenFormat;
 			unitOfWork = uow;
             mapper = imapper;
             emailSender = eSender;
-            this.userProfileConfirmationHub = hub;
+            this.accessHub = hub;
         }
 
         public ApplicationUserManager UserManager
@@ -79,13 +80,10 @@ namespace WebApp.Controllers
         {
             try
             {
-                List<ApplicationUser> allRegisteredUsers = await UserManager.GetAllRegisteredUsers();
-                List<ApplicationUserDto> dtos = new List<ApplicationUserDto>(allRegisteredUsers.Count);
+                List<ApplicationUser> allRegisteredUsers = await UserManager.GetAllRegisteredUsers();				
+                List<ApplicationUserDto> dtos = mapper.Map<List<ApplicationUser>, List<ApplicationUserDto>>(allRegisteredUsers);
 
-                foreach (var user in allRegisteredUsers)
-                {
-                    dtos.Add(mapper.Map<ApplicationUser, ApplicationUserDto>(user));
-                }
+				SetMainUserRoleForUserDto(ref dtos);
 
                 return Ok(dtos);
             }
@@ -94,6 +92,26 @@ namespace WebApp.Controllers
                 return InternalServerError();
             }
         }
+
+		private void SetMainUserRoleForUserDto(ref List<ApplicationUserDto> userDtos)
+		{
+			foreach (var user in userDtos)
+			{
+				ApplicationUser u = UserManager.FindByEmail(user.Email);
+				if (UserManager.IsInRole(u.Id, "Admin"))
+				{
+					user.Role = "Admin";
+				}
+				else if (UserManager.IsInRole(u.Id, "Controller"))
+				{
+					user.Role = "Controller";
+				}
+				else if (UserManager.IsInRole(u.Id, "AppUser"))
+				{
+					user.Role = "AppUser";
+				}
+			}
+		}
 
         [AllowAnonymous]
         [Route("CheckIfEmailExists")]
@@ -601,7 +619,7 @@ namespace WebApp.Controllers
                 {
                     t.Start();
                 }
-                userProfileConfirmationHub.AddNewUser(user);
+				accessHub.UserRegistered(mapper.Map<ApplicationUser, ApplicationUserDto>(user));
 
                 if (!result.Succeeded)
                 {
@@ -624,14 +642,11 @@ namespace WebApp.Controllers
         {
             List<ApplicationUser> users = UserManager.Users.Include(x => x.UserType)
                 .Where(user => user.RegistrationStatus == RegistrationStatus.Processing).ToList();
-            List<ApplicationUserDto> userDtos = new List<ApplicationUserDto>(users.Count);
+            List<ApplicationUserDto> userDtos = mapper.Map<List<ApplicationUser>, List<ApplicationUserDto>>(users);
 
-            foreach (var user in users)
-            {
-                userDtos.Add(user);
-            }
+			SetMainUserRoleForUserDto(ref userDtos);
 
-            return Ok(userDtos);
+			return Ok(userDtos);
         }
 
         // POST api/Account/ConfirmRegistration
@@ -659,7 +674,7 @@ namespace WebApp.Controllers
                         return GetErrorResult(result);
                     }
 
-                    userProfileConfirmationHub.ConfirmRegistration(user.Email);
+					accessHub.ConfirmRegistration(user.Email);
 
                     return Ok();
                 }
@@ -699,7 +714,7 @@ namespace WebApp.Controllers
                         return GetErrorResult(result);
                     }
 
-                    userProfileConfirmationHub.DeclineRegistration(user.Email);
+					accessHub.DeclineRegistration(user.Email);
 
                     return Ok();
                 }
@@ -740,7 +755,7 @@ namespace WebApp.Controllers
                         return GetErrorResult(result);
                     }
 
-                    userProfileConfirmationHub.BanUser(banDto.Email);
+					accessHub.BanUser(banDto.Email);
 
                     return Ok();
                 }
@@ -781,7 +796,7 @@ namespace WebApp.Controllers
                         return GetErrorResult(result);
                     }
 
-                    userProfileConfirmationHub.UnbanUser(unbanDto.Email);
+					accessHub.UnbanUser(unbanDto.Email);
 
                     return Ok();
                 }

@@ -43,12 +43,13 @@ import { UsersComponent } from './components/users/users.component';
 import { PasswordEqualValidatorDirective } from './common/directives/password-equal-validator.directive';
 import { PasswordPatternValidatorDirective } from './common/directives/password-pattern-validator.directive';
 import { ImageHttpService } from './services/image-http.service';
-import { UserConfirmationService } from './services/user-confirmation.service';
 import { UserHttpService } from './services/user-http.service';
 import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
 import { SimulationService } from './services/simulator.service';
 import { StationHttpService } from './services/station-http.service';
 import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
+import { AdminHubService } from './services/admin-hub.service';
+import { UserHubService } from './services/user-hub.service';
 
 @NgModule({
   declarations:[
@@ -103,7 +104,8 @@ import { TicketValidationComponent } from './components/ticket-validation/ticket
     UserTypeHttpService,
     PricelistHttpService,
     ImageHttpService,
-    UserConfirmationService,
+    AdminHubService,
+    UserHubService,
     UserHttpService,
     SimulationService,
     StationHttpService

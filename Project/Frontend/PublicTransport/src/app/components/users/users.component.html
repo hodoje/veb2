@@ -4,21 +4,21 @@
             <div class="col col-md-6">
                 <h2>Pending users</h2>
                 <hr/>
-                <div *ngIf="unregisteredUsers?.length === 0">
+                <div *ngIf="unconfirmedUsers?.length === 0">
                     There are no pending users.
                 </div>
-                <div *ngIf="unregisteredUsers?.length > 0" class="side-list">
+                <div *ngIf="unconfirmedUsers?.length > 0" class="side-list">
                     <table class="table table-hover">
-                        <tr *ngFor="let user of unregisteredUsers">
+                        <tr *ngFor="let user of unconfirmedUsers">
                             <td>
                                 <!--Card-->
                             <div class="card">
                                 <div class="card-header">
                                     <div class="card-header-tabs">
-                                            <button type="button" (click)="onDecline(user.email)" class="btn btn-danger btn-sm float-right">
+                                            <button type="button" (click)="declineUser(user.email)" class="btn btn-danger btn-sm float-right">
                                                     Decline
                                             </button>
-                                            <button type="button" (click)="onAccept(user.email)" class="btn btn-success btn-sm float-right">
+                                            <button type="button" (click)="acceptUser(user.email)" class="btn btn-success btn-sm float-right">
                                                     Accept
                                             </button>              
                                     </div>
@@ -59,21 +59,21 @@
             <div class="col col-md-6">
                 <h2>Registered users</h2>
                 <hr/>
-                <div *ngIf="registeredUsers?.length === 0">
+                <div *ngIf="confirmedUsers?.length === 0">
                     There are no registered users.
                 </div>
-                <div *ngIf="registeredUsers?.length > 0" class="side-list">
+                <div *ngIf="confirmedUsers?.length > 0" class="side-list">
                     <table class="table table-hover">
-                        <tr *ngFor="let user of registeredUsers">
+                        <tr *ngFor="let user of confirmedUsers">
                             <td>
                                     <!--Card-->
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="card-header-tabs">
-                                            <button type="button" (click)="onBan(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
+                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="banUser(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
                                                 Ban
                                             </button>
-                                            <button type="button" (click)="onUnban(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
+                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="unbanUser(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
                                                 Unban
                                             </button>            
                                         </div>

@@ -94,7 +94,7 @@ namespace WebApp.App_Start
             container.RegisterType<ITransportationLineRoutePointsRepository, TransportationLineRoutePointsRepository>();
             container.RegisterType<ITransportationLineComponent, TransportationLineComponent>();
 			container.RegisterType<IPricelistComponent, PricelistComponent>();
-            container.RegisterType<UserProfileConfirmationHub>();
+            container.RegisterType<AccessHub>();
             // This allows usage of UnitOfWork in AccountController
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:52296"));

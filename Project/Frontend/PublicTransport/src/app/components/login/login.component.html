@@ -38,9 +38,8 @@
           <input class="btn btn-primary" type="submit" value="Login" [disabled]="!f.valid">
         </form>
         &nbsp;
-        <div *ngIf="isBadLoginParams || isOtherError" class="alert alert-danger">
-          <div *ngIf="isBadLoginParams">Email or password is not valid.</div>
-          <div *ngIf="isOtherError">There were some errors on the server side. Try again later...</div>
+        <div *ngIf="isError" class="alert alert-danger">
+          <div>{{errorDescription}}</div>
         </div>
       </div>
       <div class="col-md-4"></div>
