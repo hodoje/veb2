@@ -29,6 +29,7 @@ using WebApp.BusinessComponents;
 using System.Text;
 using WebApp.Models.Enumerations;
 using WebApp.Models.DomainModels.Dtos;
+using Newtonsoft.Json;
 
 namespace WebApp.Controllers
 {
@@ -169,7 +170,37 @@ namespace WebApp.Controllers
 			return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
         }
 
-        private Image GetUserImage(string userImagePath)
+		[Route("GetUserDocumentForUserEmail")]
+		[HttpPost]
+		public async Task<HttpResponseMessage> GetUserDocumentForUserEmailAsync()
+		{
+			var bodyStream = new StreamReader(HttpContext.Current.Request.InputStream);
+			//The modelbinder has already read the stream so we need to reset the stream index
+			bodyStream.BaseStream.Seek(0, SeekOrigin.Begin);
+			var bodyText = bodyStream.ReadToEnd();
+
+			dynamic jsonObj = JsonConvert.DeserializeObject(bodyText);
+			string email = jsonObj.email;
+
+			ApplicationUser user = await UserManager.FindByEmailAsync(email);
+			if (!String.IsNullOrWhiteSpace(user.DocumentImage))
+			{
+				Image img = GetUserImage(user.DocumentImage);
+				using (MemoryStream ms = new MemoryStream())
+				{
+					img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+
+					HttpResponseMessage result = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+					result.Content = new ByteArrayContent(ms.ToArray());
+					result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+
+					return result;
+				}
+			}
+			return new HttpResponseMessage(System.Net.HttpStatusCode.NotFound);
+		}
+
+		private Image GetUserImage(string userImagePath)
         {
             string imgPath = HttpContext.Current.Server.MapPath("~/Resources/" + userImagePath);
             return new Bitmap(imgPath);
@@ -564,9 +595,12 @@ namespace WebApp.Controllers
 				foreach (string file in httpRequest.Files)
 				{
 					var postedFile = httpRequest.Files[file];
-					var filePath = HttpContext.Current.Server.MapPath("~/Resources/" + postedFile.FileName);
+					// We have to use PathGetFileName because Internet Explorer and MS Edge send absolute paths to a file
+					// while Chrome, Mozzila and Safari send just filenames
+					string filename = Path.GetFileName(postedFile.FileName);
+					var filePath = HttpContext.Current.Server.MapPath("~/Resources/" + filename);
 					postedFile.SaveAs(filePath);
-					documentImageFileName = postedFile.FileName;
+					documentImageFileName = filename;
 					break;
 				}
 			}

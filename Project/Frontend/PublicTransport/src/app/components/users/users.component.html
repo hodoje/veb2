@@ -26,61 +26,6 @@
                                 <!--Card content-->
                                 <div class="card-block">
                                     <div class="card-body">
-                                    <!--Title-->
-                                    <h4 class="card-title">{{user.name}} {{user.lastname}}</h4>
-                                    <!--Text-->
-                                    <span class="card-text">Email: </span>
-                                    <span class="card-text">{{user.email}}</span>
-                                    <br/>
-                                    <span class="card-text">Name: </span>
-                                    <span class="card-text">{{user.name}}</span>
-                                    <br/>
-                                    <span class="card-text">Lastname: </span>
-                                    <span class="card-text">{{user.lastname}}</span>
-                                    <br/>
-                                    <span class="card-text">Address: </span>
-                                    <span class="card-text">{{user.address}}</span>
-                                    <br/>
-                                    <span class="card-text">Birthday: </span>
-                                    <span class="card-text">{{user.birthday}}</span>
-                                    <br/>
-                                    <span class="card-text">User Type: </span>
-                                    <span class="card-text">{{user.userType.name}}</span>
-                                    </div>
-                                </div>
-                                <!--/.Card content-->
-                                </div>
-                                <!--/.Card-->
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="col col-md-6">
-                <h2>Registered users</h2>
-                <hr/>
-                <div *ngIf="confirmedUsers?.length === 0">
-                    There are no registered users.
-                </div>
-                <div *ngIf="confirmedUsers?.length > 0" class="side-list">
-                    <table class="table table-hover">
-                        <tr *ngFor="let user of confirmedUsers">
-                            <td>
-                                    <!--Card-->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="card-header-tabs">
-                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="banUser(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
-                                                Ban
-                                            </button>
-                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="unbanUser(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
-                                                Unban
-                                            </button>            
-                                        </div>
-                                    </div>
-                                    <!--Card content-->
-                                    <div class="card-block">
-                                        <div class="card-body">
                                         <!--Title-->
                                         <h4 class="card-title">{{user.name}} {{user.lastname}}</h4>
                                         <!--Text-->
@@ -101,12 +46,74 @@
                                         <br/>
                                         <span class="card-text">User Type: </span>
                                         <span class="card-text">{{user.userType.name}}</span>
+                                        <br/>
+                                        <span class="card-text">Document:</span>
+                                    </div>
+                                </div>
+                                <!--/.Card content-->
+                                    <div class="card card-body zoom">
+                                        <img class="document-image" [attr.src]="user.document" alt="Place image title">
+                                        <!-- <img class="document-image" *ngIf="isImageLoaded" [attr.src]="imageToShow" alt="Place image title"> -->
+                                        <!-- <img class="document-image" *ngIf="!isImageLoaded" src="../../../assets/fallbackimage.jpg" alt="Fallbackimage"> -->
+                                    </div>
+                                </div>
+                                <!--/.Card-->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <h2>Registered users</h2>
+                <hr/>
+                <div *ngIf="confirmedUsers?.length === 0">
+                    There are no registered users.
+                </div>
+                <div *ngIf="confirmedUsers?.length > 0" class="side-list">
+                    <table class="table table-hover">
+                        <tr *ngFor="let user of confirmedUsers">
+                            <td>
+                                <!--Card-->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-header-tabs">
+                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="banUser(user.email)" class="btn btn-danger btn-sm float-right" *ngIf="user.banned === false">
+                                                Ban
+                                            </button>
+                                            <button type="button" [disabled]="user.role === 'Admin'" (click)="unbanUser(user.email)" class="btn btn-success btn-sm float-right" *ngIf="user.banned === true">
+                                                Unban
+                                            </button>            
+                                        </div>
+                                    </div>
+                                    <!--Card content-->
+                                    <div class="card-block">
+                                        <div class="card-body">
+                                            <!--Title-->
+                                            <h4 class="card-title">{{user.name}} {{user.lastname}}</h4>
+                                            <!--Text-->
+                                            <span class="card-text">Email: </span>
+                                            <span class="card-text">{{user.email}}</span>
+                                            <br/>
+                                            <span class="card-text">Name: </span>
+                                            <span class="card-text">{{user.name}}</span>
+                                            <br/>
+                                            <span class="card-text">Lastname: </span>
+                                            <span class="card-text">{{user.lastname}}</span>
+                                            <br/>
+                                            <span class="card-text">Address: </span>
+                                            <span class="card-text">{{user.address}}</span>
+                                            <br/>
+                                            <span class="card-text">Birthday: </span>
+                                            <span class="card-text">{{user.birthday}}</span>
+                                            <br/>
+                                            <span class="card-text">User Type: </span>
+                                            <span class="card-text">{{user.userType.name}}</span>
                                         </div>
                                     </div>
                                     <!--/.Card content-->
-                                    </div>
-                                    <!--/.Card-->
-                                </td>
+                                </div>
+                                <!--/.Card-->
+                            </td>
                         </tr>
                     </table>
                 </div>

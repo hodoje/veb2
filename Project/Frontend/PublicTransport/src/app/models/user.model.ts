@@ -8,7 +8,8 @@ export class User{
     email: string;
     registrationStatus: string;
     userType: UserType;
-    documentImage: File;
+    documentImage: string;
     banned: boolean;
     role: string;
+    document: any;
 }

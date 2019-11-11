@@ -3,6 +3,7 @@ import { AdminHubService } from 'src/app/services/admin-hub.service';
 import { User } from 'src/app/models/user.model';
 import { UserHttpService } from 'src/app/services/user-http.service';
 import { Subscription } from 'rxjs';
+import { ImageHttpService } from 'src/app/services/image-http.service';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +21,11 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.stopAdminHubServiceConnection();
   }
 
-  constructor(private adminHubService: AdminHubService, private userHttpService: UserHttpService, private ngZone: NgZone) { }
+  constructor(
+    private adminHubService: AdminHubService, 
+    private userHttpService: UserHttpService, 
+    private ngZone: NgZone,
+    private imageService: ImageHttpService,) { }
 
   ngOnInit() {
     this.startAdminHubServiceConnection();
@@ -33,6 +38,9 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     this.userHttpService.getAllUnConfirmedUsers().subscribe(users => {
       this.unconfirmedUsers = users;
+      this.unconfirmedUsers.forEach(user => {
+        this.getUserImage(user);
+      });
     });
 
     this.userHttpService.getAllRegisteredUsers().subscribe(users => {
@@ -64,6 +72,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   public onUserRegistered(user: User) {
     this.ngZone.run(() => {
       this.unconfirmedUsers.push(user);
+      this.getUserImage(user);
     });
   }
 
@@ -166,5 +175,26 @@ export class UsersComponent implements OnInit, OnDestroy {
         unbannedUser.banned = false;
       }
     );
+  }
+
+  public getUserImage(user: User){
+    this.imageService.getImageForUsername(user.email).subscribe(
+      data => { 
+        this.createImageFromBlob(user, data);
+      }, 
+      error => {
+        console.log(error);
+    });
+  }
+
+  private createImageFromBlob(user: User, image: Blob){
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      user.document = reader.result;
+    }, false);
+
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 }
