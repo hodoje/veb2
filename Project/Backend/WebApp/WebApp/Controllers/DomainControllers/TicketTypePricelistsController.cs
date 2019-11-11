@@ -47,14 +47,14 @@ namespace WebApp.Controllers.DomainControllers
         {
             try
             {
-                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAllTicketPrices(unitOfWork);
+                IEnumerable<TicketTypePricelistDto> tickets = ticketBusiness.ListAllTicketPrices(UserManager, unitOfWork);
 
                 return Ok(tickets);
             }
             catch(NullReferenceException nre)
             {
                 // log exception 
-                return BadRequest("Service is in invalid state.");
+                return BadRequest();
             }
             catch(Exception e)
             {
@@ -76,7 +76,7 @@ namespace WebApp.Controllers.DomainControllers
             catch (NullReferenceException nre)
             {
                 // log exception 
-                return BadRequest("Service is in invalid state.");
+                return BadRequest();
             }
             catch (Exception e)
             {

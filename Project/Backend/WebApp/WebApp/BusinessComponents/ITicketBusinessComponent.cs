@@ -10,9 +10,9 @@ namespace WebApp.BusinessComponents
 {
     public interface ITicketBusinessComponent
     {
-        IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(IUnitOfWork unitOfWork);
+        IEnumerable<TicketTypePricelistDto> ListAllTicketPrices(ApplicationUserManager userManager, IUnitOfWork unitOfWork);
 
-		bool ValidateTicket(IUnitOfWork unitOfWork, int ticketId);
+		Task<bool> ValidateTicket(ApplicationUserManager userManager, IUnitOfWork unitOfWork, int ticketId);
 
 		Task<IEnumerable<TicketTypePricelistDto>> GetTicketPriceForUser(ApplicationUserManager userManager, IUnitOfWork unitOfWork);
 

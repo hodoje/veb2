@@ -16,6 +16,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using WebApp.BusinessComponents;
 using WebApp.Models;
+using WebApp.Models.CustomHttpActionResults;
 using WebApp.Models.DomainModels;
 using WebApp.Models.Dtos;
 using WebApp.Persistence;
@@ -130,6 +131,8 @@ namespace WebApp.Controllers.DomainControllers
 						return InternalServerError();
 					case HttpStatusCode.BadRequest:
 						return BadRequest();
+					case HttpStatusCode.Forbidden:
+						return new ForbiddenActionResult(Request, "This user is banned.");
 					default:
 						return Ok();
 				}
@@ -143,7 +146,7 @@ namespace WebApp.Controllers.DomainControllers
         [Route("api/Tickets/ValidateTicket")]
 		[Authorize(Roles = "Controller")]
 		[HttpPost]
-        public IHttpActionResult ValidateTicket(TicketDto ticketDto)
+        public async Task<IHttpActionResult> ValidateTicket(TicketDto ticketDto)
         {
             if (!ModelState.IsValid)
             {
@@ -151,7 +154,9 @@ namespace WebApp.Controllers.DomainControllers
             }
             try
             {
-                if (ticketBusinessComponent.ValidateTicket(unitOfWork, ticketDto.TicketTypeId))
+				bool validationResult = await ticketBusinessComponent.ValidateTicket(UserManager, unitOfWork, ticketDto.TicketTypeId);
+
+				if (validationResult)
                 {
                     return Ok(new
                     {
