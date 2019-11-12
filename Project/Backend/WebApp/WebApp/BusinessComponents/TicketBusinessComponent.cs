@@ -16,6 +16,7 @@ using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.BusinessComponents
 {
+	// TODO: refactor this whole component
     public class TicketBusinessComponent : ITicketBusinessComponent
     {
 		public async Task<IEnumerable<TicketTypePricelistDto>> GetTicketPriceForUser(ApplicationUserManager userManager, IUnitOfWork unitOfWork)
@@ -23,7 +24,7 @@ namespace WebApp.BusinessComponents
 			string username = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
 			ApplicationUser user = await userManager.FindByNameAsync(username);
 
-			if (user.Banned)
+			if (user != null && user.Banned)
 			{
 				throw new Exception();
 			}
@@ -98,7 +99,7 @@ namespace WebApp.BusinessComponents
 			string username = ((ClaimsIdentity)(Thread.CurrentPrincipal.Identity)).Name;
 			ApplicationUser user = await userManager.FindByNameAsync(username);
 
-			if (user.Banned)
+			if (user != null && user.Banned)
 			{
 				return HttpStatusCode.Forbidden;
 			}
@@ -106,12 +107,23 @@ namespace WebApp.BusinessComponents
 			int boughtTicketId;
 			if ((boughtTicketId = BuyTicket(unitOfWork, user, ticketDto.TicketTypeId)) > 0)
 			{
-				if (!String.IsNullOrEmpty(ticketDto.Email))
+				string email = "";
+
+				if(user != null)
+				{
+					email = user.Email;
+				}
+				else
+				{
+					email = ticketDto.Email;
+				}
+
+				if (!String.IsNullOrEmpty(email))
 				{
 					TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
 					string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
 					string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
-					if (emailSender.SendMail(subject, body, ticketDto.Email))
+					if (emailSender.SendMail(subject, body, email))
 					{
 						return HttpStatusCode.OK;
 					}
@@ -146,8 +158,6 @@ namespace WebApp.BusinessComponents
 			int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
 			TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(ttpl => ttpl.PricelistId == plIndex).FirstOrDefault();
 			Ticket boughtTicket = new Ticket(ticketType.Name) { PurchaseDate = DateTime.Now };
-
-			List<Ticket> tickets = unitOfWork.TicketRepository.GetAll().ToList();
 
 			try
 			{
