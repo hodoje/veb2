@@ -107,22 +107,14 @@ namespace WebApp.BusinessComponents
 			int boughtTicketId;
 			if ((boughtTicketId = BuyTicket(unitOfWork, user, ticketDto.TicketTypeId)) > 0)
 			{
-				string email = "";
-
-				if(user != null)
-				{
-					email = user.Email;
-				}
-				else
-				{
-					email = ticketDto.Email;
-				}
+				string email = user != null ? user.Email : ticketDto.Email;
 
 				if (!String.IsNullOrEmpty(email))
 				{
 					TicketType ticketType = unitOfWork.TicketTypeRepository.Find(tt => tt.Id == ticketDto.TicketTypeId).FirstOrDefault();
 					string subject = $"NS - Public Transport: {ticketType.Name} ticket bought.";
 					string body = $"Your {ticketType.Name.ToLower()} ticket id is: #{boughtTicketId}.";
+
 					if (emailSender.SendMail(subject, body, email))
 					{
 						return HttpStatusCode.OK;
@@ -155,8 +147,8 @@ namespace WebApp.BusinessComponents
 				return -1;
 			}
 
-			int plIndex = unitOfWork.PricelistRepository.GetActivePricelist().Id;
-			TicketTypePricelist currentPLTT = unitOfWork.TicketTypePricelistRepository.Find(ttpl => ttpl.PricelistId == plIndex).FirstOrDefault();
+			int plId = unitOfWork.PricelistRepository.GetActivePricelist().Id;
+			TicketTypePricelist currentTtpl = unitOfWork.TicketTypePricelistRepository.Find(ttpl => ttpl.PricelistId == plId).FirstOrDefault();
 			Ticket boughtTicket = new Ticket(ticketType.Name) { PurchaseDate = DateTime.Now };
 
 			try
@@ -170,7 +162,7 @@ namespace WebApp.BusinessComponents
 			}
 
 			boughtTicket.ApplicationUserId = user?.Id;
-			boughtTicket.TicketTypePricelistId = currentPLTT.Id;
+			boughtTicket.TicketTypePricelistId = currentTtpl.Id;
 
 			try
 			{
