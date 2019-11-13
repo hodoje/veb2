@@ -18,63 +18,68 @@ namespace WebApp.BusinessComponents.NotificationHub.SimulatorComponents
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<SimulatorHub>();
         private static Timer timer = new Timer();
-		private static IUnitOfWork unitOfWork;
 		private static ITransportationLineComponent transportationLineComponent;
-		private static Dictionary<string, string> onlineListeners = new Dictionary<string, string>();
+		private static HashSet<string> onlineListeners = new HashSet<string>();
 
 		static SimulatorHub()
         {
-			unitOfWork = (IUnitOfWork)GlobalHost.DependencyResolver.GetService(typeof(IUnitOfWork));
 			transportationLineComponent = (ITransportationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransportationLineComponent));
+			StartSimulation();
 		}
 
-		public void StartSimulation()
+		public static void StartSimulation()
 		{
-			timer.Interval = 1000;
-			timer.Start();
-			timer.Elapsed += SendSimulation;
+			if (!timer.Enabled)
+			{
+				timer.Interval = 1000;
+				timer.Start();
+				timer.Elapsed += SendSimulation;
+			}
 		}
 
-		private void SendSimulation(object sender, ElapsedEventArgs e)
+		private static void SendSimulation(object sender, ElapsedEventArgs e)
 		{
 			// Don't waste resources if there are no listeners
-			//if(onlineListeners.Count > 0)
-			//{
+			if (onlineListeners.Count > 0)
+			{
 				UpdateVehiclePositions();
-			//}
+			}
 		}
 
-		public void UpdateVehiclePositions()
+		public static void UpdateVehiclePositions()
 		{
 			List<VehicleModel> currentVehicleState = new List<VehicleModel>();
 			List<VehicleModel> vehicles = CreateNotificationModel();
 
-			Clients.Group("Listeners").vehiclesChangedPositions(vehicles);
+			hubContext.Clients.Group("Listeners").vehiclesChangedPositions(vehicles);
 		}
 
-		private List<VehicleModel> CreateNotificationModel()
+		private static List<VehicleModel> CreateNotificationModel()
 		{
 			Random random = new Random();
-			List<int> existingLines = unitOfWork.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
-			List<VehicleModel> vehicles = new List<VehicleModel>(existingLines.Count);
-
-			foreach (var line in existingLines)
+			using(UnitOfWork uow = (UnitOfWork)GlobalHost.DependencyResolver.GetService(typeof(IUnitOfWork)))
 			{
-				TransportationLinePlanDto lineDto = transportationLineComponent.GetTransportationLinePlan(unitOfWork, line);
+				List<int> existingLines = uow.TransportationLineRepository.GetAll().Select(x => x.LineNum).ToList();
+				List<VehicleModel> vehicles = new List<VehicleModel>(existingLines.Count);
 
-				if(lineDto.RoutePoints.Count > 0)
+				foreach (var line in existingLines)
 				{
-					Station currStation = lineDto.RoutePoints[random.Next(0, lineDto.RoutePoints.Count)].Station;
-					vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
-				}
-			}
+					TransportationLinePlanDto lineDto = transportationLineComponent.GetTransportationLinePlan(uow, line);
 
-			return vehicles;
+					if (lineDto.RoutePoints.Count > 0)
+					{
+						Station currStation = lineDto.RoutePoints[random.Next(0, lineDto.RoutePoints.Count)].Station;
+						vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
+					}
+				}
+
+				return vehicles;
+			}
 		}
 		public override Task OnConnected()
 		{
 			Groups.Add(Context.ConnectionId, "Listeners");
-			onlineListeners.Add(Context.User.Identity.Name, Context.ConnectionId);
+			onlineListeners.Add(Context.ConnectionId);
 
 			return base.OnConnected();
 		}
@@ -82,7 +87,7 @@ namespace WebApp.BusinessComponents.NotificationHub.SimulatorComponents
 		public override Task OnDisconnected(bool stopCalled)
 		{
 			Groups.Remove(Context.ConnectionId, "Listeners");
-			onlineListeners.Remove(Context.User.Identity.Name);
+			onlineListeners.Remove(Context.ConnectionId);
 
 			return base.OnDisconnected(stopCalled);
 		}
