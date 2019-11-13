@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { MarkerInfo } from 'src/app/models/map-models/marker-info.model';
 import { Subscription } from 'rxjs';
-import { SimulationService } from 'src/app/services/simulator.service';
+import { SimulatorHubService } from 'src/app/services/simulator-hub.service';
 
 @Component({
   selector: 'app-vehicles-map',
@@ -9,46 +9,50 @@ import { SimulationService } from 'src/app/services/simulator.service';
   styleUrls: ['./vehicles-map.component.scss']
 })
 export class VehiclesMapComponent implements OnInit, OnDestroy {
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions = [];
-
-    this.simulatorService.disconnect();
-  }
-
+  
   currentLatitude: number = 45.2520547;
-  currentLongitude: number = 19.8326543;
-
+  currentLongitude: number = 19.8326543; 
   currentPositions: MarkerInfo[] = [];
+  isConnected: Boolean;
 
-  subscriptions: Subscription[] = [];
-
-  constructor(private simulatorService: SimulationService, private ngZone: NgZone) { }
+  ngOnDestroy(): void {
+    this.stopSimulatorHubServiceConnection();
+  }
+  
+  constructor(private simulatorHubService: SimulatorHubService, private ngZone: NgZone) { }
 
   ngOnInit() {
+    this.startSimulatorHubServiceConnection();
     this.checkConnection();
-    this.simulatorService.resetEmitters();
-    this.subscribeForVehiclePositions();
-
-    this.simulatorService.registerForVehiclePositions();
+    this.subscribeForNewVehiclePositions();
   }
 
-  subscribeForVehiclePositions(){
-    this.subscriptions.push(this.simulatorService.vehicleNotification.subscribe(e => this.moveVehicles(e)));
+  private startSimulatorHubServiceConnection() {
+    this.simulatorHubService.startConnection();
   }
 
+  private stopSimulatorHubServiceConnection() {
+    this.simulatorHubService.stopConnection();
+  }
+  
   private checkConnection() {
-    this.simulatorService.startConnection().subscribe(
-      (connectionStatus) =>{
-        if (connectionStatus) {
-          this.simulatorService.createEvent();
-          console.log("CONNECTED");
-        }
+    this.simulatorHubService.connectionEstablishedEventEmmiter.subscribe(
+      (connectionStatus) => {
+        this.isConnected = connectionStatus;
+        this.simulatorHubService.startSimulation();
+      }
+    );
+  }
+  
+  private subscribeForNewVehiclePositions(){
+    this.simulatorHubService.newVehiclesPositionNotificationEventEmitter.subscribe(
+      (e) => {
+        this.onNewVehiclesPositions(e);
       }
     );
   }
 
-  moveVehicles(newMarkers: MarkerInfo[]) {
+  public onNewVehiclesPositions(newMarkers: MarkerInfo[]) {
     this.ngZone.run(() => {
       console.log(JSON.stringify(newMarkers));
       this.currentPositions = newMarkers;

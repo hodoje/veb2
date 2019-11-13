@@ -13,66 +13,43 @@ using WebApp.Persistence.UnitOfWork;
 
 namespace WebApp.BusinessComponents.NotificationHub.SimulatorComponents
 {
-    [HubName("simulator")]
+    [HubName("simulatorHub")]
     public class SimulatorHub : Hub
     {
         private static IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<SimulatorHub>();
-
         private static Timer timer = new Timer();
-
-        private static bool eventSet = false;
-        private static object lockObject = new object();
-
 		private static IUnitOfWork unitOfWork;
 		private static ITransportationLineComponent transportationLineComponent;
+		private static Dictionary<string, string> onlineListeners = new Dictionary<string, string>();
 
 		static SimulatorHub()
         {
-            timer.Interval = 3000;
-            timer.Start();
-
 			unitOfWork = (IUnitOfWork)GlobalHost.DependencyResolver.GetService(typeof(IUnitOfWork));
 			transportationLineComponent = (ITransportationLineComponent)GlobalHost.DependencyResolver.GetService(typeof(ITransportationLineComponent));
 		}
 
-		public void CreateEvent()
+		public void StartSimulation()
 		{
-			lock (lockObject)
-			{
-				if (!eventSet)
-				{
-					timer.Elapsed += OnTimedEvent;
-					eventSet = true;
-				}
-			}
+			timer.Interval = 1000;
+			timer.Start();
+			timer.Elapsed += SendSimulation;
 		}
 
-		public override Task OnConnected()
+		private void SendSimulation(object sender, ElapsedEventArgs e)
 		{
-			Groups.Add(Context.ConnectionId, "Listeners");
-
-			return base.OnConnected();
+			// Don't waste resources if there are no listeners
+			//if(onlineListeners.Count > 0)
+			//{
+				UpdateVehiclePositions();
+			//}
 		}
 
-		public override Task OnDisconnected(bool stopCalled)
-		{
-			Groups.Remove(Context.ConnectionId, "Listeners");
-
-			return base.OnDisconnected(stopCalled);
-		}
-
-		public void SendMessage()
-		{
-			Clients.Group("Listeners").vehicleChangePosition();
-		}
-
-		public void OnTimedEvent(object source, ElapsedEventArgs e)
+		public void UpdateVehiclePositions()
 		{
 			List<VehicleModel> currentVehicleState = new List<VehicleModel>();
-
 			List<VehicleModel> vehicles = CreateNotificationModel();
 
-			Clients.Group("Listeners").vehicleChangePosition(vehicles);
+			Clients.Group("Listeners").vehiclesChangedPositions(vehicles);
 		}
 
 		private List<VehicleModel> CreateNotificationModel()
@@ -85,12 +62,29 @@ namespace WebApp.BusinessComponents.NotificationHub.SimulatorComponents
 			{
 				TransportationLinePlanDto lineDto = transportationLineComponent.GetTransportationLinePlan(unitOfWork, line);
 
-				// Puca ukoliko nema stanica za definisanu liniju	
-				Station currStation = lineDto.RoutePoints[random.Next(0, lineDto.RoutePoints.Count)].Station;
-				vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
+				if(lineDto.RoutePoints.Count > 0)
+				{
+					Station currStation = lineDto.RoutePoints[random.Next(0, lineDto.RoutePoints.Count)].Station;
+					vehicles.Add(new VehicleModel(line, new CurrentPosition() { Latitude = currStation.Latitude, Longitude = currStation.Longitude }));
+				}
 			}
 
 			return vehicles;
+		}
+		public override Task OnConnected()
+		{
+			Groups.Add(Context.ConnectionId, "Listeners");
+			onlineListeners.Add(Context.User.Identity.Name, Context.ConnectionId);
+
+			return base.OnConnected();
+		}
+
+		public override Task OnDisconnected(bool stopCalled)
+		{
+			Groups.Remove(Context.ConnectionId, "Listeners");
+			onlineListeners.Remove(Context.User.Identity.Name);
+
+			return base.OnDisconnected(stopCalled);
 		}
 	}
 }

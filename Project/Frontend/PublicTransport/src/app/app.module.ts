@@ -45,7 +45,7 @@ import { PasswordPatternValidatorDirective } from './common/directives/password-
 import { ImageHttpService } from './services/image-http.service';
 import { UserHttpService } from './services/user-http.service';
 import { EmailExistsValidatorDirective } from './common/directives/email-exists-validator.directive';
-import { SimulationService } from './services/simulator.service';
+import { SimulatorHubService } from './services/simulator-hub.service';
 import { StationHttpService } from './services/station-http.service';
 import { TicketValidationComponent } from './components/ticket-validation/ticket-validation.component';
 import { AdminHubService } from './services/admin-hub.service';
@@ -107,7 +107,7 @@ import { UserHubService } from './services/user-hub.service';
     AdminHubService,
     UserHubService,
     UserHttpService,
-    SimulationService,
+    SimulatorHubService,
     StationHttpService
   ],
   bootstrap: [AppComponent]

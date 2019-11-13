@@ -57,7 +57,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   private checkConnection() {
-    this.adminHubService.connectionEstablishedEventEmmiter.subscribe(connestionStatus => this.isConnected = connestionStatus);
+    this.adminHubService.connectionEstablishedEventEmmiter.subscribe(connectionStatus => this.isConnected = connectionStatus);
   }
 
   // Subscribe for actions taken by other admins

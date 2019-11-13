@@ -20,17 +20,13 @@ export class UserHubService {
     // Object that holds the connection
     // used for creating the proxy, starting and stopping connections (and some other stuff)
     private connection: any;  
-    private events: string[] = [];
     public connectionExists: Boolean; 
 
-    public connectionEstablishedEventEmmiter: EventEmitter <boolean>;    
     // Events to which the component that uses this service will subscribe to
     // these events will fire when the server hub calls a client method
+    public connectionEstablishedEventEmmiter: EventEmitter <boolean>;    
     public userConfirmedNotificationEventEmitter: EventEmitter<string>;
     public userDeclinedNotificationEventEmitter: EventEmitter<string>;
-    // public userBannedNotificationEventEmitter: EventEmitter<string>;
-    // public userUnbanNotificationEventEmitter: EventEmitter<string>;
-
 
   constructor() {
     this.connectionEstablishedEventEmmiter = new EventEmitter<boolean>();

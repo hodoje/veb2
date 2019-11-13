@@ -19,7 +19,6 @@ export class AdminHubService {
     // Object that holds the connection
     // used for creating the proxy, starting and stopping connections (and some other stuff)
     private connection: any;
-    private events: string[] = [];
     public connectionExists: Boolean; 
     
     public connectionEstablishedEventEmmiter: EventEmitter <boolean>;    

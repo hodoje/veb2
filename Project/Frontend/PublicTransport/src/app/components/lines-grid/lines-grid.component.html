@@ -31,7 +31,7 @@
                             <agm-polyline-point *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude">
                             </agm-polyline-point>
                         </agm-polyline>
-                        <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude"[iconUrl]="{
+                        <agm-marker *ngFor="let point of polyline.path" [latitude]="point.latitude" [longitude]="point.longitude" [iconUrl]="{
                             url: './../../assets/bus.svg',
                             scaledSize: {
                               width: 30,

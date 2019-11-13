@@ -144,7 +144,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.getMyData();
       }
     );
-    // this.initConnectionToRegistrationService();
   }
 
   private startUserHubServiceConnection() {
@@ -158,7 +157,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   
   private checkConnection() {
-    this.userHubService.connectionEstablishedEventEmmiter.subscribe(connestionStatus => this.isConnected = connestionStatus);
+    this.userHubService.connectionEstablishedEventEmmiter.subscribe(connectionStatus => this.isConnected = connectionStatus);
   }
 
   private subscribeForConfirmedRegistration() {
