@@ -22,13 +22,12 @@ export class PurchaseComponent implements OnInit {
   // cardholdersName: string;
   /////////////////////////
 
+  isPurchased: boolean;
+  isTicketBought: boolean;
   ticketTypes: PriceListTicketType[];
   currentTicket: PriceListTicketType;
-
   isPurchasing: Boolean = false;
-
   showPaypal: Boolean = false;
-
   userEmail: string;
   // showCreditCard: Boolean = false;
 
@@ -41,6 +40,8 @@ export class PurchaseComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.isPurchased = false;
+    this.isTicketBought = false;
     this.plttService.getUserPrices().subscribe(
       tickets =>{
         this.ticketTypes = tickets
@@ -76,7 +77,6 @@ export class PurchaseComponent implements OnInit {
   buyTicket() {
     this.showPaypal = true;
     this.isPurchasing = true;
-    // (<HTMLInputElement>document.getElementById("priceInput")).value = <any>this.currentTicket.price;
   }
   
   goBackToEdit(){
@@ -91,6 +91,42 @@ export class PurchaseComponent implements OnInit {
   
   buttonEnabled(): Boolean {
     return this.showEmailInput();
+  }
+
+  clearPurchaseForm(){
+    this.goBackToEdit();
+  }
+
+  showPositivePurchaseFeedback(){
+    this.isPurchased = true;
+    this.isTicketBought = true;
+
+    let resetFeedbackCounter = 2;
+    let logoutInterval = setInterval(() => {
+      if(resetFeedbackCounter !== 0){
+        resetFeedbackCounter--;
+      }
+      else{
+        this.isPurchased = false;
+        clearInterval(logoutInterval);
+      }
+    }, 1000);
+  }
+
+  showNegativePurchaseFeedback(){
+    this.isPurchased = true;
+    this.isTicketBought = false;
+
+    let resetFeedbackCounter = 2;
+    let logoutInterval = setInterval(() => {
+      if(resetFeedbackCounter !== 0){
+        resetFeedbackCounter--;
+      }
+      else{
+        this.isPurchased = false;
+        clearInterval(logoutInterval);
+      }
+    }, 1000);
   }
 
   //#region Spinner toggling

@@ -74,10 +74,9 @@ function initPaypalButton(userEmail) {
                 email: emailToSet
               }
             }
-          
-
-            // Show a confirmation message to the buyer
-            window.alert('Thank you for your purchase!');     
+            
+            var clearPurchaseBtn = document.getElementById("clearPurchaseBtn");
+            clearPurchaseBtn.click();
 
             return fetch('http://localhost:52296/api/Tickets/PaypalPurchase', {
                           method: 'post',
@@ -85,6 +84,21 @@ function initPaypalButton(userEmail) {
                               'content-type': 'application/json',
                           },
                           body: JSON.stringify(customResponse)
+                      }).then((response) => {
+                        if(response.status === 200){
+                          var showPositiveFeedbackBtn = document.getElementById("showPositiveFeedbackBtn");
+                          showPositiveFeedbackBtn.click();
+                        }
+                        else{
+                          var showNegativeFeedbackBtn = document.getElementById("showNegativeFeedbackBtn");
+                          showNegativeFeedbackBtn.click();  
+                        }
+                      }, (error) => {
+                        var showNegativeFeedbackBtn = document.getElementById("showNegativeFeedbackBtn");
+                        showNegativeFeedbackBtn.click();
+                      }).catch((error) => {
+                        var showNegativeFeedbackBtn = document.getElementById("showNegativeFeedbackBtn");
+                        showNegativeFeedbackBtn.click();
                       });
           });
         }

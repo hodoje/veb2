@@ -24,13 +24,14 @@ export class TicketValidationComponent implements OnInit {
       data => {
         this.finally();
         this.responseStatus = data.isValid;
-        console.log(this.responseStatus);
       },
       error =>{
         this.finally();
         this.responseStatus = "internalError"
-        console.log(this.responseStatus);
       },
+      () => {
+        this.resetFeedback();
+      }
     );
   }
 
@@ -41,10 +42,22 @@ export class TicketValidationComponent implements OnInit {
 
   clearFeedback(){
     this.isButtonPressed = false;
-    console.log(this.isButtonPressed);
   }
 
   getResponseStatus() {
     return this.responseStatus;
+  }
+
+  resetFeedback(){
+    let resetFeedbackCounter = 2;
+    let logoutInterval = setInterval(() => {
+      if(resetFeedbackCounter !== 0){
+        resetFeedbackCounter--;
+      }
+      else{
+        this.clearFeedback();
+        clearInterval(logoutInterval);
+      }
+    }, 1000);
   }
 }
