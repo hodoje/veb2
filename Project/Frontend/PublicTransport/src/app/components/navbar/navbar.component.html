@@ -31,13 +31,13 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <button *ngIf="!isLoggedIn" class="btn btn-primary btn-lg" [routerLink]="['/login']">Login</button>
+          <button *ngIf="!isLoggedIn" class="btn btn-primary" [routerLink]="['/login']">Login</button>
         </li>
         <li>
-          <button *ngIf="!isLoggedIn" class="btn btn-primary btn-lg" [routerLink]="['/register']">Register</button>
+          <button *ngIf="!isLoggedIn" class="btn btn-primary" [routerLink]="['/register']">Register</button>
         </li>
         <li>
-          <button *ngIf="isLoggedIn" (click)="logout()" class="btn btn-primary btn-lg" [routerLink]="['/home']">Logout</button>
+          <button *ngIf="isLoggedIn" (click)="logout()" class="btn btn-primary" [routerLink]="['/home']">Logout</button>
         </li>
       </ul>
     </div>

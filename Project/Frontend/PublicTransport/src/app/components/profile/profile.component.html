@@ -12,7 +12,7 @@
             <h3 class="alert-text">You're account has been rejected.</h3>
             <h4 class="alert-text">You will be logged out automatically in {{logoutCounter}} seconds.</h4>
             <p class="alert-text">
-              <button class="btn btn-primary centered-btn" (click)="logoutUserAfterRegistration()">Logout</button>
+              <button class="btn btn-primary btn-sm centered-btn" (click)="logoutUserAfterRegistration()">Logout</button>
             </p>
           </div>
           <div *ngIf="isRegistrationCompleted && registrationMessageStatus === RegistrationStatuses.Accepted" class="alert alert-success">
@@ -20,7 +20,7 @@
             <h4 class="alert-text">Please log out and log in again so changes could be applied.</h4>
             <h4 class="alert-text">You will be logged out automatically in {{logoutCounter}} seconds.</h4>
             <p class="alert-text">
-              <button class="btn btn-primary centered-btn" (click)="logoutUserAfterRegistration()">Logout</button>
+              <button class="btn btn-primary btn-sm centered-btn" (click)="logoutUserAfterRegistration()">Logout</button>
             </p>
           </div>
         </div>
@@ -84,7 +84,7 @@
                 <div *ngIf="pdForm.userType.errors.required">User type is required.</div>
               </div>
             </div>
-            <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeData(personalDataForm.value)" [disabled]="!personalDataForm.dirty && personalDataForm.valid">
+            <input class="btn btn-primary btn-sm" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeData(personalDataForm.value)" [disabled]="!personalDataForm.dirty && personalDataForm.valid">
           </form>  
         </div>
       </div>
@@ -106,7 +106,7 @@
                 <label class="custom-file-label" for="inputGroupFile01">{{fileLabelText}}</label>
               </div>
             </div>
-            <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">
+            <input class="btn btn-primary btn-sm" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changeDocument(documentForm.value)" [disabled]="!documentForm.dirty && documentForm.valid">
           </form>
         </div>
       </div>
@@ -154,7 +154,7 @@
                 <div *ngIf="cpForm.confirmPassword.errors.notEqual">New Password and Confirm Password do not match.</div>
               </div>
             </div>
-            <input class="btn btn-primary" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changePassword(changePasswordForm.value)" [disabled]="!changePasswordForm.valid">
+            <input class="btn btn-primary btn-sm" style="float: right; margin-right: 0px;" type="submit" value="Update" (click)="changePassword(changePasswordForm.value)" [disabled]="!changePasswordForm.valid">
           </form>
         </div>
       </div>
