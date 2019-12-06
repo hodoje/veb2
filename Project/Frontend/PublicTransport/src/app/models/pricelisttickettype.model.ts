@@ -2,13 +2,13 @@
 export class PriceListTicketType{
 
     constructor(id: number, name: string, price: number, userType: string){
-        this.ticketId = id;
+        this.ticketTypeId = id;
         this.name = name;
         this.price = price;
         this.userType = userType;
     }
 
-    ticketId: number;
+    ticketTypeId: number;
     name: string;
     price: number;
     userType: string;

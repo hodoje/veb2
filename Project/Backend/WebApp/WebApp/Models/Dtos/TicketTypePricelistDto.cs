@@ -7,7 +7,7 @@ namespace WebApp.Models.Dtos
 {
     public class TicketTypePricelistDto
     {   
-        public int TicketId { get; set; }
+        public int TicketTypeId { get; set; }
         public string Name { get; set; }
         public string UserType { get; set; }
         /// <summary>

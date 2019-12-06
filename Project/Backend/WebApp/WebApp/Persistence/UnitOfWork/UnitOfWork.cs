@@ -43,7 +43,8 @@ namespace WebApp.Persistence.UnitOfWork
 		public ITransportationLineTypeRepository TransportationLineTypeRepository { get; set; }
         [Dependency]
         public ITransportationLineRoutePointsRepository TransportationLineRoutePointsRepository { get; set; }
-
+		[Dependency]
+		public ITransactionRepository TransactionRepository { get; set; }
         public int Complete()
         {
             return _context.SaveChanges();

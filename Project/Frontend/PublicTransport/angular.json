@@ -41,7 +41,8 @@
               "node_modules/hammerjs/hammer.min.js",
               "node_modules/popper.js/dist/umd/popper.js",
               "node_modules/bootstrap/dist/js/bootstrap.js",
-              "node_modules/signalr/jquery.signalR.js"
+              "node_modules/signalr/jquery.signalR.js",
+              "src/app/custom-scripts/paypal.js"
             ],
             "es5BrowserSupport": true
           },

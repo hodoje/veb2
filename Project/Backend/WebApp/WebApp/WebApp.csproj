@@ -51,6 +51,9 @@
     <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Braintree, Version=4.16.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.4.16.0\lib\net452\Braintree.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0-preview2-19525-03\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -104,11 +107,12 @@
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.4.403061554\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.Management" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -229,6 +233,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\MappingProfiles\ApplicationUserMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\DayOfTheWeekMappingProfile.cs" />
+    <Compile Include="App_Start\MappingProfiles\GeneralTransactionMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\PricelistMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\ScheduleMappingProfile.cs" />
     <Compile Include="App_Start\MappingProfiles\StationMappingProfile.cs" />
@@ -269,6 +274,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="BusinessComponents\BraintreeConfiguration.cs" />
+    <Compile Include="BusinessComponents\IBraintreeConfiguration.cs" />
     <Compile Include="BusinessComponents\IEmailSender.cs" />
     <Compile Include="BusinessComponents\IPricelistComponent.cs" />
     <Compile Include="BusinessComponents\ITicketBusinessComponent.cs" />
@@ -375,11 +382,16 @@
     <Compile Include="Migrations\201911071006306_ChangedTransportationRouteToTransportationRoutePoint.Designer.cs">
       <DependentUpon>201911071006306_ChangedTransportationRouteToTransportationRoutePoint.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912060824437_AddedGeneralTransactionModel.cs" />
+    <Compile Include="Migrations\201912060824437_AddedGeneralTransactionModel.designer.cs">
+      <DependentUpon>201912060824437_AddedGeneralTransactionModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\CustomHttpActionResults\ForbiddenActionResult.cs" />
+    <Compile Include="Models\DomainModels\GeneralTransaction.cs" />
     <Compile Include="Models\Dtos\ApplicationUserDto.cs" />
     <Compile Include="Models\DomainModels\Benefits\Benefit.cs" />
     <Compile Include="Models\DomainModels\Benefits\TransportDiscountBenefit.cs" />
@@ -388,6 +400,7 @@
     <Compile Include="Models\DomainModels\UserType.cs" />
     <Compile Include="Models\DomainModels\DayOfTheWeek.cs" />
     <Compile Include="Models\Dtos\CheckEmailExistsDto.cs" />
+    <Compile Include="Models\Dtos\GeneralTransactionDto.cs" />
     <Compile Include="Models\Dtos\PricelistDto.cs" />
     <Compile Include="Models\Dtos\RegisterConfirmationDto.cs" />
     <Compile Include="Models\Dtos\RoutePointDto.cs" />
@@ -397,6 +410,7 @@
     <Compile Include="Models\Dtos\TicketDto.cs" />
     <Compile Include="Models\Dtos\TicketTypeDto.cs" />
     <Compile Include="Models\Dtos\TicketTypePricelistDto.cs" />
+    <Compile Include="Models\Dtos\TransactionTicketWrapper.cs" />
     <Compile Include="Models\Dtos\TransportationLinePlanDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineDto.cs" />
     <Compile Include="Models\Dtos\TransportationLineTypeDto.cs" />
@@ -404,7 +418,9 @@
     <Compile Include="Models\Dtos\DayOfTheWeekDto.cs" />
     <Compile Include="Models\Enumerations\RegistrationStatus.cs" />
     <Compile Include="Models\Enumerations\TicketTypeEnum.cs" />
+    <Compile Include="Models\Enumerations\TransactionStatus.cs" />
     <Compile Include="Persistence\ModelRepositories\BenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositories\TransactionRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransportationLineRoutePointsRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TransporationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\UserTypeRepository.cs" />
@@ -414,6 +430,7 @@
     <Compile Include="Persistence\ModelRepositories\TicketTypePricelistRepository.cs" />
     <Compile Include="Persistence\ModelRepositories\TicketTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IBenefitRepository.cs" />
+    <Compile Include="Persistence\ModelRepositoryInterfaces\ITransactionRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineRoutePointsRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\ITransportationLineTypeRepository.cs" />
     <Compile Include="Persistence\ModelRepositoryInterfaces\IUserTypeRepository.cs" />
@@ -445,6 +462,7 @@
     <Compile Include="Providers\CustomJwtFormat.cs" />
     <Compile Include="Providers\CustomOAuthProvider.cs" />
     <Compile Include="Providers\QueryStringOAuthBearerProvider.cs" />
+    <Compile Include="Resources\PaypalTestCredentials.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -546,7 +564,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -610,6 +627,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911071006306_ChangedTransportationRouteToTransportationRoutePoint.resx">
       <DependentUpon>201911071006306_ChangedTransportationRouteToTransportationRoutePoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912060824437_AddedGeneralTransactionModel.resx">
+      <DependentUpon>201912060824437_AddedGeneralTransactionModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

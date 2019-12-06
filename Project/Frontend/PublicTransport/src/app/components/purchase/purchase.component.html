@@ -1,45 +1,139 @@
 <div class="wrapper">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col col-md-2"></div>
-      <div class="col col-md-8">
+    <div class="row row-with-padding">
+      <div class="col col-md-2 col-sm-2"></div>
+      <div class="col col-md-8 col-sm-8 col-12">
         <div class="page-header purchase-header">
-          <h2>Buy a ticket</h2>
+          <h2>Purchase a ticket</h2>
         </div>
         <hr/>
-        <div class="spinner">
-            <ngx-spinner
-            bdColor="rgba(51,51,51,0.6)"
-            size="medium"
-            color="#fff"
-            type="ball-clip-rotate-multiple"
-            [fullScreen] = "false">
-            <p style="font-size: 20px; color: white; margin-top: 92%">Buying ticket...</p>
-            </ngx-spinner>
-        </div>
         <div class="form-group required"
           [hidden]="!showEmailInput()">
-          <label for="email">Email</label>
-          <input required email type="text" name="email" #email="ngModel" ngModel class="form-control form-control-sm">
-          <div class="alert alert-danger" *ngIf="email?.touched && !email.valid">
-            <div *ngIf="email.errors.required">Email is required.</div>
-            <div *ngIf="email.errors.email">Email is not valid.</div>
+          <label for="email">Email <span class="warning-message">&nbsp;(Caution: By entering wrong email you will not get the confirmation email and your ticket will be lost.)</span></label>
+          <input id="email" [disabled]="isPurchasing" required email type="text" name="email" #email="ngModel" ngModel class="form-control form-control-sm">
+          <div class="alert alert-danger" *ngIf="!isPurchasing && email?.touched && !email.valid">
+            <div *ngIf="email.errors?.required">Email is required.</div>
+            <div *ngIf="email.errors?.email">Email is not valid.</div>
           </div>
         </div>
         <div class="form-group required">
           <label for="ticketTypeCBox">Tickets</label>
-          <select required ticketTypeCBox name="ticketTypeCBox" [(ngModel)]="currentTicket" class="form-control form-control-sm">
+          <select [disabled]="isPurchasing" id="ticketSelect" required ticketTypeCBox name="ticketTypeCBox" [(ngModel)]="currentTicket" class="form-control form-control-sm">
               <option *ngFor="let ticketType of ticketTypes" [ngValue]="ticketType">{{ ticketType.name }} - {{ ticketType.price}} RSD</option>
           </select>
           <div class="alert alert-danger" *ngIf="ticketTypeCBox?.touched && !ticketTypeCBox.valid">
-              <div *ngIf="ticketTypeCBox.errors.required">Ticket is required.</div>
+              <div *ngIf="ticketTypeCBox.errors?.required">Ticket is required.</div>
           </div>
-          <p>
-            <button id="buyTicketBtn" class="btn btn-primary btn-sm float-right" (click)="buyTicket(email.value)" [disabled]="(!email.valid && buttonEnabled() || isProccessing)">Buy</button>
-          </p>
         </div>
+        <!-- This table is used to align this component with the priceslist components-->
+        <!-- <table class="table table-sm">
+          <thead>
+            <tr>
+              <th></th>
+            </tr>
+          </thead>
+        </table> -->
+        <!-- <div class="payment-method-options-list" role="group" aria-label="Basic example">
+          <button class="btn btn-block btn-lg btn-primary" type="button" (click)="togglePaymentMethod($event)">Paypal</button>
+          <button class="btn btn-block btn-lg btn-success" type="button" (click)="togglePaymentMethod($event)">Credit Card</button>
+        </div> -->
+        <div class="row">
+          <div class="col">
+            <div class="collapse" [ngClass]="!showPaypal ? 'show' : '' ">
+              <p>
+                <button id="createPurchaseBtn" class="btn btn-primary btn-sm" (click)="buyTicket()" [disabled]="(!email.valid && buttonEnabled())">Create Purchase</button>
+              </p>
+            </div>
+            <div class="collapse" [ngClass]="showPaypal ? 'show' : '' ">
+              <p>
+                <button id="editPurchaseDetailsBtn" class="btn btn-primary btn-sm" (click)="goBackToEdit()">Edit Purchase</button>
+              </p>
+              <hr/>
+              <div class="card card-body">
+                <input id="priceInput" type="hidden" [ngModel]="currentTicket && currentTicket.price" name="priceInput" #priceInput="ngModel"/>
+                <input id="ticketTypeInput" type="hidden" [ngModel]="currentTicket && currentTicket.ticketTypeId" name="ticketTypeInput" #ticketTypeInput="ngModel"/>
+                <input id="ticketTypeNameInput" type="hidden" [ngModel]="currentTicket && currentTicket.name" name="ticketTypeNameInput" #ticketTypeNameInput="ngModel"/>
+                <div id="paypal-button"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="col">
+            <div class="collapse" [ngClass]="showCreditCard ? 'show' : '' ">
+              <hr/>
+              <div class="card card-body">
+                <form id="cardForm">
+                  <div class="card">
+                    <div class="purchase-header card-header panel__header">
+                      <h1>Card Payment</h1>
+                    </div>
+                    <div class="card-block">
+                      <div class="card-body">
+                        <div class="panel__content">
+                          <div *ngIf="showEmailInput()">
+                            <div class="custom-name">
+                              <label class="hosted-field--label" for="cardholder-name" name="cardholderName">
+                                <span class="icon">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z"/>
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                  </svg>
+                                </span>
+                                Email
+                              </label>
+                              <input type="text" placeholder="e.g. JOHN DOE" class="name-custom-input" [(ngModel)]="cardholdersName" name="cardholderName"/>
+                            </div>
+                          </div>
+                          <div>
+                            <label class="hosted-field--label" for="card-number">
+                              <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                  <path d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                                </svg>
+                              </span> 
+                              Card Number 
+                            </label>
+                            <div id="card-number" class="hosted-field"></div>
+                          </div>
+                          <br/>
+                          <div>
+                            <label class="hosted-field--label" for="expiration-date">
+                              <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                  <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                                </svg>
+                              </span>
+                              Expiration Date
+                            </label>
+                            <div id="expiration-date" class="hosted-field"></div>
+                          </div>
+                          <div>                            
+                            <label class="hosted-field--label" for="cvv">
+                              <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                                </svg>
+                              </span>
+                              CVV
+                            </label>
+                            <div id="cvv" class="hosted-field"></div>
+                          </div>
+                          <div>
+                            <input type="button" value="Pay" (click)="tokenizeUserDetails();" class="btn btn-block btn-lg btn-danger"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>        
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div> -->
       </div>
-      <div class="col-md-2"></div>
+      <div class="col col-md-2 col-sm-2"></div>
     </div>
     <div class="row">
       <div class="col-md-2"></div>

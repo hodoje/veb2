@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Braintree;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
@@ -88,6 +89,7 @@ namespace WebApp.App_Start
 			container.RegisterType<ITicketTypeRepository, TicketTypeRepository>();
 			container.RegisterType<ITransportationLineRepository, TransportationLineRepository>();
 			container.RegisterType<ITransportationLineTypeRepository, TransportationLineTypeRepository>();
+			container.RegisterType<ITransactionRepository, TransactionRepository>();
 			container.RegisterType<IUnitOfWork, UnitOfWork>();
             container.RegisterType<ITicketBusinessComponent, TicketBusinessComponent>();
             container.RegisterType<IEmailSender, SMTPClient>();
@@ -99,6 +101,8 @@ namespace WebApp.App_Start
             container.RegisterType<ApplicationUserManager>();
             container.RegisterType<ISecureDataFormat<AuthenticationTicket>, CustomJwtFormat>(new InjectionConstructor("http://localhost:52296"));
             container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new InjectionConstructor(typeof(ApplicationDbContext)));
+			// Set up Braintree Configuration
+			//container.RegisterType<IBraintreeConfiguration, BraintreeConfiguration>();			
 
 			MapperConfiguration config = new MapperConfiguration(c =>
 			{
@@ -111,6 +115,7 @@ namespace WebApp.App_Start
 				c.AddProfile<PricelistMappingProfile>();
                 c.AddProfile<ApplicationUserMappingProfile>();
 				c.AddProfile<StationMappingProfile>();
+				c.AddProfile<GeneralTransactionMappingProfile>();
 			});
 
 			container.RegisterType<IMapper, Mapper>(new InjectionConstructor(config));
