@@ -10,8 +10,8 @@
             <div class="col-md-4"></div>
         </div>
         <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-5">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
             <div class="form-group required">
               <label for="ticketId">Ticket ID: </label>
               <input required ticketId type="text" name="ticketId" #ticketId="ngModel" ngModel ngModel class="form-control form-control-sm"
@@ -29,11 +29,11 @@
               </p>
             </div>
           </div>
-          <div class="col-md-2"></div>
+          <div class="col-md-4"></div>
         </div>
         <div class="row">
-          <div class="col col-md-2"></div>
-          <div class="col col-md-5">
+          <div class="col col-md-4"></div>
+          <div class="col col-md-4">
             <div *ngIf="isButtonPressed">
               <div [ngSwitch]="getResponseStatus()">
                 <div *ngSwitchCase="'valid'" class="alert alert-success">
@@ -51,7 +51,7 @@
               </div>
             </div>
           </div>
-          <div class="col col-md-2"></div>
+          <div class="col col-md-4"></div>
         </div>
       </div>
     </div>
