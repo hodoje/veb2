@@ -39,6 +39,10 @@ export class PricelistModificationComponent implements OnInit {
       }
     );
 
+    this.getAllPriceLists();
+  }
+
+  getAllPriceLists() {
     this.pricelistService.getAll().subscribe(
       (data: Pricelist[]) => {
         console.log(data);
@@ -51,12 +55,8 @@ export class PricelistModificationComponent implements OnInit {
     newPricelist.fromDate = this.currentDate;
     this.pricelistService.post(newPricelist).subscribe(
       (data) => {
-        form.reset({
-          hourly: "",
-          daily: "",
-          monthly: "",
-          yearly: ""
-        });
+        form.reset();       
+        this.getAllPriceLists();
       },
       (err) => {
         console.log(err);

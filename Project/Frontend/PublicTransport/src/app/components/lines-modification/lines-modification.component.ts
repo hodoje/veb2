@@ -7,6 +7,8 @@ import { StationHttpService } from 'src/app/services/station-http.service';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { TransportationLine } from 'src/app/models/transportationline.model';
 import { RoutePoint } from 'src/app/models/route-point.model';
+import { TransportationLineType } from 'src/app/models/transportationlinetype.model';
+import { TransportationLineTypesHttpService } from 'src/app/services/transportation-line-types-http.service';
 
 @Component({
   selector: 'app-lines-modification',
@@ -20,25 +22,29 @@ export class LinesModificationComponent implements OnInit {
 
   allLines: TransportationLine[];
   currentLine: TransportationLine;
+  allLineTypes: TransportationLineType[]
+  currentLineType: TransportationLineType
   currentPlan: TransportationLinePlan;
-  allStations = [];  
+  allStations = [];
   // https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular
   updateLineStationsForm: FormGroup;
   isUpdateButtonDisabled = true;
 
   constructor(private transportationLineService: TransportationLinesHttpService,
+    private transportationLineTypesService: TransportationLineTypesHttpService,
     private stationsService: StationHttpService,
     private formBuilder: FormBuilder) {
-      this.updateLineStationsForm = this.formBuilder.group({
-        stations: new FormArray([])
-      });
+    this.updateLineStationsForm = this.formBuilder.group({
+      stations: new FormArray([])
+    });
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.getAllLines();
     this.getAllStations();
+    this.getTransportationLineTypesData();
   }
-  
+
   getAllLines() {
     this.transportationLineService.getAll().subscribe(
       (data: TransportationLine[]) => {
@@ -53,12 +59,12 @@ export class LinesModificationComponent implements OnInit {
       }
     );
   }
-    
+
   getAllStations() {
     this.stationsService.getAll().subscribe(
       (data) => {
         this.allStations = data;
-        this.addStationCheckboxes();        
+        this.addStationCheckboxes();
       },
       (err) => {
         console.log(err);
@@ -66,13 +72,56 @@ export class LinesModificationComponent implements OnInit {
     );
   }
 
-  getPlanForCurrentLine(){
+  getTransportationLineTypesData(){
+    this.transportationLineTypesService.getAll().subscribe(
+      (data) => {
+        this.allLineTypes = data;
+        this.currentLineType = this.allLineTypes[0];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  removeLine() {
+    this.transportationLineService.removeTransportationLine(this.currentLine).subscribe(
+      (data) => {
+        console.log(data);
+        this.getAllLines();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  addNewLine(newLineFormValue) {
+    let newLine = new TransportationLine();
+    newLine.lineNum = newLineFormValue.newLine;
+    newLine.transportationLineType = this.currentLineType;
+    this.transportationLineService.addTransportationLine(newLine).subscribe(
+      () => {
+        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  currentLineTypeChanged(){
+    this.allLines.length = 0;
+    this.allLines = this.allLines.filter(l => l.transportationLineType.name === this.currentLineType.name);
+  }
+
+  getPlanForCurrentLine() {
     this.transportationLineService.getTransportationLinePlan(this.currentLine.lineNum).subscribe(
       (data: TransportationLinePlan) => {
         this.currentPlan = data;
         this.determineCheckboxStates();
       },
-      (err) =>{
+      (err) => {
         console.log(err);
       }
     );
@@ -85,7 +134,7 @@ export class LinesModificationComponent implements OnInit {
     });
   }
 
-  determineCheckboxStates(){
+  determineCheckboxStates() {
     let updateLineStationsFormValue = [];
     this.allStations.forEach(station => {
       let isStationChecked = this.currentPlan.routePoints.find(rp => rp.station.id == station.id) ? true : false;
@@ -94,33 +143,33 @@ export class LinesModificationComponent implements OnInit {
     (this.updateLineStationsForm.controls.stations as FormArray).setValue(updateLineStationsFormValue);
   }
 
-  changeLine(){
+  changeLine() {
     this.getPlanForCurrentLine();
   }
 
   updatePlanPathForCurrentPlan(stationId: number, isChecked: boolean) {
     this.isUpdateButtonDisabled = false;
-    if(isChecked){
+    if (isChecked) {
       let newRoutePoint = new RoutePoint();
       let nextSequenceNo = Math.max(...this.currentPlan.routePoints.map(r => r.sequenceNumber)) + 1;
       newRoutePoint.sequenceNumber = nextSequenceNo;
       newRoutePoint.station = this.allStations.find(s => s.id == stationId);
       this.currentPlan.routePoints.push(newRoutePoint);
     }
-    else{
+    else {
       let routePointToBeRemoved = this.currentPlan.routePoints.find(rp => rp.station.id == stationId) as RoutePoint;
       let routePointToBeRemovedSequenceNo = routePointToBeRemoved.sequenceNumber;
       this.currentPlan.routePoints = this.currentPlan.routePoints.filter(rp => rp.station.id != stationId);
       let routePointsToBeUpdated = this.currentPlan.routePoints.filter(rp => rp.sequenceNumber > routePointToBeRemovedSequenceNo) as RoutePoint[];
       this.currentPlan.routePoints.forEach(rp => {
-        if(routePointsToBeUpdated.indexOf(rp) > -1){
+        if (routePointsToBeUpdated.indexOf(rp) > -1) {
           --rp.sequenceNumber;
         }
       });
     }
   }
 
-  updateLinePlan(){
+  updateLinePlan() {
     this.transportationLineService.updateTransportationLinePlan(this.currentPlan).subscribe(
       () => {
         this.isUpdateButtonDisabled = true;
@@ -135,7 +184,7 @@ export class LinesModificationComponent implements OnInit {
     let geoLocations: GeoLocation[] = [];
 
     plan.routePoints.forEach(route => {
-        geoLocations.push(new GeoLocation(route.station.latitude, route.station.longitude));
+      geoLocations.push(new GeoLocation(route.station.latitude, route.station.longitude));
     });
 
     return new Polyline(geoLocations, color, '', plan.lineNumber);

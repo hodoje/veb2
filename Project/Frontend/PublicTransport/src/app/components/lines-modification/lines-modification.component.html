@@ -32,6 +32,8 @@
           <select name="currentLine" [(ngModel)]="currentLine" (change)="changeLine()" class="form-control form-control-sm">
             <option *ngFor="let currentLine of allLines" [ngValue]="currentLine">{{ currentLine.lineNum }}</option>
           </select>
+          <button class="btn btn-primary btn-sm float-right" (click)="removeLine()">Remove</button>
+          <br/>
           <label for="currentStation">Stations</label>
           <!--https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular-->            
           <form [formGroup]="updateLineStationsForm" (ngSubmit)="updateLinePlan()">
@@ -50,6 +52,21 @@
               </div>
             </div>
             <button class="btn btn-primary btn-sm float-right" [disabled]="isUpdateButtonDisabled">Update</button>
+          </form>
+          <br/>
+          <hr/>
+          <form #newLineForm="ngForm" (ngSubmit)="addNewLine(newLineForm.value)">
+            <h5>Add New Line</h5>
+            <div class="form-group">
+              <label for="newLine">Line Number</label>
+              <input type="number" min="0" step="1" oninput="validity.valid || (value='');" name="newLine" [(ngModel)]="newLine" class="form-control form-control-sm">
+              <br/>
+              <label for="currentLineType">Line Type</label>
+              <select name="currentLineType" [(ngModel)]="currentLineType" (change)="currentLineTypeChanged()" class="form-control form-control-sm">
+                <option *ngFor="let lineType of allLineTypes" [ngValue]="lineType">{{ lineType.name }}</option>
+              </select>
+              <button class="btn btn-primary btn-sm float-right" [disabled]="!newLine">Add</button>
+            </div>
           </form>
         </div>
       </div>

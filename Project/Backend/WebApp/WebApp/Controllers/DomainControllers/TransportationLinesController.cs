@@ -146,19 +146,65 @@ namespace WebApp.Controllers.DomainControllers
         }
 
         // POST: api/TransportationLines
-        [ResponseType(typeof(TransportationLine))]
-        public IHttpActionResult PostTransportationLine(TransportationLine transportationLine)
+		[Route("api/TransportationLines/AddNewLine")]
+		[Authorize(Roles = "Admin")]
+		public IHttpActionResult PostTransportationLine(TransportationLineDto transportationLineDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-			unitOfWork.TransportationLineRepository.Add(transportationLine);
-			unitOfWork.Complete();
+			TransportationLine newLine = new TransportationLine();
+			if((unitOfWork.TransportationLineRepository.Find(tl => tl.LineNum == transportationLineDto.LineNum)).FirstOrDefault() == null)
+			{
+				newLine.LineNum = transportationLineDto.LineNum;
+			}
+			else
+			{
+				return InternalServerError();
+			}
 
-            return CreatedAtRoute("DefaultApi", new { id = transportationLine.Id }, transportationLine);
+			TransportationLineType newLineType;
+			if((newLineType = unitOfWork.TransportationLineTypeRepository.Find(tlt => tlt.Name == transportationLineDto.TransportationLineType.Name).FirstOrDefault()) != null)
+			{
+				newLine.TransportationLineType = newLineType;
+			}
+
+			try
+			{
+				unitOfWork.TransportationLineRepository.Add(newLine);
+				unitOfWork.Complete();
+			}
+			catch (Exception)
+			{
+				return InternalServerError();
+			}
+
+            return Ok();
         }
+
+		[HttpPost]
+		public IHttpActionResult RemoveTransportationLine(TransportationLineDto transportationLineDto)
+		{
+			TransportationLine transportationLine = unitOfWork.TransportationLineRepository.Find(tl => tl.LineNum == transportationLineDto.LineNum).FirstOrDefault();
+			if(transportationLine == null)
+			{
+				return NotFound();
+			}
+
+			try
+			{
+				unitOfWork.TransportationLineRepository.Remove(transportationLine);
+				unitOfWork.Complete();
+			}
+			catch (Exception)
+			{
+				return InternalServerError();
+			}
+
+			return Ok(transportationLine);
+		}
 
         // DELETE: api/TransportationLines/5
         [ResponseType(typeof(TransportationLine))]

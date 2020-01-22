@@ -27,4 +27,12 @@ export class TransportationLinesHttpService extends BaseHttpService<Transportati
   removeStationFromPlan(lineNum: number, sId: number){
     return this.httpClient.post(this.base_url + this.specifiedUrl + '/removeStationFromPlan', { lineNumber: lineNum, stationId: sId});
   }
+
+  addTransportationLine(newLine: TransportationLine){
+    return this.httpClient.post(this.base_url + this.specifiedUrl + '/addNewLine', newLine);
+  }
+
+  removeTransportationLine(lineToDelete: TransportationLine){
+    return this.httpClient.post(this.base_url + this.specifiedUrl + '/RemoveTransportationLine', lineToDelete);
+  }
 }
