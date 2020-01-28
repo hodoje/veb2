@@ -386,6 +386,10 @@
     <Compile Include="Migrations\201912060824437_AddedGeneralTransactionModel.designer.cs">
       <DependentUpon>201912060824437_AddedGeneralTransactionModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001280658142_AddedTimestampToGeneralTransaction.cs" />
+    <Compile Include="Migrations\202001280658142_AddedTimestampToGeneralTransaction.designer.cs">
+      <DependentUpon>202001280658142_AddedTimestampToGeneralTransaction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -630,6 +634,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912060824437_AddedGeneralTransactionModel.resx">
       <DependentUpon>201912060824437_AddedGeneralTransactionModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001280658142_AddedTimestampToGeneralTransaction.resx">
+      <DependentUpon>202001280658142_AddedTimestampToGeneralTransaction.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

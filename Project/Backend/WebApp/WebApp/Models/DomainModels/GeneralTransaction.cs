@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models.DomainModels
 {
@@ -18,6 +19,8 @@ namespace WebApp.Models.DomainModels
 		public string PayerEmail { get; set; }
 	    public string Price { get; set; }
 		public string Currency { get; set; }
-		public string UserId { get; set; }		
+		public string UserId { get; set; }
+		[Timestamp]
+		public byte[] Timestamp { get; set; }
 	}
 }
